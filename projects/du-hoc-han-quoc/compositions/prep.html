@@ -1,0 +1,25 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; padding: 130px 180px; color: var(--ink); }
+    #prep-head { font-size: 84px; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 56px; }
+    #prep-head span { color: var(--blue); }
+    .prep-item { display: flex; align-items: center; gap: 36px; font-family: var(--font-body); font-size: 50px; font-weight: 700; margin-bottom: 34px; }
+    .prep-num { width: 88px; height: 88px; border-radius: 50%; background: var(--red); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-weight: 900; font-size: 44px; flex-shrink: 0; }
+  </style>
+  <div id="root" data-composition-id="prep" data-width="1920" data-height="1080">
+    <h2 id="prep-head">Cần <span>chuẩn bị</span> gì?</h2>
+    <div id="prep-1" class="prep-item"><div class="prep-num">1</div>Hộ chiếu &amp; hồ sơ học tập</div>
+    <div id="prep-2" class="prep-item"><div class="prep-num">2</div>Chứng minh tài chính</div>
+    <div id="prep-3" class="prep-item"><div class="prep-num">3</div>Chứng chỉ tiếng Hàn TOPIK</div>
+    <div id="prep-4" class="prep-item"><div class="prep-num">4</div>Thư mời nhập học của trường</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#prep-head", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.1);
+    ["#prep-1", "#prep-2", "#prep-3", "#prep-4"].forEach((s, i) => {
+      tl.fromTo(s, { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: 0.45, ease: "power3.out" }, 0.6 + i * 0.4);
+    });
+    tl.to("#root", { opacity: 0, duration: 0.3, ease: "power2.in" }, 4.15);
+    window.__timelines["prep"] = tl;
+  </script>
+</template>

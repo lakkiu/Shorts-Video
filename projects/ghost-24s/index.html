@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/lib/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Jua"; src: url("assets/fonts/jua-korean.woff2") format("woff2"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { width: 100%; height: 100%; position: relative; }
+      #gl { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+      .cap {
+        position: absolute; left: 90px; right: 90px; top: 1440px; text-align: center;
+        font-family: "Montserrat"; font-weight: 900; font-size: 76px; line-height: 1.12; color: #ffffff;
+        -webkit-text-stroke: 14px #07080f; paint-order: stroke fill;
+      }
+      .cap span { display: inline-block; }
+      .cap.sfx { font-style: italic; color: #c9d6ff; font-size: 68px; }
+      .cap.ghost { color: #ff6b6b; }
+      #endq { top: 900px; font-size: 64px; color: #e9edf7; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24" data-width="1080" data-height="1920">
+      <canvas id="gl" class="clip" data-start="0" data-duration="24" data-track-index="0" width="1080" height="1920"></canvas>
+
+      <div id="c1" class="cap clip" data-start="0.5" data-duration="1.3" data-track-index="1"><span>Ba giờ sáng.</span></div>
+      <div id="c2" class="cap clip" data-start="2.1" data-duration="2.0" data-track-index="1"><span>Minh nghe tiếng gõ cửa phòng.</span></div>
+      <div id="c3" class="cap sfx clip" data-start="4.3" data-duration="1.7" data-track-index="1"><span>Cốc… cốc… cốc…</span></div>
+      <div id="c4" class="cap clip" data-start="6.2" data-duration="1.4" data-track-index="1"><span>Cậu mở cửa ra.</span></div>
+      <div id="c5" class="cap clip" data-start="7.9" data-duration="1.7" data-track-index="1"><span>Hành lang trống không.</span></div>
+      <div id="c6" class="cap clip" data-start="9.8" data-duration="1.6" data-track-index="1"><span>Chỉ có một đôi dép ướt…</span></div>
+      <div id="c7" class="cap clip" data-start="11.4" data-duration="1.7" data-track-index="1"><span>đặt ngay ngắn trước cửa.</span></div>
+      <div id="c8" class="cap clip" data-start="13.4" data-duration="1.5" data-track-index="1"><span>Minh thở phào.</span></div>
+      <div id="c9" class="cap clip" data-start="15.2" data-duration="1.7" data-track-index="1"><span>Rồi một giọng nói thì thầm…</span></div>
+      <div id="c10" class="cap clip" data-start="16.9" data-duration="1.6" data-track-index="1"><span>ngay sau lưng cậu.</span></div>
+      <div id="c11" class="cap ghost clip" data-start="18.8" data-duration="3.1" data-track-index="1"><span>“Cảm ơn… vì đã cho tớ vào.”</span></div>
+      <div id="endq" class="cap clip" data-start="22.6" data-duration="1.4" data-track-index="1"><span>Bạn có dám mở cửa không?</span></div>
+
+      <audio id="a-drone" class="clip" src="assets/sfx/drone.mp3" data-start="0" data-duration="22" data-track-index="3" data-volume="0.55"></audio>
+      <audio id="a-hum" class="clip" src="assets/sfx/hum.mp3" data-start="0" data-duration="21.95" data-track-index="4" data-volume="0.5"></audio>
+      <audio id="a-knocks" class="clip" src="assets/sfx/knocks.wav" data-start="4.3" data-track-index="5" data-volume="1.6"></audio>
+      <audio id="a-creak" class="clip" src="assets/sfx/creak.wav" data-start="6.7" data-track-index="5" data-volume="0.9"></audio>
+      <audio id="a-sting" class="clip" src="assets/sfx/sting.wav" data-start="21.9" data-track-index="5" data-volume="1.3"></audio>
+      <audio id="v1" class="clip" src="assets/vo/l1.mp3" data-start="0.5" data-track-index="2" data-volume="1"></audio>
+      <audio id="v2" class="clip" src="assets/vo/l2.mp3" data-start="2.1" data-track-index="2" data-volume="1"></audio>
+      <audio id="v3" class="clip" src="assets/vo/l3.mp3" data-start="6.2" data-track-index="2" data-volume="1"></audio>
+      <audio id="v4" class="clip" src="assets/vo/l4.mp3" data-start="7.9" data-track-index="2" data-volume="1"></audio>
+      <audio id="v5" class="clip" src="assets/vo/l5.mp3" data-start="9.8" data-track-index="2" data-volume="1"></audio>
+      <audio id="v6" class="clip" src="assets/vo/l6.mp3" data-start="13.4" data-track-index="2" data-volume="1"></audio>
+      <audio id="v7" class="clip" src="assets/vo/l7.mp3" data-start="15.2" data-track-index="2" data-volume="1"></audio>
+      <audio id="v8" class="clip" src="assets/vo/g1fx.wav" data-start="18.8" data-track-index="2" data-volume="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var D = 24, clock = { t: 0 }, scene = { render: null };
+        window.__toon = scene;
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["main"] = new Promise(function (resolve) { scene.ready = resolve; });
+        var tl = gsap.timeline({ paused: true });
+        tl.to(clock, { t: D, duration: D, ease: "none", onUpdate: function () { if (scene.render) scene.render(clock.t); } }, 0);
+        var caps = [["#c1",0.5],["#c2",2.1],["#c3",4.3],["#c4",6.2],["#c5",7.9],["#c6",9.8],["#c7",11.4],["#c8",13.4],["#c9",15.2],["#c10",16.9],["#c11",18.8],["#endq",22.6]];
+        caps.forEach(function (c) { tl.fromTo(c[0] + " span", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" }, c[1]); });
+        tl.fromTo("#c11 span", { x: 0 }, { x: 4, duration: 0.05, repeat: 50, yoyo: true, ease: "none" }, 19.0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+
+    <script type="module">
+      import * as THREE from "./assets/lib/three.module.min.js";
+      import { buildDorm, FOG, hash } from "./assets/toon/dorm.js";
+      import { makePost } from "./assets/toon/post.js";
+      import { CAST, POSE, drawCharacter, drawGhost } from "./assets/toon/characters.js";
+
+      const W = 1080, H = 1920;
+      const sm = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * x * (x * (x * 6 - 15) + 10); };
+      const lerp = (a, b, k) => a + (b - a) * k;
+      const V = (a, b, k) => new THREE.Vector3(lerp(a[0], b[0], k), lerp(a[1], b[1], k), lerp(a[2], b[2], k));
+
+      await document.fonts.load("64px Jua", "비상구");
+
+      const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gl"), antialias: false, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.Fog(FOG, 5, 28);
+      scene.background = FOG.clone();
+      scene.add(new THREE.HemisphereLight("#41507a", "#1a1f2a", 0.9));
+      const camera = new THREE.PerspectiveCamera(48, W / H, 0.05, 200);
+
+      const set = buildDorm(scene);
+
+      // character cards
+      function makeCard(height, opts = {}) {
+        const cv = document.createElement("canvas"); cv.width = 600; cv.height = 1000;
+        const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+        const geo = new THREE.PlaneGeometry(height * 0.6, height);
+        geo.translate(0, height / 2 - height * 0.025, 0);
+        const mat = opts.ghost
+          ? new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, color: new THREE.Color("#b9c9e6"), opacity: 0, fog: false })
+          : new THREE.MeshBasicMaterial({ map: tex, alphaTest: 0.5, color: new THREE.Color("#a9b6d6") });
+        const mesh = new THREE.Mesh(geo, mat);
+        if (opts.ghost) mesh.userData.noNormal = true;
+        else mesh.userData.flagMat = new THREE.ShaderMaterial({
+          uniforms: { map: { value: tex } },
+          vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.); }",
+          fragmentShader: "uniform sampler2D map; varying vec2 vUv; void main(){ if (texture2D(map, vUv).a < 0.5) discard; gl_FragColor = vec4(0.5,0.5,1.0,0.0); }",
+        });
+        scene.add(mesh);
+        return { cv, ctx: cv.getContext("2d"), tex, mesh };
+      }
+      const minh = makeCard(1.6);
+      const ghost = makeCard(2.0, { ghost: true });
+      const face = (card, x, z) => {
+        card.mesh.position.set(x, 0, z);
+        card.mesh.rotation.y = Math.atan2(camera.position.x - x, camera.position.z - z);
+      };
+
+      const post = makePost(renderer, W, H, { sat: 0.82, vignette: 0.6, tint: "#c9d7ff", grain: 0.045, blur: 6 });
+
+      // shots: [start, end, camFrom, camTo, lookFrom, lookTo, fov]
+      const SHOTS = [
+        [0, 4.2, [0.35, 1.62, 16], [0.25, 1.55, 11.5], [0.35, 1.25, -10], [0.45, 1.2, -10], 48],
+        [4.2, 7.9, [-1.25, 1.42, 2.3], [-1.1, 1.42, 1.75], [1.6, 1.3, -0.15], [1.6, 1.28, -0.05], 46],
+        [7.9, 9.8, [1.05, 1.5, 0.15], [0.9, 1.48, -0.7], [-0.25, 1.25, -20], [-0.15, 1.2, -20], 50],
+        [9.8, 13.4, [0.1, 0.75, 1.7], [0.4, 0.55, 1.15], [1.25, 0.05, 0.15], [1.35, 0.05, 0.05], 50],
+        [13.4, 24, [-1.3, 1.12, 0.85], [-0.65, 1.18, 0.4], [1.85, 1.02, -0.05], [1.95, 1.12, -0.12], 46],
+      ];
+      const KNOCKS = [4.3, 4.85, 5.4];
+
+      function flick(t, i, rate, thr) { return hash(Math.floor(t * rate), i + 7) > thr ? 0.12 : 1; }
+
+      function render(t) {
+        const s = SHOTS.find((x) => t >= x[0] && t < x[1]) || SHOTS[SHOTS.length - 1];
+        const k = sm((t - s[0]) / (s[1] - s[0]));
+        camera.fov = s[6]; camera.updateProjectionMatrix();
+        const pos = V(s[2], s[3], k), look = V(s[4], s[5], k);
+        // knock shake on shot B
+        let shake = 0;
+        for (const kt of KNOCKS) if (t >= kt && t < kt + 0.25) shake = Math.exp(-(t - kt) * 18) * 0.012;
+        pos.x += Math.sin(t * 90) * shake; pos.y += Math.cos(t * 77) * shake;
+        camera.position.copy(pos); camera.lookAt(look);
+        // slow uneasy roll
+        camera.rotateZ(THREE.MathUtils.degToRad(Math.sin(t * 0.4) * 1.2 + (t > 17 ? (t - 17) * 0.5 : 0)));
+        camera.updateMatrixWorld();
+
+        // door 305: jiggle on knocks, swing open 6.7-7.3
+        let ang = 0;
+        for (const kt of KNOCKS) if (t >= kt && t < kt + 0.2) ang = -0.02 * Math.exp(-(t - kt) * 20);
+        if (t >= 6.7) ang = -1.55 * sm((t - 6.7) / 0.7);
+        set.doors.minh.pivot.rotation.y = ang;
+
+        // lights: steady, one tube near 305 stutters, all go wild at the end, out at 21.95
+        const blackout = t >= 21.95;
+        for (const L of set.lights) {
+          let f = 1;
+          if (L.i === 3 && ((t > 0.8 && t < 1.7) || (t > 13.0 && t < 13.5))) f = flick(t, L.i, 14, 0.7);
+          if (L.i === 6 && t > 7.9 && t < 9.8) f = flick(t, L.i, 10, 0.6);
+          if (t > 18.6) f = flick(t, L.i, 16, 0.55 - (t - 18.6) * 0.1);
+          if (blackout) f = 0;
+          L.pl.intensity = L.base * f;
+          L.tube.material.color.setScalar(f > 0.5 ? 1 : 0.15);
+        }
+        set.moon.intensity = blackout ? 0 : 3;
+
+        // Minh in the doorway (hidden by the closed door until 6.7)
+        const scared = t >= 17.0, relieved = t >= 13.4 && t < 15.2;
+        const tremble = scared ? Math.sin(t * 40) * 1.5 : 0;
+        drawCharacter(minh.ctx, CAST.minhPJ, {
+          ...POSE,
+          armL: scared ? 25 : 8, armR: scared ? 30 : -8, elbowL: scared ? -60 : 0, elbowR: scared ? 70 : 0,
+          eyes: scared ? "scared" : relieved ? "closed" : t > 7.3 && t < 7.9 ? "open" : "open",
+          mouth: scared ? "wobble" : relieved ? "smile" : t > 15.2 ? "flat" : "o",
+          look: t < 9.8 ? -0.7 : scared ? 0.8 : 0, lean: tremble, tilt: scared ? 4 : relieved ? -6 : 0,
+          sweat: scared ? Math.min(1, (t - 17.0) / 2) : 0,
+        }, t);
+        minh.tex.needsUpdate = true;
+        face(minh, 1.88, 0.02);
+
+        // the ghost fades in behind Minh's shoulder, inside the dark room
+        const gk = sm((t - 16.4) / 2.2);
+        const gx = lerp(3.0, 2.35, sm((t - 16.4) / 5.5));
+        drawGhost(ghost.ctx, { sway: Math.sin(t * 0.9) * 0.6, eye: t > 19.5 ? 1 : 0.6, tilt: -9 + Math.sin(t * 0.7) * 2 }, t);
+        ghost.tex.needsUpdate = true;
+        ghost.mesh.material.opacity = blackout ? 0 : 0.9 * gk * (t > 18.6 ? lerp(0.75, 1, flick(t, 3, 16, 0.55)) : 1);
+        ghost.mesh.visible = t > 16.2;
+        face(ghost, gx, -0.42);
+
+        const focus = s === SHOTS[0] ? 11 : s === SHOTS[2] ? 9 : s === SHOTS[3] ? 1.4 : camera.position.distanceTo(minh.mesh.position);
+        const expo = blackout ? 0 : t > 18.6 ? lerp(0.6, 1, flick(t, 1, 16, 0.6)) : 1;
+        post.render(scene, camera, null, focus, expo, Math.floor(t * 30));
+      }
+
+      window.__toon.render = render;
+      window.addEventListener("hf-seek", (e) => render(e.detail.time));
+      render(0);
+      window.__toon.ready();
+      document.title = "done";
+    </script>
+  </body>
+</html>

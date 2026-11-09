@@ -1,0 +1,7 @@
+.env
+node_modules/
+renders/
+.hyperframes/
+out/
+*.mp4
+.DS_Store
