@@ -97,16 +97,26 @@ function armPts(sx, sy, a, e, len = 105) {
 function face(ctx, c, pose, cx, cy, R) {
   const ex = R * 0.36, ey = cy + R * 0.08 + (pose.lookDown ? 10 : 0);
   const lk = pose.look * 8;
-  // cheeks
+  // cheeks (none on ghosts)
   ctx.fillStyle = "rgba(255,120,130,0.45)";
-  for (const s of [-1, 1]) {
+  for (const s of c.ghostly ? [] : [-1, 1]) {
     ctx.beginPath();
     ctx.ellipse(cx + s * R * 0.58, ey + R * 0.3, R * 0.15, R * 0.09, 0, 0, Math.PI * 2);
     ctx.fill();
   }
   // eyes
   ctx.lineCap = "round";
-  for (const s of [-1, 1]) {
+  if (c.eyesStyle === "hollow") {
+    for (const s of [-1, 1]) {
+      const x = cx + s * ex;
+      ctx.fillStyle = "#0b0d16"; ctx.beginPath(); ctx.ellipse(x, ey, 26, 30, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#f2f5ff"; ctx.beginPath(); ctx.arc(x + lk * 0.5, ey + 2, 4.5, 0, Math.PI * 2); ctx.fill();
+    }
+  } else if (c.eyesStyle === "smile-closed") {
+    ctx.strokeStyle = INK; ctx.lineWidth = 9;
+    for (const s of [-1, 1]) { ctx.beginPath(); ctx.arc(cx + s * ex, ey + 12, 20, rad(200), rad(340)); ctx.stroke(); }
+  }
+  for (const s of (c.eyesStyle === "hollow" || c.eyesStyle === "smile-closed") ? [] : [-1, 1]) {
     const x = cx + s * ex + lk;
     if (pose.eyes === "closed") {
       ctx.strokeStyle = INK; ctx.lineWidth = 10;
@@ -141,18 +151,23 @@ function face(ctx, c, pose, cx, cy, R) {
   // mouth
   const my = cy + R * 0.42;
   ctx.strokeStyle = INK; ctx.lineWidth = 9;
-  if (pose.mouth === "smile") {
+  const mouth = c.mouthStyle || pose.mouth;
+  if (c.mouthStyle === "grin") {
+    const p = new Path2D(); p.moveTo(cx - 44, my - 8); p.quadraticCurveTo(cx, my + 30, cx + 44, my - 8); p.quadraticCurveTo(cx, my + 8, cx - 44, my - 8);
+    ctx.fillStyle = "#1a0f14"; ctx.fill(p); ctx.lineWidth = 7; ctx.stroke(p);
+    ctx.fillStyle = "#e9e4d6"; for (let i = -2; i <= 2; i++) ctx.fillRect(cx + i * 14 - 5, my + 1 + Math.abs(i) * -3, 10, 9);
+  } else if (mouth === "smile") {
     ctx.beginPath(); ctx.arc(cx, my - 14, 24, rad(25), rad(155)); ctx.stroke();
-  } else if (pose.mouth === "wobble") {
+  } else if (mouth === "wobble") {
     ctx.beginPath(); ctx.moveTo(cx - 30, my);
     for (let i = 1; i <= 6; i++) ctx.lineTo(cx - 30 + i * 10, my + (i % 2 ? -7 : 7));
     ctx.stroke();
-  } else if (pose.mouth === "flat") {
+  } else if (mouth === "flat") {
     ctx.beginPath(); ctx.moveTo(cx - 16, my); ctx.lineTo(cx + 16, my); ctx.stroke();
-  } else if (pose.mouth === "o") {
+  } else if (mouth === "o") {
     ctx.fillStyle = "#6b1f2e";
     ctx.beginPath(); ctx.ellipse(cx, my, 13, 17, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  } else {
+  } else if (c.mouthStyle !== "grin") {
     // open D smile with tongue
     const p = new Path2D();
     p.moveTo(cx - 32, my - 10);
@@ -316,7 +331,7 @@ export function drawCharacter(ctx, c, pose, t = 0) {
   // contact shadow drawn in 3D, not here.
   // legs
   const legColor = c.legs || c.pants;
-  for (const s of [-1, 1]) {
+  for (const s of c.hanbok ? [] : [-1, 1]) {
     const a = s * swing;
     const hx = cx + s * 38;
     const fx = hx + Math.sin(rad(a)) * legLen;
@@ -344,7 +359,23 @@ export function drawCharacter(ctx, c, pose, t = 0) {
 
   // torso
   const torso = new Path2D();
-  if (c.dress) {
+  if (c.hanbok) {
+    const ch = new Path2D();
+    ch.moveTo(cx - 85, shY + 60); ch.quadraticCurveTo(cx, shY + 40, cx + 85, shY + 60);
+    ch.quadraticCurveTo(cx + 170, hipY + 60, cx + 175, 958); ch.quadraticCurveTo(cx, 985, cx - 175, 958);
+    ch.quadraticCurveTo(cx - 170, hipY + 60, cx - 85, shY + 60); ch.closePath();
+    inkFill(ctx, ch, c.chima || "#e9eef6");
+    ctx.strokeStyle = "rgba(29,35,64,0.35)"; ctx.lineWidth = 5;
+    for (const k of [-90, -30, 30, 90]) { ctx.beginPath(); ctx.moveTo(cx + k * 0.6, shY + 120); ctx.quadraticCurveTo(cx + k, hipY + 40, cx + k * 1.3, 950); ctx.stroke(); }
+    torso.moveTo(cx - 98, shY + 8); torso.quadraticCurveTo(cx, shY - 32, cx + 98, shY + 8);
+    torso.lineTo(cx + 104, shY + 118); torso.quadraticCurveTo(cx, shY + 136, cx - 104, shY + 118); torso.closePath();
+    inkFill(ctx, torso, c.top);
+    const col = new Path2D(); col.moveTo(cx - 40, shY - 14); col.lineTo(cx + 10, shY + 70); col.lineTo(cx + 30, shY + 60); col.lineTo(cx - 18, shY - 18); col.closePath();
+    inkFill(ctx, col, "#ffffff", 6);
+    const rb = new Path2D(); rb.moveTo(cx + 12, shY + 66); rb.lineTo(cx + 24, shY + 200); rb.lineTo(cx + 44, shY + 196); rb.lineTo(cx + 26, shY + 64); rb.closePath();
+    inkFill(ctx, rb, c.ribbon || "#a33a4a", 6);
+    inkFill(ctx, circle(cx + 20, shY + 66, 14), c.ribbon || "#a33a4a", 6);
+  } else if (c.dress) {
     torso.moveTo(cx - 90, shY + 4);
     torso.quadraticCurveTo(cx, shY - 30, cx + 90, shY + 4);
     torso.lineTo(cx + 150, hipY + 95);
@@ -420,6 +451,15 @@ export function drawCharacter(ctx, c, pose, t = 0) {
   for (const s of [-1, 1]) inkFill(ctx, circle(cx + s * R * 0.98, HY + 12, R * 0.17), c.skin, 10);
   inkFill(ctx, ellipsePath(cx, HY, R * 1.02, R * 0.96), c.skin);
   face(ctx, c, pose, cx, HY, R);
+  if (c.old) {
+    ctx.strokeStyle = "rgba(29,35,64,0.55)"; ctx.lineWidth = 6; ctx.lineCap = "round";
+    for (const s of [-1, 1]) {
+      ctx.beginPath(); ctx.arc(cx + s * R * 0.36, HY + R * 0.08 + 34, 18, rad(30), rad(150)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + s * R * 0.2, HY + R * 0.35); ctx.quadraticCurveTo(cx + s * R * 0.32, HY + R * 0.5, cx + s * R * 0.24, HY + R * 0.62); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + s * R * 0.78, HY - R * 0.02); ctx.lineTo(cx + s * R * 0.9, HY - R * 0.08); ctx.stroke();
+    }
+    ctx.beginPath(); ctx.moveTo(cx - R * 0.3, HY - R * 0.42); ctx.lineTo(cx + R * 0.3, HY - R * 0.42); ctx.stroke();
+  }
   if (c.mustache) {
     const m = new Path2D(); const my = HY + R * 0.33;
     m.moveTo(cx, my); m.quadraticCurveTo(cx - 40, my - 22, cx - 62, my + 8); m.quadraticCurveTo(cx - 30, my + 4, cx, my + 12);

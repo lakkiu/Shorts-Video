@@ -91,6 +91,12 @@ function drawChar(c, t, lt, shotIndex) {
     el.style.opacity = String(0.9 * a * f);
     drawGhost(c.ctx, { sway: Math.sin(t * 0.9) * 0.6, eye: st.mood === "stare" ? 1 : 0.6 + 0.4 * sm((t - (c.fadeAt || 0) - 2.5) / 0.5), tilt: -9 + Math.sin(t * 0.7) * 2 }, t);
   } else {
+    const spec = (S.cast && S.cast[c.char]) || CAST[c.char] || {};
+    if (spec.ghostly) {
+      const a = c.fadeAt != null ? sm((t - c.fadeAt) / (c.fadeDur || 2)) : 1;
+      const f = S.fx.some((x) => x.type === "flicker" && t >= x.start && t < x.end) ? lerp(0.65, 1, 1 - flick(t, 3, 16, 0.55)) : 1;
+      el.style.opacity = String((spec.opacity ?? 0.88) * a * f);
+    }
     const md = MOODS[st.mood] || MOODS.neutral, ps = POSES[st.pose] || POSES.idle;
     const talking = S.talk.some((x) => x.who === c.who && t >= x.start && t < x.end);
     const blink = md.eyes === "open" && hash(Math.floor((t + shotIndex * 1.7) / 0.13), 11 + shotIndex) > 0.955;

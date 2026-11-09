@@ -1,0 +1,12 @@
+{ "role": "Bà cụ ma phòng bên cạnh", "candidates": [
+  { "name": "Hanbok trắng", "desc": "Tóc búi bạc, hanbok trắng tang, mắt nhắm mà cười — hiền mà rợn", "spec": {
+    "ghostly": true, "old": true, "skin": "#e6ecf2", "hair": "#c9ccd2", "hairStyle": "bun", "hanbok": true, "top": "#f1f3f7", "chima": "#e9eef6", "ribbon": "#9aa3b5", "shoes": "#e9eef6", "eyesStyle": "smile-closed", "headR": 140 } },
+  { "name": "Tóc bạc xõa", "desc": "Tóc dài bạc xõa che vai, hanbok trắng, hốc mắt đen — kiểu ma Hàn cổ điển", "spec": {
+    "ghostly": true, "old": true, "skin": "#dfe7ef", "hair": "#d9dce2", "hairStyle": "long", "hanbok": true, "top": "#eef1f6", "chima": "#e4e9f1", "ribbon": "#c9ced8", "shoes": "#e9eef6", "eyesStyle": "hollow", "headR": 140 } },
+  { "name": "Bà hàng xóm", "desc": "Trông như bà cụ bình thường: cardigan xám, kính, tóc búi — chỉ có đôi mắt là không bình thường", "spec": {
+    "ghostly": true, "old": true, "skin": "#e9dccf", "hair": "#a9adb5", "hairStyle": "bun", "top": "#8a8f99", "cardigan": true, "skirt": "#4a4f5c", "legs": "#e9dccf", "shoes": "#3b3b3b", "glasses": true, "eyesStyle": "hollow", "headR": 140 } },
+  { "name": "Ajumma tóc xoăn", "desc": "Tóc uốn xoăn kiểu bà cô Hàn, áo khoác đỏ thẫm, nụ cười toe lộ răng", "spec": {
+    "ghostly": true, "old": true, "skin": "#e4d3c4", "hair": "#4a3a3a", "hairStyle": "curly", "top": "#7a2a32", "zip": true, "pants": "#3b3f52", "shoes": "#2a2a2a", "eyesStyle": "hollow", "mouthStyle": "grin", "headR": 142 } },
+  { "name": "Hanbok tro xám", "desc": "Hanbok xám tro, khăn quàng, da tái xanh, mắt nhắm cười — như vừa bước ra từ ảnh thờ", "spec": {
+    "ghostly": true, "old": true, "skin": "#cfdbe0", "hair": "#e2e4e8", "hairStyle": "bun", "hanbok": true, "top": "#9aa1ab", "chima": "#7f8794", "ribbon": "#5a2a3a", "scarf": "#6b7280", "shoes": "#d9dde3", "eyesStyle": "smile-closed", "mouthStyle": "grin", "headR": 140 } }
+] }
