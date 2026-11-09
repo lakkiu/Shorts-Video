@@ -4,6 +4,7 @@
   "desc": "Cận cửa từ bên trong, nắm cửa",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "door-inside": {
       "x": 719,

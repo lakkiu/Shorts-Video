@@ -1,0 +1,15 @@
+{
+  "id": "tuan",
+  "desc": "Tuấn: Năng động, tóc ngắn, áo sọc, mũ lưỡi trai đỏ",
+  "spec": {
+    "skin": "#f3c9a5",
+    "hair": "#1d1a1a",
+    "hairStyle": "cap",
+    "cap": "#e5484d",
+    "top": "#f4f1ea",
+    "stripes": "#2f6fdb",
+    "pants": "#3b3f52",
+    "shoes": "#ffffff",
+    "headR": 146
+  }
+}

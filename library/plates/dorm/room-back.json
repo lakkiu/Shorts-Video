@@ -4,6 +4,7 @@
   "desc": "Từ phía cửa sổ nhìn về cửa: giữa phòng, cửa phía sau",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "room-mid": {
       "x": 829.2,

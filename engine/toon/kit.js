@@ -23,11 +23,11 @@ const shadeHex = (hex, k) => { const c = new THREE.Color(hex); c.multiplyScalar(
 const KR = "'Jua', 'WenQuanYi Zen Hei', sans-serif";
 
 export const LIGHTS = {
-  "night-cold": { hemi: ["#41507a", "#1a1f2a", 0.9], fog: "#070a12", fogNear: 5, fogFar: 26, tint: "#c9d7ff", sat: 0.84, window: "#8fb0e8", winLight: ["#7f9cff", 3] },
-  "warm-lamp": { hemi: ["#6b5a72", "#2a2020", 0.75], fog: "#120d0c", fogNear: 6, fogFar: 26, tint: "#ffe6cc", sat: 0.95, window: "#2b3a66", winLight: ["#6f8cff", 1.2] },
-  day: { hemi: ["#fff6e8", "#b8a888", 1.6], sun: ["#fff1d6", 2.2, [4, 6, 3]], fog: "#dfe8f2", fogNear: 12, fogFar: 40, tint: "#ffffff", sat: 1.05, window: "#cfe8ff", winLight: ["#fff6e0", 3] },
-  sunset: { hemi: ["#ffb98a", "#4a3050", 1.1], sun: ["#ff9a5a", 2.0, [-4, 3, 2]], fog: "#3a2436", fogNear: 8, fogFar: 30, tint: "#ffd9c0", sat: 1.0, window: "#ff9a6a", winLight: ["#ff8a50", 3] },
-  "red-candle": { hemi: ["#3a1a22", "#120808", 0.7], fog: "#0b0406", fogNear: 4, fogFar: 20, tint: "#ffc9c0", sat: 0.9, window: "#2a1630", winLight: ["#7a3050", 1.0] },
+  "night-cold": { charTint: "rgba(30,40,90,0.22)", hemi: ["#41507a", "#1a1f2a", 0.9], fog: "#070a12", fogNear: 5, fogFar: 26, tint: "#c9d7ff", sat: 0.84, window: "#8fb0e8", winLight: ["#7f9cff", 3] },
+  "warm-lamp": { charTint: "rgba(90,50,20,0.15)", hemi: ["#6b5a72", "#2a2020", 0.75], fog: "#120d0c", fogNear: 6, fogFar: 26, tint: "#ffe6cc", sat: 0.95, window: "#2b3a66", winLight: ["#6f8cff", 1.2] },
+  day: { charTint: "rgba(0,0,0,0)", hemi: ["#fff6e8", "#b8a888", 1.6], sun: ["#fff1d6", 2.2, [4, 6, 3]], fog: "#dfe8f2", fogNear: 12, fogFar: 40, tint: "#ffffff", sat: 1.05, window: "#cfe8ff", winLight: ["#fff6e0", 3] },
+  sunset: { charTint: "rgba(120,50,30,0.15)", hemi: ["#ffb98a", "#4a3050", 1.1], sun: ["#ff9a5a", 2.0, [-4, 3, 2]], fog: "#3a2436", fogNear: 8, fogFar: 30, tint: "#ffd9c0", sat: 1.0, window: "#ff9a6a", winLight: ["#ff8a50", 3] },
+  "red-candle": { charTint: "rgba(110,20,20,0.25)", hemi: ["#3a1a22", "#120808", 0.7], fog: "#0b0406", fogNear: 4, fogFar: 20, tint: "#ffc9c0", sat: 0.9, window: "#2a1630", winLight: ["#7a3050", 1.0] },
 };
 
 function floorTex(kind, color) {
@@ -153,7 +153,7 @@ export function buildSet(scene, spec) {
   }
   // hide props that would sit in front of the lens (sight-line culling)
   const cull = (camPos, r = 0.85) => { for (const o of props) { const b = new THREE.Box3().setFromObject(o), c = b.getCenter(new THREE.Vector3()); const dx = Math.max(b.min.x - camPos.x, 0, camPos.x - b.max.x), dz = Math.max(b.min.z - camPos.z, 0, camPos.z - b.max.z); o.visible = Math.hypot(dx, dz) > r * 0.5 && Math.hypot(c.x - camPos.x, c.z - camPos.z) > r; } };
-  return { lights, props, cull, post: { tint: L.tint, sat: L.sat } };
+  return { lights, props, cull, post: { tint: L.tint, sat: L.sat, charTint: L.charTint } };
 }
 
 // default camera angles and marks for demos / new sets

@@ -4,6 +4,7 @@
   "desc": "Cận mặt nhân vật đứng sát cửa trong phòng",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "door-inside": {
       "x": 756.6,

@@ -1,0 +1,28 @@
+{
+  "set": "student-room",
+  "angle": "front",
+  "desc": "Chính diện vào tường sau",
+  "w": 2400,
+  "h": 1350,
+  "charTint": "rgba(30,40,90,0.22)",
+  "marks": {
+    "center": {
+      "x": 1200,
+      "y": 1375.2,
+      "pxPerM": 697.2,
+      "depth": 2.046
+    },
+    "back": {
+      "x": 1200,
+      "y": 1076.4,
+      "pxPerM": 426.6,
+      "depth": 3.357
+    },
+    "front": {
+      "x": 1200,
+      "y": 1940.7,
+      "pxPerM": 1207.9,
+      "depth": 1.183
+    }
+  }
+}

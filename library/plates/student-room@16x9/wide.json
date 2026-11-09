@@ -1,0 +1,34 @@
+{
+  "set": "student-room",
+  "angle": "wide",
+  "desc": "Toàn cảnh từ phía trước phòng",
+  "w": 2400,
+  "h": 1350,
+  "charTint": "rgba(30,40,90,0.22)",
+  "marks": {
+    "center": {
+      "x": 1145.1,
+      "y": 1158.6,
+      "pxPerM": 459.8,
+      "depth": 2.263
+    },
+    "left": {
+      "x": 827.8,
+      "y": 1053.5,
+      "pxPerM": 392.4,
+      "depth": 2.838
+    },
+    "right": {
+      "x": 1581.6,
+      "y": 1161.3,
+      "pxPerM": 461.5,
+      "depth": 2.392
+    },
+    "back": {
+      "x": 1264.4,
+      "y": 920.1,
+      "pxPerM": 305.6,
+      "depth": 3.51
+    }
+  }
+}

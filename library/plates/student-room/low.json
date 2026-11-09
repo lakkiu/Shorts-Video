@@ -4,6 +4,7 @@
   "desc": "Góc thấp sát sàn nhìn lên",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "center": {
       "x": 327.1,

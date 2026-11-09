@@ -4,6 +4,7 @@
   "desc": "Nhìn về tường trái",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "left": {
       "x": 880.1,

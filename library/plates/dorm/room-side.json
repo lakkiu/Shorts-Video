@@ -4,6 +4,7 @@
   "desc": "Góc nghiêng trong phòng, thấy đường đi từ giữa phòng ra cửa",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "room-center": {
       "x": 1631.8,

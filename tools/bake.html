@@ -55,7 +55,7 @@
         }
         const focus = a.focus ?? (a.marks?.length ? marks[a.marks[0]].depth : 3);
         post.render(scene, camera, null, focus, 1, 0);
-        return { png: renderer.domElement.toDataURL("image/png"), meta: { set: def.name, angle: name, desc: a.desc, w: W, h: H, marks } };
+        return { png: renderer.domElement.toDataURL("image/png"), meta: { set: def.name, angle: name, desc: a.desc, w: W, h: H, charTint: def.charTint || set.post?.charTint || null, marks } };
       };
       window.angles = Object.keys(def.angles);
       document.title = "ready";

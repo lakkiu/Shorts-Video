@@ -2,6 +2,7 @@
   "name": "dorm",
   "description": "Ký túc xá ban đêm: hành lang dài đèn tuýp, cửa phòng 302-310 (phòng Minh là 305), biển 비상구; trong phòng 305: bàn học, đèn bàn, đồng hồ 03:00, giường, cửa sổ ánh trăng. Ngoài cửa 305 có đôi dép ướt trong vũng nước.",
   "module": "dorm.js",
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "desk": [3.3, 0.9],
     "room-center": [3.0, -0.05],

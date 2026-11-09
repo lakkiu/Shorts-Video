@@ -4,6 +4,7 @@
   "desc": "Trung cảnh nhân vật giữa phòng, phía sau là cửa tối: để ma hiện sau lưng",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "room-mid": {
       "x": 637.5,

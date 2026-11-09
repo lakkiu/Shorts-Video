@@ -4,6 +4,7 @@
   "desc": "Hành lang vắng nhìn về cửa 305 đóng",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "corridor-near": {
       "x": 699,

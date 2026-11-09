@@ -15,7 +15,7 @@ Mọi video đi qua **6 cổng duyệt**. Ở mỗi cổng: làm xong phần c�
 
 ## ① Duyệt kịch bản
 
-Viết `stories/<slug>.script.md` (chưa phải JSON) rồi gửi người dùng. Gồm:
+Viết `stories/<slug>.script.md` theo mẫu `stories/_template.script.md` (chưa phải JSON) rồi gửi người dùng. Gồm:
 
 1. **Logline** một câu, **độ dài dự kiến** (≈ 3,3 từ tiếng Việt/giây với giọng kể 0,95x), nền tảng đích.
 2. **3 phương án hook** khác kiểu nhau, mỗi cái ≤ 15 từ, nói trong 3 giây đầu. Ghi rõ kiểu của từng cái:
@@ -77,7 +77,7 @@ Chọn 5 ứng viên khác nhau rõ (giới tính / tuổi / chất giọng / nh
 node tools/voice-demo.mjs demos/voices-<slug>.json   # -> demos/voices-<slug>/<role>-1..5.mp3 + <role>-tat-ca.mp3
 ```
 
-Gửi người dùng các file `<role>-tat-ca.mp3` (nghe lần lượt, có đọc "Giọng số một…") và bảng số → tên giọng (in ra cuối lệnh, lưu ở `README.txt`); gửi thêm file lẻ nếu họ muốn nghe lại một giọng. Người dùng có thể đổi tốc độ (`speed`: MiniMax/CapCut 0.5-2, ElevenLabs 0.7-1.2) hoặc hiệu ứng → chạy lại (giọng đã tạo được cache, chỉ phần mới tốn credit). Giọng được chọn ghi vào `voices` của kịch bản JSON (giữ nguyên `voice`, `provider`, `speed`, `model`, `fx`) — cache dùng chung nên khi render không tạo lại câu đã nghe thử. Giọng hay dùng lại cho kênh: lưu thêm vào `library/voices.json`.
+Gửi người dùng các file `<role>-tat-ca.mp3` (nghe lần lượt, có đọc "Giọng số một…") và bảng số → tên giọng (in ra cuối lệnh, lưu ở `README.txt`); gửi thêm file lẻ nếu họ muốn nghe lại một giọng. Người dùng có thể đổi tốc độ (`speed`: MiniMax/CapCut 0.5-2, ElevenLabs 0.7-1.2) hoặc hiệu ứng → chạy lại (giọng đã tạo được cache, chỉ phần mới tốn credit). Giọng được chọn ghi vào `voices` của kịch bản JSON (giữ nguyên `voice`, `provider`, `speed`, `model`, `fx`) — cache dùng chung nên khi render không tạo lại câu đã nghe thử. Giọng hay dùng lại cho kênh: lưu vào `library/voices.json` (tên preset → cấu hình giọng) rồi trong kịch bản chỉ cần `{ "preset": "horror-narrator" }` (có thể ghi đè thêm `speed`, `fx`…).
 
 Hiệu ứng giọng (`fx`): `muffled` (qua cửa), `ghost` (trầm, vọng), `whisper`, `phone`, `radio`, `cave`.
 
@@ -128,8 +128,11 @@ node tools/demo.cjs sets demos/<noi>.json         # -> demos/<noi>.png
 Người dùng chọn → lưu `library/sets/<id>.json` = `{ "name", "description", "module": "kit.js", "spec": {...} }`. Thêm `angles` / `marks` riêng nếu góc mặc định (`wide front left-wall right-wall low`; điểm đứng `center left right back front`) chưa đủ cho kịch bản — mẫu chi tiết: `library/sets/dorm.json`. Rồi chụp và xem:
 
 ```bash
-node tools/bake-plates.cjs <id>                   # library/plates/<id>/*.jpg + *.json
+node tools/bake-plates.cjs <id>                   # khung dọc 9:16  -> library/plates/<id>/*.jpg + *.json
+node tools/bake-plates.cjs <id> --landscape       # khung ngang 16:9 -> library/plates/<id>@16x9/
 ```
+
+Kịch bản `"format": "16:9"` dùng ảnh nền `<set>@16x9` — chụp bản ngang trước khi làm video YouTube. Màu ám nhân vật (`charTint`) lấy theo ánh sáng của bối cảnh, tự áp khi kịch bản không ghi `tint`.
 
 Gửi ảnh nền cho người dùng nếu bối cảnh mới. Bối cảnh không lắp ghép được (hành lang, phố…) thì viết module riêng như `engine/toon/dorm.js`.
 
@@ -174,7 +177,7 @@ Xem storyboard.png **trước khi gửi**: nhân vật đứng đúng chỗ, kh�
 - **Thời điểm** trong `keys`, `walk.at`, `fadeAt`, `fx.at`, `notify.at`: số giây từ đầu cảnh, `"bN"` (đầu nhịp N), `"eN"` (cuối nhịp N), cộng trừ: `"b2+0.6"`.
 - **Nhân vật**: `id` (trùng tên người nói thì tự nhép miệng), `char` (file trong `library/characters`), `mark` (điểm đứng có trong `.json` của góc máy đó — kiểm tra bằng `cat library/plates/<set>/<angle>.json`), `mood`, `pose`, `look` (-1 trái … 1 phải), `keys` (đổi trạng thái theo thời gian; thêm `lookDown`, `tilt`, `lean`), `walk { to, at, dur }`, `height` (m, mặc định 1.6; ma 2.0), ma: `fadeAt`, `fadeDur`.
 - `mood`: `neutral calm happy excited surprised wow scared worried relieved sleepy`. `pose`: `idle wave arms-up reach phone phone-off cower point`.
-- `voices.<vai>`: `{ name }` (tên giọng GenMax) hoặc `{ voice, provider (minimax|capcut|elevenlabs) }`, cộng `speed, model, fx, color (màu phụ đề), quote (phụ đề trong ngoặc kép)` — lấy từ cổng ②.
+- `voices.<vai>`: `{ name }` (tên giọng GenMax), `{ preset }` (trong `library/voices.json`) hoặc `{ voice, provider (minimax|capcut|elevenlabs) }`, cộng `speed, model, fx, color (màu phụ đề), quote (phụ đề trong ngoặc kép)` — lấy từ cổng ②.
 - Tiếng động có sẵn (`library/sfx`): `knocks creak sting buzz heart drips drone hum`. Nền (`ambience`) được lặp liên tục và trộn ở bước cuối, tắt khi `blackout`.
 
 ## ⑥ Render và giao
@@ -184,7 +187,9 @@ node scripts/make.mjs stories/<slug>.json --jobs 2       # -> out/<slug>/<slug>.
 ```
 
 - Tự chia chương ≤ 90 s (`--chapter N`), render song song `--jobs` chương, ghép không nén lại, trộn nền, chuẩn hoá -14 LUFS (mức TikTok/Reels/Shorts).
-- Thời gian trên 4 nhân CPU không GPU: ~5,3 giây render cho mỗi giây video, 1 job. Video 20 phút ≈ 1,5-2 giờ với 1 job; máy nhiều nhân + `--jobs` nhanh hơn tương ứng.
+- Thời gian trên 4 nhân CPU không GPU: ~5,3 giây render cho mỗi giây video với 1 job; `--jobs 2` gần gấp đôi tốc độ (đã đo). Video 20 phút ≈ 1,5-2 giờ với 1 job; máy nhiều nhân + `--jobs` nhanh hơn tương ứng.
+- Cuối lệnh in số credit GenMax đã dùng / còn lại — báo cho người dùng.
+- Mỗi lần chạy `make` xoá chương cũ trong `out/<slug>/` rồi dựng lại.
 - Xem `out/<slug>/sheet.png` (một ảnh mỗi cảnh từ video thật) trước khi giao. Gửi video bằng SendUserFile. File > 100 MB: nói với người dùng có thể nén thêm.
 
 ## Lỗi hay gặp
@@ -194,3 +199,5 @@ node scripts/make.mjs stories/<slug>.json --jobs 2       # -> out/<slug>/<slug>.
 - Nhân vật quá to / bị cắt: chọn góc rộng hơn, đổi `mark` xa hơn, hoặc giảm `height`.
 - Khung đen khi render: kiểm tra `render.log` trong thư mục chương; chạy `npx hyperframes check --json` trong thư mục đó.
 - GenMax lỗi 401: `.env` thiếu `GENMAX_API_KEY`.
+- `no plate <set>@16x9/...`: chưa chụp ảnh nền khung ngang — `node tools/bake-plates.cjs <set> --landscape`.
+- Phụ đề đè lên nhân vật: đổi `mark` lên cao/xa hơn, hoặc dùng góc rộng hơn — phụ đề luôn ở 75% chiều cao khung.

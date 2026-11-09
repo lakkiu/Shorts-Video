@@ -4,6 +4,7 @@
   "desc": "Trong phòng nhìn ra cửa đóng, vệt sáng dưới khe cửa",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "room-center": {
       "x": 891.9,

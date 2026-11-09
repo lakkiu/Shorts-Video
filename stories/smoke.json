@@ -1,0 +1,11 @@
+{ "title": "Kiểm tra", "slug": "smoke", "format": "9:16", "set": "student-room",
+  "voices": { "narrator": { "name": "kể chuyện ma", "speed": 0.95 }, "tuan": { "name": "Nam Trầm", "color": "#9fd3ff", "quote": true } },
+  "ambience": [{ "sfx": "drone", "volume": 0.5 }],
+  "shots": [
+    { "angle": "wide", "move": "push", "chars": [{ "id": "tuan", "char": "tuan", "mark": "center", "mood": "calm" }],
+      "beats": [{ "say": "narrator", "text": "Tuấn vừa chuyển vào phòng trọ mới." }, { "say": "tuan", "text": "Phòng này rẻ thật đấy!" }] },
+    { "angle": "front", "move": "drift", "chars": [{ "id": "tuan", "char": "tuan", "mark": "back", "mood": "surprised", "keys": [{ "at": "b0+1", "mood": "scared", "pose": "cower" }] }],
+      "fx": [{ "type": "flicker", "at": "b0" }],
+      "beats": [{ "sfx": "knocks", "caption": "Cốc… cốc…", "shake": [0, 0.55] }, { "say": "narrator", "text": "Nhưng đêm đầu tiên, có người gõ cửa." }] },
+    { "black": true, "text": "Còn tiếp…", "hold": 1.5 }
+  ] }

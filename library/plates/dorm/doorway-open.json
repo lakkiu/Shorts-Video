@@ -4,6 +4,7 @@
   "desc": "Từ hành lang nhìn vào cửa 305 đang mở, phòng tối phía sau",
   "w": 1350,
   "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
   "marks": {
     "doorway": {
       "x": 741.1,

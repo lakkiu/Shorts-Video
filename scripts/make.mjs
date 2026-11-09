@@ -28,14 +28,28 @@ const probe = (f) => Number(execFileSync("ffprobe", ["-v", "error", "-show_entri
 const ff = (a) => execFileSync("ffmpeg", ["-loglevel", "error", "-y", ...a]);
 
 // ---------- 1. voices (cached, parallel; shared cache with tools/voice-demo.mjs) ----------
-const voiceOf = (who) => story.voices?.[who] || story.voices?.narrator || { voice: "Vietnamese_Serene_Man", speed: 0.95 };
+const PRESETS = fs.existsSync(path.join(ROOT, "library/voices.json")) ? JSON.parse(fs.readFileSync(path.join(ROOT, "library/voices.json"), "utf8")) : {};
+const voiceOf = (who) => {
+  const v = story.voices?.[who] || story.voices?.narrator || { voice: "Vietnamese_Serene_Man", speed: 0.95 };
+  if (!v.preset) return v;
+  if (!PRESETS[v.preset]) throw new Error(`voice preset "${v.preset}" not in library/voices.json`);
+  const { preset, ...rest } = v;
+  return { ...PRESETS[preset], ...rest };
+};
 const beats = [];
 story.shots.forEach((s, si) => (s.beats || []).forEach((b, bi) => { if (b.say) beats.push({ si, bi, b }); }));
+const credits = () => { try { return JSON.parse(execFileSync(process.execPath, [path.join(ROOT, "scripts/genmax-tts.mjs"), "--credits"], { cwd: ROOT }).toString()).credit_balance; } catch { return null; } };
+const C0 = credits();
 log(`voices: ${beats.length} lines`);
 await pool(beats, 4, async ({ b }) => { const r = await synth(b.text, voiceOf(b.say)); b._file = r.file; b._dur = r.dur; });
 
 // ---------- 2. timeline ----------
-const plateMeta = (set, angle) => JSON.parse(fs.readFileSync(path.join(ROOT, "library/plates", set, `${angle}.json`), "utf8"));
+const plateDir = (set) => (W > H ? `${set}@16x9` : set);
+const plateMeta = (set, angle) => {
+  const f = path.join(ROOT, "library/plates", plateDir(set), `${angle}.json`);
+  if (!fs.existsSync(f)) throw new Error(`no plate ${plateDir(set)}/${angle} — run: node tools/bake-plates.cjs ${set}${W > H ? " --landscape" : ""}`);
+  return JSON.parse(fs.readFileSync(f, "utf8"));
+};
 const sfxFile = (n) => path.join(ROOT, "library/sfx", `${n}.mp3`);
 let cur = 0;
 const shots = [], audio = [], caps = [], fx = [], shakes = [], talk = [], notifies = [], overlays = [];
@@ -84,7 +98,7 @@ for (const s of story.shots) {
     if (s.text) caps.push({ text: s.text, start: sh.start + 0.3, end: sh.end, color: "#e9edf7", card: true });
   } else {
     const meta = plateMeta(set, s.angle);
-    sh.plate = `plates/${set}/${s.angle}.jpg`; sh.plateW = meta.w; sh.plateH = meta.h;
+    sh.plate = `plates/${plateDir(set)}/${s.angle}.jpg`; sh.plateW = meta.w; sh.plateH = meta.h;
     sh.chars = (s.chars || []).map((c) => {
       const mk = (name) => { const m = meta.marks[name]; if (!m) throw new Error(`angle ${s.angle} has no mark "${name}" (has: ${Object.keys(meta.marks).join(", ") || "none"})`); return m; };
       const from = mk(c.mark);
@@ -95,7 +109,7 @@ for (const s of story.shots) {
       if (c.showAt != null) r.showAt = resolveAt(c.showAt, sh);
       return r;
     });
-    sh.move = s.move || "drift"; sh.dim = s.dim || 0; sh.tint = s.tint;
+    sh.move = s.move || "drift"; sh.dim = s.dim || 0; sh.tint = s.tint ?? (story.tint ? undefined : meta.charTint);
   }
   for (const f of s.fx || []) {
     const start = f.at != null ? resolveAt(f.at, sh) : sh.start;
@@ -107,6 +121,7 @@ for (const s of story.shots) {
   cur = sh.end;
 }
 const TOTAL = cur;
+{ const C1 = credits(); if (C0 != null && C1 != null) log(`GenMax credits: used ${C0 - C1}, left ${C1}`); }
 const blackoutAt = Math.min(...fx.filter((f) => f.type === "blackout").map((f) => f.start), TOTAL);
 log(`timeline: ${shots.length} shots, ${TOTAL.toFixed(1)} s`);
 
@@ -131,6 +146,7 @@ function writeChapter(ch, n) {
   fs.copyFileSync(path.join(ROOT, "engine/runtime.js"), path.join(A, "engine/runtime.js"));
   fs.copyFileSync(path.join(ROOT, "engine/toon/characters.js"), path.join(A, "engine/characters.js"));
   cp(path.join(ROOT, "engine/lib/gsap.min.js"), path.join(A, "lib/gsap.min.js"));
+  for (const f of ["montserrat-latin-900-normal.woff2", "montserrat-vietnamese-900-normal.woff2"]) cp(path.join(ROOT, "engine/fonts", f), path.join(A, "fonts", f));
   const o = ch.start, D = ch.end - ch.start;
   const inCh = (x) => x.start < ch.end && x.end > ch.start;
   const rel = (x) => ({ ...x, start: Math.max(0, x.start - o), end: Math.min(D, x.end - o) });
@@ -188,6 +204,10 @@ function writeChapter(ch, n) {
     <meta name="viewport" content="width=${W}, height=${H}" />
     <script src="assets/lib/gsap.min.js"></script>
     <style>
+      @font-face { font-family: "Montserrat"; font-weight: 900; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: "Montserrat"; font-weight: 900; src: url("assets/fonts/montserrat-vietnamese-900-normal.woff2") format("woff2");
+        unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: ${W}px; height: ${H}px; overflow: hidden; background: #000; }
       #root { width: 100%; height: 100%; position: relative; overflow: hidden; background: #000; }
@@ -246,6 +266,8 @@ ${capsHtml}${audioHtml}    </div>
   fs.writeFileSync(path.join(dir, "hyperframes.json"), JSON.stringify({ paths: { assets: "assets" } }, null, 2));
   return dir;
 }
+for (const d of fs.readdirSync(OUT)) if (/^ch\d+$/.test(d)) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
+for (const d of ["storyboard", "sheet"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
 const dirs = chapters.map(writeChapter);
 fs.writeFileSync(path.join(OUT, "timeline.json"), JSON.stringify({ total: TOTAL, shots: shots.map((s) => ({ angle: s.src.angle, start: s.start, end: s.end })) }, null, 2));
 log(`projects: ${dirs.map((d) => path.relative(ROOT, d)).join(", ")}`);
