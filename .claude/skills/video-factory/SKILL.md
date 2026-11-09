@@ -42,6 +42,16 @@ Nội dung: cốt truyện, nhân vật, câu chữ luôn là của mình, khôn
 
 Mỗi vai có lời (người kể + từng nhân vật nói + ma) nghe **5 giọng**, đọc **đúng câu thật của vai đó trong kịch bản** (chọn câu đặc trưng nhất: câu hook cho người kể, câu thoại quan trọng nhất cho nhân vật), có sẵn hiệu ứng của vai (`muffled`, `ghost`…) để nghe đúng như trong video.
 
+**Người dùng gọi giọng bằng tên** như trong GenMax ("kể chuyện ma", "Nam Trầm", "George"…): tra bằng
+
+```bash
+node scripts/voices.mjs find "kể chuyện ma"     # bỏ qua dấu/hoa thường; không có thì tìm trong thư viện chia sẻ ElevenLabs
+node scripts/voices.mjs list clone             # giọng người dùng tự clone (ưu tiên khi họ nhắc tên)
+node scripts/voices.mjs sync                   # cập nhật library/voice-catalog.json khi họ vừa clone giọng mới
+```
+
+và dùng thẳng tên trong JSON: `{ "name": "kể chuyện ma", "speed": 0.95 }` (thêm `"provider"` nếu tên trùng ở nhiều nguồn). Nếu tên không khớp chính xác, đưa người dùng các tên gần nhất để chọn, đừng tự đoán.
+
 Danh sách giọng:
 
 ```bash
@@ -164,7 +174,7 @@ Xem storyboard.png **trước khi gửi**: nhân vật đứng đúng chỗ, kh�
 - **Thời điểm** trong `keys`, `walk.at`, `fadeAt`, `fx.at`, `notify.at`: số giây từ đầu cảnh, `"bN"` (đầu nhịp N), `"eN"` (cuối nhịp N), cộng trừ: `"b2+0.6"`.
 - **Nhân vật**: `id` (trùng tên người nói thì tự nhép miệng), `char` (file trong `library/characters`), `mark` (điểm đứng có trong `.json` của góc máy đó — kiểm tra bằng `cat library/plates/<set>/<angle>.json`), `mood`, `pose`, `look` (-1 trái … 1 phải), `keys` (đổi trạng thái theo thời gian; thêm `lookDown`, `tilt`, `lean`), `walk { to, at, dur }`, `height` (m, mặc định 1.6; ma 2.0), ma: `fadeAt`, `fadeDur`.
 - `mood`: `neutral calm happy excited surprised wow scared worried relieved sleepy`. `pose`: `idle wave arms-up reach phone phone-off cower point`.
-- `voices.<vai>`: `{ voice, provider (minimax|capcut|elevenlabs), speed, model, fx, color (màu phụ đề), quote (phụ đề trong ngoặc kép) }` — lấy từ cổng ②.
+- `voices.<vai>`: `{ name }` (tên giọng GenMax) hoặc `{ voice, provider (minimax|capcut|elevenlabs) }`, cộng `speed, model, fx, color (màu phụ đề), quote (phụ đề trong ngoặc kép)` — lấy từ cổng ②.
 - Tiếng động có sẵn (`library/sfx`): `knocks creak sting buzz heart drips drone hum`. Nền (`ambience`) được lặp liên tục và trộn ở bước cuối, tắt khi `blackout`.
 
 ## ⑥ Render và giao

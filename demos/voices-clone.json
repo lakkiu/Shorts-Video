@@ -1,0 +1,10 @@
+{ "roles": [
+  { "role": "narrator", "text": "Ký túc xá trường tiếng ở Seoul có một luật lạ. Sau hai giờ sáng, không được mở cửa cho bất kỳ ai.",
+    "candidates": [
+      { "name": "kể chuyện ma", "speed": 0.95 },
+      { "name": "trường kể", "speed": 0.95 },
+      { "name": "đọc postcard", "speed": 0.95 },
+      { "name": "Serene Man", "speed": 0.95 },
+      { "name": "Nam Trầm", "speed": 0.95 }
+    ] }
+] }

@@ -1,0 +1,422 @@
+{
+  "synced": "2026-11-09T14:51:34.404Z",
+  "voices": [
+    {
+      "name": "đọc postcard",
+      "provider": "minimax",
+      "voice": "0d609cad-96e1-4051-985f-8b56c82b603f",
+      "kind": "clone",
+      "tags": "Male, Vietnamese"
+    },
+    {
+      "name": "trường kể",
+      "provider": "minimax",
+      "voice": "943ec345-6337-433f-92d6-98322248608d",
+      "kind": "clone",
+      "tags": "Male, Vietnamese"
+    },
+    {
+      "name": "kể chuyện ma",
+      "provider": "minimax",
+      "voice": "eaa5986f-c033-44ae-92ab-bb10f33281d3",
+      "kind": "clone",
+      "tags": "Male, Vietnamese"
+    },
+    {
+      "name": "Professional Guide",
+      "full": "Professional Guide - Clear,Informative,Consistent",
+      "provider": "minimax",
+      "voice": "Vietnamese_Professional_Guide_v6",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Middle-aged, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Serene Man",
+      "full": "Serene Man - Solemn,Cinematic,Captivating",
+      "provider": "minimax",
+      "voice": "Vietnamese_Serene_Man",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Young, Audiobooks & Novels, Documentary"
+    },
+    {
+      "name": "Professional Narrator",
+      "full": "Professional Narrator - Warm,Neutral,Measured",
+      "provider": "minimax",
+      "voice": "Vietnamese_Professional_Narrator_v2",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Middle-aged, Corporate Promotion & Narration, Online Education, Documentary"
+    },
+    {
+      "name": "Confident Woman",
+      "full": "Confident Woman - Professional,Inviting,Polished",
+      "provider": "minimax",
+      "voice": "Vietnamese_female_4_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Young, Audio Drama, Audiobooks & Novels, Podcasts & Social, Corporate & Narration"
+    },
+    {
+      "name": "Articulate Assistant",
+      "full": "Articulate Assistant - Bright,Crisp,Precise",
+      "provider": "minimax",
+      "voice": "Vietnamese_Articulate_Assistant_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Young, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Friendly Man",
+      "full": "Friendly Man - Persuasive,Dynamic,High-Energy",
+      "provider": "minimax",
+      "voice": "Vietnamese_male_1_v2",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Young, Games & RPG, Commercials & Trailers, Podcasts & Social"
+    },
+    {
+      "name": "Warm Narrator",
+      "full": "Warm Narrator - Clean,Warm,Measured",
+      "provider": "minimax",
+      "voice": "Vietnamese_Warm_Narrator_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Young, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Kind-hearted girl",
+      "full": "Kind-hearted girl - Compassionate,Uplifting,Heartwarming",
+      "provider": "minimax",
+      "voice": "Vietnamese_kindhearted_girl",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Young, Audiobooks & Novels, E-Learning, Podcasts & Social"
+    },
+    {
+      "name": "Steady Instructor",
+      "full": "Steady Instructor - Resonant,Smooth,Informative",
+      "provider": "minimax",
+      "voice": "Vietnamese_Steady_Instructor_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Middle-aged, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Polished Announcer",
+      "full": "Polished Announcer - Bright,Polished,Articulate",
+      "provider": "minimax",
+      "voice": "Vietnamese_polished_Announcer_v3",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Young, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Patient Instructor",
+      "full": "Patient Instructor - Informative,Neutral,Clear",
+      "provider": "minimax",
+      "voice": "Vietnamese_patient_Instructor_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Middle-aged, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Crisp Woman",
+      "full": "Crisp Woman - Crisp,Fluid,Polished",
+      "provider": "minimax",
+      "voice": "Vietnamese_crisp_announcer_v2",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Middle-aged, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Dependable Woman",
+      "full": "Dependable Woman - Warm,Smooth,Inviting",
+      "provider": "minimax",
+      "voice": "Vietnamese_Professional_Assistant_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Middle-aged, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Podcast Host",
+      "full": "Podcast Host - Resonant,Fast,Precise",
+      "provider": "minimax",
+      "voice": "Vietnamese_Podcast_Host_v2",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Middle-aged, Podcast, Narration, Documentary"
+    },
+    {
+      "name": "Audiobook Woman",
+      "full": "Audiobook Woman - Warm,Low-Paced,Clear",
+      "provider": "minimax",
+      "voice": "Vietnamese_Audiobook_woman_v2",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Middle-aged, Corporate Promotion & Narration, Online Education"
+    },
+    {
+      "name": "Male Narrator",
+      "full": "Male Narrator - Resonant,Warm,Narrative",
+      "provider": "minimax",
+      "voice": "Vietnamese_Male_Narrator_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Elderly, Audiobooks & Novels, Online Education, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Cheerful Instructor",
+      "full": "Cheerful Instructor - Well-Paced,Cheerful,Resonate",
+      "provider": "minimax",
+      "voice": "Vietnamese_Cheerful_Instructor_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Male, Middle-aged, Corporate Promotion & Narration, Online Education"
+    },
+    {
+      "name": "Cute Girl",
+      "full": "Cute Girl - Crisp,Friendly,Bright",
+      "provider": "minimax",
+      "voice": "Vietnamese_Cute_Girl_v1",
+      "kind": "system",
+      "tags": "Vietnamese, Standard, Female, Young, Dubbing, Corporate Promotion & Narration"
+    },
+    {
+      "name": "Cute Female",
+      "provider": "capcut",
+      "voice": "7102355709945188865",
+      "kind": "system",
+      "tags": "Vietnamese"
+    },
+    {
+      "name": "Sweet Little Girl",
+      "provider": "capcut",
+      "voice": "7252594014782755330",
+      "kind": "system",
+      "tags": "Vietnamese"
+    },
+    {
+      "name": "Giọng nữ phổ thông",
+      "provider": "capcut",
+      "voice": "7264854897953083905",
+      "kind": "system",
+      "tags": "Vietnamese"
+    },
+    {
+      "name": "Confident Male",
+      "provider": "capcut",
+      "voice": "7102355803792740865",
+      "kind": "system",
+      "tags": "Vietnamese"
+    },
+    {
+      "name": "Chí Mai",
+      "provider": "capcut",
+      "voice": "7483736254694035984",
+      "kind": "system",
+      "tags": "Vietnamese"
+    },
+    {
+      "name": "Trung Caha",
+      "provider": "capcut",
+      "voice": "7491607775621943824",
+      "kind": "system",
+      "tags": "male, Vietnamese"
+    },
+    {
+      "name": "Nam Trầm",
+      "provider": "capcut",
+      "voice": "7493478233703191041",
+      "kind": "system",
+      "tags": "male, Vietnamese"
+    },
+    {
+      "name": "Ly Nam",
+      "provider": "capcut",
+      "voice": "7491608014181372417",
+      "kind": "system",
+      "tags": "male, Vietnamese"
+    },
+    {
+      "name": "Duy Bắc",
+      "provider": "capcut",
+      "voice": "7491608109043945985",
+      "kind": "system",
+      "tags": "male, Vietnamese"
+    },
+    {
+      "name": "Hà Nữ",
+      "provider": "capcut",
+      "voice": "7491607926562361857",
+      "kind": "system",
+      "tags": "female, Vietnamese"
+    },
+    {
+      "name": "Sài Nữ",
+      "provider": "capcut",
+      "voice": "7491607853086544400",
+      "kind": "system",
+      "tags": "female, Vietnamese"
+    },
+    {
+      "name": "Anh Dũng",
+      "provider": "capcut",
+      "voice": "7483736167565758992",
+      "kind": "system",
+      "tags": "Vietnamese"
+    },
+    {
+      "name": "Bella",
+      "full": "Bella - Professional, Bright, Warm",
+      "provider": "elevenlabs",
+      "voice": "hpp4J3VqNfWAUOO0d1Us",
+      "kind": "default",
+      "tags": "female, middle_aged, american, professional"
+    },
+    {
+      "name": "Roger",
+      "full": "Roger - Laid-Back, Casual, Resonant",
+      "provider": "elevenlabs",
+      "voice": "CwhRBWXzGAHq8TQ4Fs17",
+      "kind": "default",
+      "tags": "male, middle_aged, american, classy"
+    },
+    {
+      "name": "Sarah",
+      "full": "Sarah - Mature, Reassuring, Confident",
+      "provider": "elevenlabs",
+      "voice": "EXAVITQu4vr4xnSDxMaL",
+      "kind": "default",
+      "tags": "female, young, american, professional"
+    },
+    {
+      "name": "Laura",
+      "full": "Laura - Enthusiast, Quirky Attitude",
+      "provider": "elevenlabs",
+      "voice": "FGY2WhTYpPnrIDTdsKH5",
+      "kind": "default",
+      "tags": "female, young, american, sassy"
+    },
+    {
+      "name": "Charlie",
+      "full": "Charlie - Deep, Confident, Energetic",
+      "provider": "elevenlabs",
+      "voice": "IKne3meq5aSn9XLyUdCD",
+      "kind": "default",
+      "tags": "male, young, australian, hyped"
+    },
+    {
+      "name": "George",
+      "full": "George - Warm, Captivating Storyteller",
+      "provider": "elevenlabs",
+      "voice": "JBFqnCBsd6RMkjVDRZzb",
+      "kind": "default",
+      "tags": "male, middle_aged, british, mature"
+    },
+    {
+      "name": "Callum",
+      "full": "Callum - Husky Trickster",
+      "provider": "elevenlabs",
+      "voice": "N2lVS1w4EtoT3dr4eOWO",
+      "kind": "default",
+      "tags": "male, middle_aged, american"
+    },
+    {
+      "name": "River",
+      "full": "River - Relaxed, Neutral, Informative",
+      "provider": "elevenlabs",
+      "voice": "SAz9YHcvj6GT2YYXdXww",
+      "kind": "default",
+      "tags": "neutral, middle_aged, american, calm"
+    },
+    {
+      "name": "Harry",
+      "full": "Harry - Fierce Warrior",
+      "provider": "elevenlabs",
+      "voice": "SOYHLrjzK2X1ezoPC6cr",
+      "kind": "default",
+      "tags": "male, young, american, rough"
+    },
+    {
+      "name": "Liam",
+      "full": "Liam - Energetic, Social Media Creator",
+      "provider": "elevenlabs",
+      "voice": "TX3LPaxmHKxFdv7VOQHJ",
+      "kind": "default",
+      "tags": "male, young, american, confident"
+    },
+    {
+      "name": "Alice",
+      "full": "Alice - Clear, Engaging Educator",
+      "provider": "elevenlabs",
+      "voice": "Xb7hH8MSUJpSbSDYk0k2",
+      "kind": "default",
+      "tags": "female, middle_aged, british, professional"
+    },
+    {
+      "name": "Matilda",
+      "full": "Matilda - Knowledgable, Professional",
+      "provider": "elevenlabs",
+      "voice": "XrExE9yKIg1WjnnlVkGX",
+      "kind": "default",
+      "tags": "female, middle_aged, american, upbeat"
+    },
+    {
+      "name": "Will",
+      "full": "Will - Relaxed Optimist",
+      "provider": "elevenlabs",
+      "voice": "bIHbv24MWmeRgasZH58o",
+      "kind": "default",
+      "tags": "male, young, american, chill"
+    },
+    {
+      "name": "Jessica",
+      "full": "Jessica - Playful, Bright, Warm",
+      "provider": "elevenlabs",
+      "voice": "cgSgspJ2msm6clMCkdW9",
+      "kind": "default",
+      "tags": "female, young, american, cute"
+    },
+    {
+      "name": "Eric",
+      "full": "Eric - Smooth, Trustworthy",
+      "provider": "elevenlabs",
+      "voice": "cjVigY5qzO86Huf0OWal",
+      "kind": "default",
+      "tags": "male, middle_aged, american, classy"
+    },
+    {
+      "name": "Chris",
+      "full": "Chris - Charming, Down-to-Earth",
+      "provider": "elevenlabs",
+      "voice": "iP95p4xoKVk53GoZ742B",
+      "kind": "default",
+      "tags": "male, middle_aged, american, casual"
+    },
+    {
+      "name": "Brian",
+      "full": "Brian - Deep, Resonant and Comforting",
+      "provider": "elevenlabs",
+      "voice": "nPczCjzI2devNBz1zQrb",
+      "kind": "default",
+      "tags": "male, middle_aged, american, classy"
+    },
+    {
+      "name": "Daniel",
+      "full": "Daniel - Steady Broadcaster",
+      "provider": "elevenlabs",
+      "voice": "onwK4e9ZLuTAKqWW03F9",
+      "kind": "default",
+      "tags": "male, middle_aged, british, formal"
+    },
+    {
+      "name": "Lily",
+      "full": "Lily - Velvety Actress",
+      "provider": "elevenlabs",
+      "voice": "pFZP5JQG7iQjIQuC4Bku",
+      "kind": "default",
+      "tags": "female, middle_aged, british, confident"
+    },
+    {
+      "name": "Adam",
+      "full": "Adam - Dominant, Firm",
+      "provider": "elevenlabs",
+      "voice": "pNInz6obpgDQGcFmaJgB",
+      "kind": "default",
+      "tags": "male, middle_aged, american"
+    },
+    {
+      "name": "Bill",
+      "full": "Bill - Wise, Mature, Balanced",
+      "provider": "elevenlabs",
+      "voice": "pqHfZKP75CvOlQylNhV4",
+      "kind": "default",
+      "tags": "male, old, american, crisp"
+    }
+  ]
+}

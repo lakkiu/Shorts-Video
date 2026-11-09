@@ -27,7 +27,7 @@ for (const r of spec.roles) {
   takes.forEach((t, i) => {
     const name = `${r.role}-${i + 1}.mp3`;
     toMp3(t.file, path.join(out, name));
-    summary.push(`${r.role} ${i + 1}: ${r.candidates[i].label || r.candidates[i].voice} (${r.candidates[i].provider || "minimax"} ${r.candidates[i].voice}, speed ${r.candidates[i].speed ?? 1}${(r.candidates[i].fx ?? r.fx) ? `, fx ${r.candidates[i].fx ?? r.fx}` : ""}) -> ${name}`);
+    summary.push(`${r.role} ${i + 1}: ${r.candidates[i].label || r.candidates[i].name || r.candidates[i].voice} (${r.candidates[i].name ? `"${r.candidates[i].name}"` : `${r.candidates[i].provider || "minimax"} ${r.candidates[i].voice}`}, speed ${r.candidates[i].speed ?? 1}${(r.candidates[i].fx ?? r.fx) ? `, fx ${r.candidates[i].fx ?? r.fx}` : ""}) -> ${name}`);
     list.push(intros[i].file, silence, t.file, silence, silence);
   });
   // one file to listen to every take in order

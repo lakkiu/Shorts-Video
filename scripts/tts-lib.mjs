@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { spawn, execFileSync } from "node:child_process";
+import { resolveVoice } from "./voices.mjs";
 
 export const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const CACHE = path.join(ROOT, ".cache", "tts");
@@ -21,6 +22,7 @@ export const ff = (a) => execFileSync("ffmpeg", ["-loglevel", "error", "-y", ...
 
 // v = { voice, speed?, provider?, fx? } -> { file, dur }
 export async function synth(text, v) {
+  v = resolveVoice(v);
   fs.mkdirSync(CACHE, { recursive: true });
   const provider = v.provider || "minimax";
   const key = crypto.createHash("sha1").update(`${provider}|${v.voice}|${v.speed ?? 1}|${text}${v.model ? `|${v.model}` : ""}`).digest("hex").slice(0, 16);
