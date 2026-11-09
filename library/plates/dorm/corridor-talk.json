@@ -1,0 +1,22 @@
+{
+  "set": "dorm",
+  "angle": "corridor-talk",
+  "desc": "Hành lang trước cửa 305: hai người nói chuyện",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
+  "marks": {
+    "talk-a": {
+      "x": 906.6,
+      "y": 1837.5,
+      "pxPerM": 724.7,
+      "depth": 3.858
+    },
+    "talk-b": {
+      "x": 501,
+      "y": 1924.8,
+      "pxPerM": 800.2,
+      "depth": 3.484
+    }
+  }
+}

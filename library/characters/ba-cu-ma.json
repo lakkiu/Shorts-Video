@@ -1,0 +1,18 @@
+{
+  "id": "ba-cu-ma",
+  "desc": "Bà cụ ma: Tóc búi bạc, hanbok trắng tang, mắt nhắm mà cười — hiền mà rợn",
+  "spec": {
+    "ghostly": true,
+    "old": true,
+    "skin": "#e6ecf2",
+    "hair": "#c9ccd2",
+    "hairStyle": "bun",
+    "hanbok": true,
+    "top": "#f1f3f7",
+    "chima": "#e9eef6",
+    "ribbon": "#9aa3b5",
+    "shoes": "#e9eef6",
+    "eyesStyle": "smile-closed",
+    "headR": 140
+  }
+}

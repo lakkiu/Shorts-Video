@@ -227,6 +227,7 @@ function writeChapter(ch, n) {
         -webkit-text-stroke: 14px #07080f; paint-order: stroke fill; }
       .cap span { display: inline-block; }
       .cap .orig { font-family: "Jua", "Montserrat"; font-weight: 400; font-size: 0.82em; -webkit-text-stroke: 12px #07080f; margin-bottom: 6px; }
+      .cap.card .orig { font-size: 2.6em; color: #ffd27a; margin-bottom: 24px; }
       .cap.sfx { font-style: italic; font-size: ${W < H ? 68 : 58}px; }
       .cap.card { top: ${Math.round(H * 0.45)}px; font-size: 64px; }
       .notify { position: absolute; left: 110px; right: 110px; top: 260px; z-index: 25; background: rgba(245,247,252,0.97); border-radius: 44px;

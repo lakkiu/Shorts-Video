@@ -1,0 +1,88 @@
+{
+  "title": "Đừng bao giờ nói 네 lúc 3 giờ sáng",
+  "slug": "dung-noi-ne",
+  "format": "9:16",
+  "set": "dorm",
+  "voices": {
+    "narrator": { "name": "kể chuyện ma", "speed": 0.95 },
+    "bacu": { "voice": "Korean_spirited_mentor_vv1", "lang": "Korean", "speed": 0.8, "fx": "ghost", "color": "#ff9a9a", "quote": true },
+    "bacu-vi": { "voice": "Korean_spirited_mentor_vv1", "lang": "Vietnamese", "speed": 0.8, "fx": "ghost", "color": "#ff6b6b", "quote": true },
+    "kim": { "name": "Dependable Woman", "speed": 0.95, "color": "#ffd9a0", "quote": true },
+    "minh": { "name": "Friendly Man", "lang": "Korean", "speed": 1.0, "color": "#9fd3ff", "quote": true }
+  },
+  "ambience": [{ "sfx": "drone", "volume": 0.5 }, { "sfx": "hum", "volume": 0.4 }],
+  "shots": [
+    { "angle": "corridor-wide", "move": "push", "lead": 0.3, "fx": [{ "type": "flicker", "at": 0.5, "dur": 0.8 }],
+      "beats": [{ "say": "narrator", "text": "Nửa đêm có người hỏi bạn bằng tiếng Hàn. Bạn có dám trả lời vâng không?" }] },
+
+    { "angle": "room-desk", "move": "drift",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "desk", "mood": "happy", "look": 0.5 }],
+      "beats": [
+        { "say": "narrator", "text": "Minh mới sang Hàn được một tuần. Tiếng Hàn, cậu chỉ biết hai câu." },
+        { "say": "minh", "text": "네! 감사합니다!", "sub": "Vâng! Cảm ơn!" }
+      ] },
+
+    { "angle": "clock", "move": "push",
+      "beats": [{ "say": "narrator", "text": "Đêm đầu tiên. Ba giờ sáng." }] },
+
+    { "angle": "room-door", "move": "push",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "room-center", "mood": "surprised", "look": -0.8, "keys": [{ "at": "b2", "mood": "excited" }] }],
+      "beats": [
+        { "sfx": "knocks", "caption": "Cốc… cốc… cốc…", "shake": [0, 0.55, 1.1] },
+        { "say": "bacu", "text": "학생... 거기 있어?", "sub": "Cháu ơi… có đó không?" },
+        { "say": "minh", "text": "네!", "sub": "Vâng!" }
+      ] },
+
+    { "angle": "door-close", "move": "push",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "door-inside", "mood": "sleepy", "look": -0.8 }],
+      "beats": [
+        { "say": "narrator", "text": "Đêm thứ hai.", "also": [{ "sfx": "knocks", "at": 0.9, "volume": 0.9, "shake": [0, 0.55, 1.1] }], "gap": 1.4 },
+        { "say": "bacu", "text": "학생... 추워...", "sub": "Cháu ơi… lạnh quá…" },
+        { "say": "minh", "text": "네...", "sub": "Vâng…" }
+      ] },
+
+    { "angle": "peek", "move": "push-fast",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "door-inside", "mood": "sleepy", "look": -0.6 }],
+      "beats": [
+        { "say": "narrator", "text": "Đêm thứ ba.", "also": [{ "sfx": "knocks", "at": 0.8, "volume": 0.7 }], "gap": 1.3 },
+        { "say": "bacu", "text": "학생... 들어가도 돼?", "sub": "Cháu ơi… bà vào được không?" },
+        { "say": "minh", "text": "네.", "sub": "Vâng.", "gap": 1.6, "also": [{ "sfx": "heart", "at": 0.6, "volume": 0.7 }] }
+      ] },
+
+    { "angle": "corridor-talk", "move": "drift",
+      "chars": [
+        { "id": "minh", "char": "minhPJ", "mark": "talk-a", "mood": "calm", "pose": "phone", "look": -0.6 },
+        { "id": "kim", "char": "kim", "mark": "talk-b", "mood": "neutral", "look": 0.7, "keys": [{ "at": "b1", "mood": "worried" }] }
+      ],
+      "beats": [
+        { "say": "narrator", "text": "Sáng hôm sau, Minh mở đoạn ghi âm cho cô Kim nghe." },
+        { "say": "kim", "text": "Phòng bên cạnh... trống ba năm rồi." }
+      ] },
+
+    { "angle": "corridor-talk", "move": "push",
+      "chars": [
+        { "id": "minh", "char": "minhPJ", "mark": "talk-a", "mood": "worried", "pose": "phone-off", "look": -0.6, "keys": [{ "at": "b1", "mood": "scared", "pose": "cower" }] },
+        { "id": "kim", "char": "kim", "mark": "talk-b", "mood": "worried", "look": 0.7 }
+      ],
+      "beats": [
+        { "say": "kim", "text": "Bà ấy hỏi: cháu có đó không. Lạnh quá. Bà vào được không." },
+        { "say": "kim", "text": "Và em đã trả lời: vâng." }
+      ] },
+
+    { "angle": "corridor-305", "move": "push", "fx": [{ "type": "flicker", "at": "b0+0.4", "dur": 1.0 }],
+      "beats": [{ "say": "narrator", "text": "Đêm đó, Minh không dám ngủ." }] },
+
+    { "angle": "reveal-clean", "move": { "zoom": [1.0, 1.12], "pan": [[0.2, 0], [0.55, -0.1]] },
+      "chars": [
+        { "id": "minh", "char": "minhPJ", "mark": "room-mid", "mood": "neutral", "keys": [{ "at": "e0", "mood": "scared", "look": 0.8, "pose": "cower" }] },
+        { "id": "bacu", "char": "ba-cu-ma", "mark": "behind-right", "height": 1.95, "fadeAt": "b0+1.2", "fadeDur": 2.6, "mood": "calm" }
+      ],
+      "fx": [{ "type": "flicker", "at": "b1", "rate": 16, "threshold": 0.55, "depth": 0.45 }, { "type": "blackout", "at": "e1+0.1" }],
+      "beats": [
+        { "say": "narrator", "text": "Rồi lần đầu tiên, giọng nói ấy vang lên bằng tiếng Việt. Ngay sau lưng cậu.", "gap": 0.5 },
+        { "say": "bacu-vi", "text": "Cảm ơn cháu... đã cho bà vào.", "also": [{ "sfx": "sting", "at": 3.6 }], "gap": 0.6 }
+      ] },
+
+    { "black": true, "textOrig": "아니요", "text": "Học ngay: \"Không\". Đừng nói 네 lúc 3 giờ sáng.", "hold": 3.2 }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "set": "dorm",
+  "angle": "reveal-clean",
+  "desc": "Như reveal nhưng không có dấu chân ướt",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(30,40,90,0.22)",
+  "marks": {
+    "room-mid": {
+      "x": 637.5,
+      "y": 2743.5,
+      "pxPerM": 1753.8,
+      "depth": 1.574
+    },
+    "behind-mid": {
+      "x": 775.3,
+      "y": 2244.8,
+      "pxPerM": 1238.7,
+      "depth": 2.245
+    },
+    "behind-right": {
+      "x": 1195.1,
+      "y": 2098.2,
+      "pxPerM": 1087.4,
+      "depth": 2.606
+    }
+  }
+}
