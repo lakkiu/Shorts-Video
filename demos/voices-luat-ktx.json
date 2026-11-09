@@ -1,0 +1,18 @@
+{ "roles": [
+  { "role": "narrator", "text": "Ký túc xá trường tiếng ở Seoul có một luật lạ. Sau hai giờ sáng, không được mở cửa cho bất kỳ ai.",
+    "candidates": [
+      { "label": "Nam trầm điện ảnh (đang dùng)", "voice": "Vietnamese_Serene_Man", "speed": 0.95 },
+      { "label": "Nam kể chuyện ấm", "voice": "Vietnamese_Male_Narrator_v1", "speed": 0.95 },
+      { "label": "Nữ đọc sách chậm", "voice": "Vietnamese_Audiobook_woman_v2", "speed": 1.0 },
+      { "label": "Nam trầm (CapCut)", "voice": "7493478233703191041", "provider": "capcut", "speed": 0.95 },
+      { "label": "Người kể chuyện Anh (ElevenLabs George)", "voice": "JBFqnCBsd6RMkjVDRZzb", "provider": "elevenlabs", "speed": 0.95 }
+    ] },
+  { "role": "ghost", "text": "Cậu không mở cửa... nhưng tớ vào lâu rồi.", "fx": "ghost",
+    "candidates": [
+      { "label": "Cô gái dễ thương (đang dùng)", "voice": "Vietnamese_Cute_Girl_v1", "speed": 0.8 },
+      { "label": "Cô gái hiền", "voice": "Vietnamese_kindhearted_girl", "speed": 0.8 },
+      { "label": "Nữ Sài Gòn (CapCut)", "voice": "7491607853086544400", "provider": "capcut", "speed": 0.8 },
+      { "label": "Bé gái ngọt (CapCut)", "voice": "7252594014782755330", "provider": "capcut", "speed": 0.8 },
+      { "label": "Nữ thì thầm, không vọng", "voice": "Vietnamese_crisp_announcer_v2", "speed": 0.75, "fx": "whisper" }
+    ] }
+] }

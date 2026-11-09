@@ -6,13 +6,14 @@ nhân vật 2D tự vẽ bằng code, bối cảnh 3D viền mực, giọng đ�
 ## Quy trình (skill `video-factory`)
 
 ```
-① Kịch bản (3 hook + dàn ý giữ chân) → ② Nhân vật (5 demo) → ③ Bối cảnh (5 demo) → ④ Storyboard → ⑤ Render
+① Kịch bản (3 hook + dàn ý giữ chân) → ② Giọng đọc (nghe thử 5 giọng/vai) → ③ Nhân vật (5 demo) → ④ Bối cảnh (5 demo) → ⑤ Storyboard → ⑥ Render
 ```
 
 Chi tiết cho Claude: `.claude/skills/video-factory/SKILL.md`.
 
 | Bước | Lệnh |
 |---|---|
+| Nghe thử giọng | `node tools/voice-demo.mjs demos/voices-<slug>.json` |
 | Demo nhân vật | `node tools/demo.cjs chars demos/<vai>.json` |
 | Demo bối cảnh | `node tools/demo.cjs sets demos/<noi>.json` |
 | Chụp ảnh nền bối cảnh đã duyệt | `node tools/bake-plates.cjs <set>` |

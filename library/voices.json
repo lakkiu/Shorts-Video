@@ -1,0 +1,4 @@
+{
+  "horror-narrator": { "voice": "Vietnamese_Serene_Man", "speed": 0.95 },
+  "ghost-girl": { "voice": "Vietnamese_Cute_Girl_v1", "speed": 0.8, "fx": "ghost", "color": "#ff6b6b", "quote": true }
+}

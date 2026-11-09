@@ -78,8 +78,11 @@ if (flag("voices")) {
   const url =
     provider === "capcut"
       ? "/v1/capcut/system-voices?language=vi&page_size=100"
-      : "/v1/minimax/system-voices?language=Vietnamese&page_size=100";
+      : provider === "elevenlabs"
+        ? "/v1/default-voices?page_size=100"
+        : "/v1/minimax/system-voices?language=Vietnamese&page_size=100";
   const d = await json(url);
+  for (const v of d.voices || []) console.log([v.voice_id, v.name, [v.gender, v.age, v.accent, v.descriptive, v.use_case].filter(Boolean).join(",")].join(" | "));
   for (const v of d.voice_list || []) {
     console.log([v.uniq_id || v.voice_id, v.voice_name || v.name, v.gender || (v.tag_list || []).join(",")].join(" | "));
   }
@@ -97,7 +100,7 @@ const voice = opt("voice", provider === "capcut" ? "7264854897953083905" : "Viet
 const body = {
   text,
   provider,
-  model_id: opt("model", provider === "minimax" ? "speech-2.8-turbo" : provider === "capcut" ? "capcut" : "eleven_multilingual_v2"),
+  model_id: opt("model", provider === "minimax" ? "speech-2.8-turbo" : provider === "capcut" ? "capcut" : "eleven_v3"),
   language_code: opt("lang", provider === "minimax" ? "Vietnamese" : "vi"),
   export_transcript: !flag("no-srt"),
 };

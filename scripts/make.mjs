@@ -5,8 +5,8 @@
 //   options: --jobs N (parallel chapter renders, default 1)  --chapter 90 (max chapter seconds)  --out out/<slug>
 import fs from "node:fs";
 import path from "node:path";
-import crypto from "node:crypto";
 import { execFileSync, spawn } from "node:child_process";
+import { synth, pool, probe as probeLib } from "./tts-lib.mjs";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const args = process.argv.slice(2);
@@ -27,40 +27,12 @@ fs.mkdirSync(OUT, { recursive: true });
 const probe = (f) => Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f]).toString().trim());
 const ff = (a) => execFileSync("ffmpeg", ["-loglevel", "error", "-y", ...a]);
 
-// ---------- 1. voices (cached, parallel) ----------
-const CACHE = path.join(ROOT, ".cache", "tts");
-fs.mkdirSync(CACHE, { recursive: true });
-const FX = {
-  muffled: "lowpass=f=1500,aecho=0.8:0.5:35:0.3,volume=1.3",
-  ghost: "highpass=f=250,lowpass=f=6000,asetrate=44100*0.92,aresample=48000,aecho=0.8:0.75:120|260:0.35|0.22,volume=1.6",
-  phone: "highpass=f=400,lowpass=f=3200,volume=1.4",
-  whisper: "highpass=f=300,aecho=0.8:0.6:80:0.25,volume=1.4",
-};
+// ---------- 1. voices (cached, parallel; shared cache with tools/voice-demo.mjs) ----------
 const voiceOf = (who) => story.voices?.[who] || story.voices?.narrator || { voice: "Vietnamese_Serene_Man", speed: 0.95 };
 const beats = [];
 story.shots.forEach((s, si) => (s.beats || []).forEach((b, bi) => { if (b.say) beats.push({ si, bi, b }); }));
-
-async function tts(b) {
-  const v = voiceOf(b.say);
-  const key = crypto.createHash("sha1").update(`${v.provider || "minimax"}|${v.voice}|${v.speed ?? 1}|${b.text}`).digest("hex").slice(0, 16);
-  const base = path.join(CACHE, key);
-  if (!fs.existsSync(`${base}.mp3`)) {
-    await new Promise((res, rej) => {
-      const p = spawn(process.execPath, [path.join(ROOT, "scripts/genmax-tts.mjs"), "--text", b.text, "--out", base, "--voice", v.voice, "--speed", String(v.speed ?? 1), "--no-srt", ...(v.provider ? ["--provider", v.provider] : [])], { stdio: ["ignore", "ignore", "inherit"], cwd: ROOT });
-      p.on("exit", (c) => (c === 0 ? res() : rej(new Error(`TTS failed: ${b.text}`))));
-    });
-  }
-  let file = `${base}.mp3`;
-  if (v.fx && FX[v.fx]) {
-    const fxf = `${base}.${v.fx}.wav`;
-    if (!fs.existsSync(fxf)) ff(["-i", file, "-af", FX[v.fx], "-ac", "2", fxf]);
-    file = fxf;
-  }
-  b._file = file;
-  b._dur = probe(file);
-}
 log(`voices: ${beats.length} lines`);
-for (let i = 0; i < beats.length; i += 4) await Promise.all(beats.slice(i, i + 4).map((x) => tts(x.b)));
+await pool(beats, 4, async ({ b }) => { const r = await synth(b.text, voiceOf(b.say)); b._file = r.file; b._dur = r.dur; });
 
 // ---------- 2. timeline ----------
 const plateMeta = (set, angle) => JSON.parse(fs.readFileSync(path.join(ROOT, "library/plates", set, `${angle}.json`), "utf8"));
