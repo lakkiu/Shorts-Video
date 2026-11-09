@@ -1,0 +1,7 @@
+{ "role": "Bạn cùng phòng ký túc xá", "candidates": [
+  { "name": "Tuấn", "desc": "Năng động, tóc ngắn, áo sọc, mũ lưỡi trai đỏ", "spec": { "skin": "#f3c9a5", "hair": "#1d1a1a", "hairStyle": "cap", "cap": "#e5484d", "top": "#f4f1ea", "stripes": "#2f6fdb", "pants": "#3b3f52", "shoes": "#ffffff", "headR": 146 } },
+  { "name": "Hà", "desc": "Hiền, tóc dài rẽ ngôi giữa, váy liền xanh lá", "spec": { "skin": "#ffdcc4", "hair": "#2b1d1a", "hairStyle": "long", "top": "#7ec4a4", "dress": "#7ec4a4", "legs": "#ffdcc4", "shoes": "#c97b63", "headR": 146 } },
+  { "name": "Khoa", "desc": "Mọt sách, tóc xoăn, kính tròn, khăn quàng", "spec": { "skin": "#e9bf98", "hair": "#3b2a20", "hairStyle": "curly", "glasses": true, "top": "#c98b4a", "scarf": "#c0392b", "pants": "#5a4a3a", "shoes": "#3b3b3b", "headR": 146 } },
+  { "name": "Mai", "desc": "Lém lỉnh, tóc hai bím, đồng phục cà vạt", "spec": { "skin": "#ffe0c8", "hair": "#4a2c2a", "hairStyle": "twintails", "accent": "#ffc940", "top": "#2f3a5a", "tie": "#c0392b", "skirt": "#2f3a5a", "legs": "#ffe0c8", "shoes": "#3b3b3b", "headR": 144 } },
+  { "name": "Bác bảo vệ", "desc": "Người lớn tuổi, đầu húi, ria mép, áo khoác xám", "spec": { "skin": "#e2b48c", "hair": "#555", "hairStyle": "bald", "mustache": "#6b6b6b", "top": "#6b7280", "zip": true, "pants": "#2f3a4a", "shoes": "#3b2a20", "headR": 140 } }
+] }

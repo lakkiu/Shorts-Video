@@ -1,0 +1,21 @@
+{
+  "set": "dorm",
+  "angle": "doorway-open",
+  "desc": "Từ hành lang nhìn vào cửa 305 đang mở, phòng tối phía sau",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "doorway": {
+      "x": 741.1,
+      "y": 2114.3,
+      "pxPerM": 870.3,
+      "depth": 3.181
+    },
+    "in-room-dark": {
+      "x": 566.7,
+      "y": 1896.1,
+      "pxPerM": 704.7,
+      "depth": 3.944
+    }
+  }
+}

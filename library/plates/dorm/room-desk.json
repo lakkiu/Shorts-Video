@@ -1,0 +1,15 @@
+{
+  "set": "dorm",
+  "angle": "room-desk",
+  "desc": "Trong phòng: góc bàn học có đèn bàn",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "desk": {
+      "x": 675,
+      "y": 2022.4,
+      "pxPerM": 1128.5,
+      "depth": 2.296
+    }
+  }
+}

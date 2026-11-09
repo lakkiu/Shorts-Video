@@ -1,0 +1,16 @@
+{
+  "id": "kim",
+  "desc": "Cô Kim: giáo viên tiếng Hàn, tóc bob, cardigan tím, ôm sách",
+  "spec": {
+    "skin": "#ffe0c8",
+    "hair": "#4a2c2a",
+    "hairStyle": "bob",
+    "top": "#8e6bd1",
+    "cardigan": true,
+    "skirt": "#2f3a5a",
+    "legs": "#ffe0c8",
+    "shoes": "#7a4a3a",
+    "book": "#f1e5c8",
+    "headR": 140
+  }
+}

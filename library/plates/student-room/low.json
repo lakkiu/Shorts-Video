@@ -1,0 +1,21 @@
+{
+  "set": "student-room",
+  "angle": "low",
+  "desc": "Góc thấp sát sàn nhìn lên",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "center": {
+      "x": 327.1,
+      "y": 2142.1,
+      "pxPerM": 1260.1,
+      "depth": 1.874
+    },
+    "back": {
+      "x": 625.2,
+      "y": 1888.7,
+      "pxPerM": 735.9,
+      "depth": 3.147
+    }
+  }
+}

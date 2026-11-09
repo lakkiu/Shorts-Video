@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face { font-family: "Jua"; src: url("../engine/fonts/jua-korean.woff2") format("woff2"); }
+      html, body { margin: 0; background: #000; }
+    </style>
+  </head>
+  <body>
+    <canvas id="gl"></canvas>
+    <script type="module">
+      // Bakes background plates for a set: no characters, steady lights.
+      import * as THREE from "../engine/lib/three.module.min.js";
+      import { makePost } from "../engine/toon/post.js";
+
+      const q = new URLSearchParams(location.search);
+      const W = +(q.get("w") || 1350), H = +(q.get("h") || 2400);
+      const def = await (await fetch(`../library/sets/${q.get("set")}.json`)).json();
+      const mod = await import(`../engine/toon/${def.module}`);
+      await document.fonts.load("64px Jua", "비상구 공지 새벽");
+
+      const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gl"), antialias: false, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H, false);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      const scene = new THREE.Scene();
+      if (mod.FOG) { scene.fog = new THREE.Fog(mod.FOG, 5, 28); scene.background = mod.FOG.clone(); }
+      const camera = new THREE.PerspectiveCamera(48, W / H, 0.05, 200);
+      const isKit = def.module === "kit.js";
+      let set;
+      if (isKit) {
+        set = mod.buildSet(scene, def.spec);
+        def.angles = def.angles || mod.defaultAngles(def.spec);
+        def.marks = def.marks || mod.defaultMarks(def.spec);
+      } else {
+        scene.add(new THREE.HemisphereLight("#41507a", "#1a1f2a", 0.9));
+        set = mod.buildDorm(scene);
+      }
+      const post = makePost(renderer, W, H, { sat: set.post?.sat ?? 0.84, vignette: 0, tint: set.post?.tint ?? "#c9d7ff", grain: 0, blur: 6 });
+
+      window.bake = (name) => {
+        const a = def.angles[name], st = a.state || {};
+        camera.fov = a.fov; camera.updateProjectionMatrix();
+        camera.position.set(...a.pos); camera.lookAt(new THREE.Vector3(...a.look)); camera.updateMatrixWorld();
+        if (set.doors) set.doors.minh.pivot.rotation.y = st.doorOpen ? -1.55 : 0;
+        for (const fp of set.insideSteps || []) fp.visible = !!st.footprints;
+        if (set.cull) set.cull(camera.position);
+        const marks = {};
+        for (const m of a.marks || []) {
+          const [x, z] = def.marks[m];
+          const foot = new THREE.Vector3(x, 0, z).project(camera), top = new THREE.Vector3(x, 1, z).project(camera);
+          const fx = (foot.x + 1) / 2 * W, fy = (1 - foot.y) / 2 * H, ty = (1 - top.y) / 2 * H;
+          marks[m] = { x: +fx.toFixed(1), y: +fy.toFixed(1), pxPerM: +(fy - ty).toFixed(1), depth: +camera.position.distanceTo(new THREE.Vector3(x, 0.8, z)).toFixed(3) };
+        }
+        const focus = a.focus ?? (a.marks?.length ? marks[a.marks[0]].depth : 3);
+        post.render(scene, camera, null, focus, 1, 0);
+        return { png: renderer.domElement.toDataURL("image/png"), meta: { set: def.name, angle: name, desc: a.desc, w: W, h: H, marks } };
+      };
+      window.angles = Object.keys(def.angles);
+      document.title = "ready";
+    </script>
+  </body>
+</html>

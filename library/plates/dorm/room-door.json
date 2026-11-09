@@ -1,0 +1,27 @@
+{
+  "set": "dorm",
+  "angle": "room-door",
+  "desc": "Trong phòng nhìn ra cửa đóng, vệt sáng dưới khe cửa",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "room-center": {
+      "x": 891.9,
+      "y": 2437.4,
+      "pxPerM": 1215.9,
+      "depth": 2.052
+    },
+    "door-inside": {
+      "x": 551.8,
+      "y": 1994.5,
+      "pxPerM": 852.5,
+      "depth": 2.946
+    },
+    "room-mid": {
+      "x": 892.8,
+      "y": 2792.5,
+      "pxPerM": 1505.6,
+      "depth": 1.65
+    }
+  }
+}

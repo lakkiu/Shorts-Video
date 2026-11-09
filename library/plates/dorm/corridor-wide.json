@@ -1,0 +1,21 @@
+{
+  "set": "dorm",
+  "angle": "corridor-wide",
+  "desc": "Toàn cảnh hành lang dài, đèn tuýp, cửa hai bên",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "corridor-near": {
+      "x": 639.3,
+      "y": 1548.6,
+      "pxPerM": 244.3,
+      "depth": 11.03
+    },
+    "corridor-far": {
+      "x": 623.4,
+      "y": 1372.7,
+      "pxPerM": 134.6,
+      "depth": 20.018
+    }
+  }
+}

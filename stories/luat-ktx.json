@@ -1,0 +1,63 @@
+{
+  "title": "Luật ký túc xá",
+  "slug": "luat-ktx",
+  "format": "9:16",
+  "set": "dorm",
+  "tint": "rgba(30,40,90,0.22)",
+  "voices": {
+    "narrator": { "voice": "Vietnamese_Serene_Man", "speed": 0.95 },
+    "linh": { "voice": "Vietnamese_Cute_Girl_v1", "speed": 1.0, "fx": "muffled", "color": "#ffb3c7", "quote": true },
+    "ghost": { "voice": "Vietnamese_Cute_Girl_v1", "speed": 0.8, "fx": "ghost", "color": "#ff6b6b", "quote": true }
+  },
+  "ambience": [{ "sfx": "drone", "volume": 0.55 }, { "sfx": "hum", "volume": 0.45 }],
+  "shots": [
+    { "angle": "corridor-wide", "move": "push", "lead": 0.4, "fx": [{ "type": "flicker", "at": 0.6, "dur": 0.9 }],
+      "beats": [{ "say": "narrator", "text": "Ký túc xá trường tiếng ở Seoul có một luật lạ." }] },
+    { "angle": "notice", "move": "drift",
+      "beats": [{ "say": "narrator", "text": "Sau hai giờ sáng, không được mở cửa cho bất kỳ ai." }] },
+    { "angle": "room-desk", "move": "drift",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "desk", "mood": "happy", "look": 0.5, "pose": "phone-off" }],
+      "beats": [{ "say": "narrator", "text": "Minh mới sang được một tuần. Cậu nghĩ đó chỉ là chuyện dọa sinh viên mới." }] },
+    { "angle": "clock", "move": "push",
+      "beats": [{ "say": "narrator", "text": "Cho đến đêm đó. Ba giờ sáng." }] },
+    { "angle": "room-door", "move": "push",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "room-center", "mood": "surprised", "look": -0.8,
+                  "keys": [{ "at": "b2", "mood": "excited" }], "walk": { "to": "door-inside", "at": "b2+0.6", "dur": 3.4 } }],
+      "beats": [
+        { "sfx": "knocks", "caption": "Cốc… cốc… cốc…", "shake": [0, 0.55, 1.1] },
+        { "say": "narrator", "text": "Một giọng nói quen thuộc vang lên ngoài cửa." },
+        { "say": "linh", "text": "Minh ơi, tớ Linh đây! Tớ quên chìa khóa, mở cửa cho tớ với!" }
+      ] },
+    { "angle": "door-close", "move": "push",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "door-inside", "mood": "calm", "pose": "reach", "look": -0.8,
+                  "keys": [{ "at": "b0+2.0", "mood": "surprised", "pose": "phone" }] }],
+      "beats": [{ "say": "narrator", "text": "Minh vừa chạm tay vào nắm cửa... thì điện thoại sáng lên.", "also": [{ "sfx": "knocks", "at": 0, "volume": 0.9, "shake": [0, 0.55, 1.1] }, { "sfx": "buzz", "at": 2.0 }] }] },
+    { "angle": "phone-cu", "move": "push", "notify": { "who": "Linh", "time": "03:02", "text": "Tớ ngủ nhà chị họ rồi, mai mới về nha!", "at": 0, "dur": 3.9 },
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "door-inside", "mood": "worried", "pose": "phone" }],
+      "beats": [{ "say": "narrator", "text": "Tin nhắn từ Linh.", "gap": 2.3 }] },
+    { "angle": "corridor-305", "move": "push", "fx": [{ "type": "flicker", "at": "b0+0.3", "dur": 0.9 }],
+      "beats": [{ "say": "narrator", "text": "Tiếng gõ dừng lại. Hành lang im phăng phắc." }] },
+    { "angle": "peek", "move": "push",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "door-inside", "mood": "worried", "look": -0.9, "keys": [{ "at": 0, "lean": -6 }] }],
+      "beats": [{ "say": "narrator", "text": "Minh ghé mắt nhìn qua lỗ nhòm." }] },
+    { "angle": "peephole", "move": "drift", "overlay": "peephole",
+      "beats": [{ "say": "narrator", "text": "Không có ai cả. Chỉ có một đôi dép ướt... đặt ngay ngắn trước cửa.", "also": [{ "sfx": "heart", "at": -0.3 }] }] },
+    { "angle": "room-back", "move": "drift",
+      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "door-inside", "mood": "relieved", "walk": { "to": "room-mid", "at": "b0+0.4", "dur": 2.4 },
+                  "keys": [{ "at": "b1", "mood": "neutral", "lookDown": true, "tilt": 8 }] }],
+      "beats": [{ "say": "narrator", "text": "Minh thở phào. Cậu đã không mở cửa." }, { "say": "narrator", "text": "Rồi cậu nhìn xuống sàn." }] },
+    { "angle": "floor-track", "move": "pan-right",
+      "beats": [{ "say": "narrator", "text": "Những dấu chân ướt... đi từ khe cửa... thẳng vào trong phòng.", "also": [{ "sfx": "drips", "at": 0 }] }] },
+    { "angle": "reveal", "move": "push",
+      "chars": [
+        { "id": "minh", "char": "minhPJ", "mark": "room-mid", "mood": "neutral", "keys": [{ "at": "b0+1.0", "mood": "scared", "look": 0.8, "pose": "cower" }] },
+        { "id": "ghost", "char": "ghost", "mark": "behind-mid", "fadeAt": "b0+0.6", "fadeDur": 2.4 }
+      ],
+      "fx": [{ "type": "flicker", "at": "b1", "rate": 16, "threshold": 0.55, "depth": 0.45 }, { "type": "blackout", "at": "e1+0.1" }],
+      "beats": [
+        { "say": "narrator", "text": "Và dừng lại... ngay sau lưng cậu.", "gap": 0.5 },
+        { "say": "ghost", "text": "Cậu không mở cửa... nhưng tớ vào lâu rồi.", "also": [{ "sfx": "sting", "at": 4.15 }], "gap": 0.6 }
+      ] },
+    { "black": true, "text": "Bạn có dám nhìn ra sau không?", "hold": 2.6 }
+  ]
+}

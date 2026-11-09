@@ -1,0 +1,15 @@
+{
+  "id": "minhPJ",
+  "desc": "Minh mặc đồ ngủ xanh (cảnh đêm)",
+  "spec": {
+    "skin": "#f7cfae",
+    "hair": "#1f1a1a",
+    "hairStyle": "spiky",
+    "top": "#7da3d8",
+    "zip": false,
+    "pants": "#5d79b0",
+    "shoes": "#c9c2b8",
+    "glasses": true,
+    "headR": 146
+  }
+}

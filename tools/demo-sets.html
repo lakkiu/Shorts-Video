@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @font-face { font-family: "Jua"; src: url("../engine/fonts/jua-korean.woff2") format("woff2"); }
+      html, body { margin: 0; background: #fff; } canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <canvas id="sheet"></canvas>
+    <canvas id="gl" style="display:none"></canvas>
+    <script type="module">
+      // Set demo sheet: each candidate (kit spec) built and baked from its hero angle, numbered for approval.
+      import * as THREE from "../engine/lib/three.module.min.js";
+      import { makePost } from "../engine/toon/post.js";
+      import { buildSet, defaultAngles } from "../engine/toon/kit.js";
+      const q = new URLSearchParams(location.search);
+      const data = await (await fetch(q.get("file"))).json();
+      await document.fonts.load("64px Jua", "공지 비상구");
+      const C = data.candidates, PW = 540, PH = 960, HEAD = 90, FOOT = 120;
+      const sheet = document.getElementById("sheet"); sheet.width = PW * C.length + 20 * (C.length + 1); sheet.height = PH + HEAD + FOOT;
+      const g = sheet.getContext("2d"); g.fillStyle = "#eef2fb"; g.fillRect(0, 0, sheet.width, sheet.height);
+      const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("gl"), antialias: false, preserveDrawingBuffer: true });
+      renderer.setPixelRatio(1); renderer.setSize(PW, PH, false); renderer.outputColorSpace = THREE.SRGBColorSpace;
+      const wrap = (text, x, y, maxW, lh) => { let line = ""; for (const w of text.split(" ")) { const t = line ? line + " " + w : w; if (g.measureText(t).width > maxW && line) { g.fillText(line, x, y); line = w; y += lh; } else line = t; } g.fillText(line, x, y); };
+      C.forEach((c, i) => {
+        const scene = new THREE.Scene();
+        const set = buildSet(scene, c.spec);
+        const a = (c.angles || defaultAngles(c.spec))[c.angle || "wide"];
+        const cam = new THREE.PerspectiveCamera(a.fov, PW / PH, 0.05, 200);
+        cam.position.set(...a.pos); cam.lookAt(new THREE.Vector3(...a.look)); cam.updateMatrixWorld();
+        set.cull(cam.position);
+        const post = makePost(renderer, PW, PH, { sat: set.post.sat, tint: set.post.tint, vignette: 0.3, blur: 5, grain: 0 });
+        post.render(scene, cam, null, 3, 1, 0);
+        const x0 = 20 + i * (PW + 20);
+        g.drawImage(renderer.domElement, x0, HEAD);
+        g.fillStyle = "#1d2340"; g.font = "900 56px Montserrat, Inter, sans-serif"; g.fillText(String(i + 1), x0, 66);
+        g.font = "800 34px Inter, sans-serif"; g.fillText(c.name || "", x0 + 56, 60);
+        g.fillStyle = "#3a4466"; g.font = "500 26px Inter, sans-serif"; wrap(c.desc || "", x0, HEAD + PH + 40, PW, 32);
+      });
+      document.title = "done";
+    </script>
+  </body>
+</html>

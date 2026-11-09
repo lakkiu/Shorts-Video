@@ -5,3 +5,4 @@ renders/
 out/
 *.mp4
 .DS_Store
+.cache/

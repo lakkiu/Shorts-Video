@@ -1,0 +1,27 @@
+{
+  "set": "dorm",
+  "angle": "room-back",
+  "desc": "Từ phía cửa sổ nhìn về cửa: giữa phòng, cửa phía sau",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "room-mid": {
+      "x": 829.2,
+      "y": 2210.9,
+      "pxPerM": 1421.3,
+      "depth": 1.877
+    },
+    "behind-mid": {
+      "x": 899.8,
+      "y": 1839.2,
+      "pxPerM": 1070.2,
+      "depth": 2.551
+    },
+    "door-inside": {
+      "x": 162.9,
+      "y": 1665.1,
+      "pxPerM": 905.5,
+      "depth": 3.089
+    }
+  }
+}

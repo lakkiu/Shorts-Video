@@ -1,0 +1,15 @@
+{
+  "id": "linh",
+  "desc": "Linh: du học sinh nữ, tóc đuôi ngựa, hoodie vàng, balo đỏ",
+  "spec": {
+    "skin": "#ffd9bf",
+    "hair": "#2b1d1a",
+    "hairStyle": "ponytail",
+    "top": "#ffc940",
+    "hood": true,
+    "pants": "#3d5a99",
+    "shoes": "#ffffff",
+    "bag": "#e5484d",
+    "headR": 150
+  }
+}

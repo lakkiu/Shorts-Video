@@ -1,0 +1,21 @@
+{
+  "set": "dorm",
+  "angle": "room-side",
+  "desc": "Góc nghiêng trong phòng, thấy đường đi từ giữa phòng ra cửa",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "room-center": {
+      "x": 1631.8,
+      "y": 2480.8,
+      "pxPerM": 1607.9,
+      "depth": 1.601
+    },
+    "door-inside": {
+      "x": 344.8,
+      "y": 2123.9,
+      "pxPerM": 1271.4,
+      "depth": 1.933
+    }
+  }
+}

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>html, body { margin: 0; background: #fff; } canvas { display: block; }</style>
+  </head>
+  <body>
+    <canvas id="sheet"></canvas>
+    <script type="module">
+      // Character demo sheet: N candidates x 3 states, numbered for approval.
+      import { POSE, drawCharacter, drawGhost } from "../engine/toon/characters.js";
+      const q = new URLSearchParams(location.search);
+      const data = await (await fetch(q.get("file"))).json();
+      const C = data.candidates, colW = 420, H = 1060, W = colW * C.length;
+      const cv = document.getElementById("sheet"); cv.width = W; cv.height = H;
+      const g = cv.getContext("2d");
+      const bg = g.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#eef2fb"); bg.addColorStop(1, "#d9e1f2");
+      g.fillStyle = bg; g.fillRect(0, 0, W, H);
+      const one = document.createElement("canvas"); one.width = 600; one.height = 1000;
+      const oc = one.getContext("2d");
+      const states = [
+        { ...POSE },
+        { ...POSE, eyes: "happy", mouth: "open", armR: 150, elbowR: 25 },
+        { ...POSE, eyes: "scared", mouth: "wobble", armL: 25, armR: 30, elbowL: -60, elbowR: 70, sweat: 1 },
+      ];
+      const wrap = (text, x, y, maxW, lh) => {
+        let line = "";
+        for (const w of text.split(" ")) {
+          const tst = line ? line + " " + w : w;
+          if (g.measureText(tst).width > maxW && line) { g.fillText(line, x, y); line = w; y += lh; } else line = tst;
+        }
+        g.fillText(line, x, y);
+      };
+      C.forEach((c, i) => {
+        const x0 = i * colW;
+        if (i) { g.fillStyle = "rgba(29,35,64,0.12)"; g.fillRect(x0, 0, 3, H); }
+        g.fillStyle = "#1d2340"; g.font = "900 54px Montserrat, Inter, sans-serif"; g.textAlign = "left";
+        g.fillText(String(i + 1), x0 + 24, 70);
+        g.font = "800 34px Inter, sans-serif"; g.fillText(c.name || "", x0 + 78, 64);
+        // big neutral
+        if (c.spec.ghost) drawGhost(oc, {}, 0); else drawCharacter(oc, c.spec, states[0], 0);
+        g.drawImage(one, 0, 220, 600, 780, x0 + 30, 110, 360, 468);
+        // small happy + scared
+        [1, 2].forEach((k, j) => {
+          if (c.spec.ghost) drawGhost(oc, { eye: j ? 1 : 0.6, tilt: j ? -14 : -6 }, 0); else drawCharacter(oc, c.spec, states[k], 0);
+          g.drawImage(one, 0, 220, 600, 780, x0 + 20 + j * 195, 640, 190, 247);
+        });
+        g.fillStyle = "#3a4466"; g.font = "500 26px Inter, sans-serif";
+        wrap(c.desc || "", x0 + 24, 940, colW - 48, 34);
+      });
+      document.title = "done";
+    </script>
+  </body>
+</html>

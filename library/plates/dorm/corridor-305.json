@@ -1,0 +1,15 @@
+{
+  "set": "dorm",
+  "angle": "corridor-305",
+  "desc": "Hành lang vắng nhìn về cửa 305 đóng",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "corridor-near": {
+      "x": 699,
+      "y": 2573.1,
+      "pxPerM": 1020.5,
+      "depth": 2.621
+    }
+  }
+}

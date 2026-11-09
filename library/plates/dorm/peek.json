@@ -1,0 +1,15 @@
+{
+  "set": "dorm",
+  "angle": "peek",
+  "desc": "Nhân vật ghé sát cửa (nhìn lỗ nhòm), từ trong phòng",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "door-inside": {
+      "x": 906.1,
+      "y": 2463.3,
+      "pxPerM": 1423.5,
+      "depth": 1.949
+    }
+  }
+}

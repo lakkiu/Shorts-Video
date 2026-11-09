@@ -1,0 +1,21 @@
+{
+  "set": "student-room",
+  "angle": "left-wall",
+  "desc": "Nhìn về tường trái",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "left": {
+      "x": 880.1,
+      "y": 2114.5,
+      "pxPerM": 1013.6,
+      "depth": 2.391
+    },
+    "center": {
+      "x": 782.9,
+      "y": 2758.3,
+      "pxPerM": 1624.7,
+      "depth": 1.475
+    }
+  }
+}

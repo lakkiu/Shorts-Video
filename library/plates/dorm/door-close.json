@@ -1,0 +1,15 @@
+{
+  "set": "dorm",
+  "angle": "door-close",
+  "desc": "Cận cửa từ bên trong, nắm cửa",
+  "w": 1350,
+  "h": 2400,
+  "marks": {
+    "door-inside": {
+      "x": 719,
+      "y": 2767.5,
+      "pxPerM": 2112.7,
+      "depth": 1.212
+    }
+  }
+}

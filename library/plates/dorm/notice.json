@@ -1,0 +1,8 @@
+{
+  "set": "dorm",
+  "angle": "notice",
+  "desc": "Cận tờ thông báo 공지: sau 2 giờ sáng không mở cửa",
+  "w": 1350,
+  "h": 2400,
+  "marks": {}
+}

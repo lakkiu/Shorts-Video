@@ -40,6 +40,13 @@ Dựng 2D nhanh hơn khoảng 30 lần.
 | 3D chia nhỏ trên AWS Lambda / Cloud Run | ~2-5 phút | HyperFrames hỗ trợ sẵn, cần tài khoản cloud |
 | 3D giảm chất lượng | ~15-20 phút | Vẫn chậm |
 
-## Bước tiếp theo
+## Kết quả
 
-Làm lại `ghost-60s` theo cách 2.5D, so chất lượng và thời gian với bản 3D, rồi đóng gói thành skill.
+Đã làm: `stories/luat-ktx.json` qua `scripts/make.mjs` → 65 s video, render 5 phút 42 giây (bản 3D: 52 phút), cùng nội dung và phong cách.
+Ảnh nền ký túc xá: 16 góc, chụp trong 25 giây.
+
+## Việc tiếp
+
+- Thêm bối cảnh: nhà vệ sinh, cầu thang, sân thượng, phố đêm, cửa hàng tiện lợi, tàu điện.
+- Tách ảnh nền thành lớp xa / gần để có parallax thật.
+- Render song song nhiều chương trên máy nhiều nhân; đo video 20 phút.
