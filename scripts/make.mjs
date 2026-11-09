@@ -41,7 +41,7 @@ story.shots.forEach((s, si) => (s.beats || []).forEach((b, bi) => { if (b.say) b
 const credits = () => { try { return JSON.parse(execFileSync(process.execPath, [path.join(ROOT, "scripts/genmax-tts.mjs"), "--credits"], { cwd: ROOT }).toString()).credit_balance; } catch { return null; } };
 const C0 = credits();
 log(`voices: ${beats.length} lines`);
-await pool(beats, 4, async ({ b }) => { const r = await synth(b.text, voiceOf(b.say)); b._file = r.file; b._dur = r.dur; });
+await pool(beats, 4, async ({ b }) => { const v = voiceOf(b.say); const r = await synth(b.text, b.lang ? { ...v, lang: b.lang } : v); b._file = r.file; b._dur = r.dur; });
 
 // ---------- 2. timeline ----------
 const plateDir = (set) => (W > H ? `${set}@16x9` : set);
@@ -78,14 +78,17 @@ for (const s of story.shots) {
     if (b.say) {
       audio.push({ file: b._file, start, vol: b.volume ?? 1 });
       const v = voiceOf(b.say);
-      const parts = chunks(b.text), total = parts.reduce((a, p) => a + p.length, 0);
-      let c = start;
-      for (const p of parts) { const d = (dur * p.length) / total; caps.push({ text: v.quote ? `“${p}”` : p, start: c, end: c + d + 0.12, color: v.color, italic: false }); c += d; }
+      if (b.sub) caps.push({ text: v.quote ? `“${b.sub}”` : b.sub, orig: b.text, start, end: start + dur + 0.3, color: v.color });
+      else {
+        const parts = chunks(b.text), total = parts.reduce((a, p) => a + p.length, 0);
+        let c = start;
+        for (const p of parts) { const d = (dur * p.length) / total; caps.push({ text: v.quote ? `“${p}”` : p, start: c, end: c + d + 0.12, color: v.color, italic: false }); c += d; }
+      }
       talk.push({ who: b.say, start, end: start + dur });
     }
     if (b.sfx) {
       audio.push({ file: sfxFile(b.sfx), start: start + (b.sfxAt || 0), vol: b.volume ?? 1 });
-      if (b.caption) caps.push({ text: b.caption, start, end: start + dur, color: "#c9d6ff", italic: true });
+      if (b.caption) caps.push({ text: b.caption, orig: b.captionOrig, start, end: start + dur, color: "#c9d6ff", italic: true });
       for (const k of b.shake || []) shakes.push(start + k);
     }
     for (const x of b.also || []) { audio.push({ file: sfxFile(x.sfx), start: start + (x.at || 0), vol: x.volume ?? 1 }); for (const k of x.shake || []) shakes.push(start + (x.at || 0) + k); }
@@ -95,7 +98,7 @@ for (const s of story.shots) {
   sh.end = s.hold != null && !(s.beats || []).length ? cur + s.hold : t + (s.tail ?? 0);
   if (s.black) {
     sh.black = true;
-    if (s.text) caps.push({ text: s.text, start: sh.start + 0.3, end: sh.end, color: "#e9edf7", card: true });
+    if (s.text) caps.push({ text: s.text, orig: s.textOrig, start: sh.start + 0.3, end: sh.end, color: "#e9edf7", card: true });
   } else {
     const meta = plateMeta(set, s.angle);
     sh.plate = `plates/${plateDir(set)}/${s.angle}.jpg`; sh.plateW = meta.w; sh.plateH = meta.h;
@@ -146,7 +149,7 @@ function writeChapter(ch, n) {
   fs.copyFileSync(path.join(ROOT, "engine/runtime.js"), path.join(A, "engine/runtime.js"));
   fs.copyFileSync(path.join(ROOT, "engine/toon/characters.js"), path.join(A, "engine/characters.js"));
   cp(path.join(ROOT, "engine/lib/gsap.min.js"), path.join(A, "lib/gsap.min.js"));
-  for (const f of ["montserrat-latin-900-normal.woff2", "montserrat-vietnamese-900-normal.woff2"]) cp(path.join(ROOT, "engine/fonts", f), path.join(A, "fonts", f));
+  for (const f of ["montserrat-latin-900-normal.woff2", "montserrat-vietnamese-900-normal.woff2", "jua-korean.woff2"]) cp(path.join(ROOT, "engine/fonts", f), path.join(A, "fonts", f));
   const o = ch.start, D = ch.end - ch.start;
   const inCh = (x) => x.start < ch.end && x.end > ch.start;
   const rel = (x) => ({ ...x, start: Math.max(0, x.start - o), end: Math.min(D, x.end - o) });
@@ -178,7 +181,7 @@ function writeChapter(ch, n) {
   });
   caps.filter(inCh).forEach((c, i) => {
     const r = rel(c);
-    capsHtml += `      <div id="cap${i}" class="cap${c.italic ? " sfx" : ""}${c.card ? " card" : ""} clip" data-start="${r.start.toFixed(3)}" data-duration="${(r.end - r.start).toFixed(3)}" data-track-index="1"${c.color ? ` style="color:${c.color}"` : ""}><span>${esc(c.text)}</span></div>\n`;
+    capsHtml += `      <div id="cap${i}" class="cap${c.italic ? " sfx" : ""}${c.card ? " card" : ""} clip" data-start="${r.start.toFixed(3)}" data-duration="${(r.end - r.start).toFixed(3)}" data-track-index="1"${c.color ? ` style="color:${c.color}"` : ""}>${c.orig ? `<span class="orig">${esc(c.orig)}</span><br />` : ""}<span>${esc(c.text)}</span></div>\n`;
   });
   notifies.filter(inCh).forEach((x, i) => {
     const r = rel(x);
@@ -208,6 +211,7 @@ function writeChapter(ch, n) {
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
       @font-face { font-family: "Montserrat"; font-weight: 900; src: url("assets/fonts/montserrat-vietnamese-900-normal.woff2") format("woff2");
         unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      @font-face { font-family: "Jua"; src: url("assets/fonts/jua-korean.woff2") format("woff2"); }
       * { margin: 0; padding: 0; box-sizing: border-box; }
       html, body { width: ${W}px; height: ${H}px; overflow: hidden; background: #000; }
       #root { width: 100%; height: 100%; position: relative; overflow: hidden; background: #000; }
@@ -222,6 +226,7 @@ function writeChapter(ch, n) {
         font-family: "Montserrat"; font-weight: 900; font-size: ${W < H ? 74 : 64}px; line-height: 1.12; color: #fff;
         -webkit-text-stroke: 14px #07080f; paint-order: stroke fill; }
       .cap span { display: inline-block; }
+      .cap .orig { font-family: "Jua", "Montserrat"; font-weight: 400; font-size: 0.82em; -webkit-text-stroke: 12px #07080f; margin-bottom: 6px; }
       .cap.sfx { font-style: italic; font-size: ${W < H ? 68 : 58}px; }
       .cap.card { top: ${Math.round(H * 0.45)}px; font-size: 64px; }
       .notify { position: absolute; left: 110px; right: 110px; top: 260px; z-index: 25; background: rgba(245,247,252,0.97); border-radius: 44px;

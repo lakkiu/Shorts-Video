@@ -21,7 +21,7 @@ ff(["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", "0.5", silence]);
 
 const summary = [];
 for (const r of spec.roles) {
-  const takes = await pool(r.candidates, 4, (c) => synth(r.text, { ...c, fx: c.fx ?? r.fx }));
+  const takes = await pool(r.candidates, 4, (c) => synth(r.text, { ...c, fx: c.fx ?? r.fx, lang: c.lang ?? r.lang }));
   const intros = await pool(r.candidates, 4, (_, i) => synth(`Giọng số ${NUM[i] || i + 1}.`, announcer));
   const list = [];
   takes.forEach((t, i) => {

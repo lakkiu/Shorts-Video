@@ -25,12 +25,12 @@ export async function synth(text, v) {
   v = resolveVoice(v);
   fs.mkdirSync(CACHE, { recursive: true });
   const provider = v.provider || "minimax";
-  const key = crypto.createHash("sha1").update(`${provider}|${v.voice}|${v.speed ?? 1}|${text}${v.model ? `|${v.model}` : ""}`).digest("hex").slice(0, 16);
+  const key = crypto.createHash("sha1").update(`${provider}|${v.voice}|${v.speed ?? 1}|${text}${v.model ? `|${v.model}` : ""}${v.lang ? `|${v.lang}` : ""}`).digest("hex").slice(0, 16);
   const base = path.join(CACHE, key);
   if (!fs.existsSync(`${base}.mp3`)) {
     await new Promise((res, rej) => {
       const p = spawn(process.execPath, [path.join(ROOT, "scripts/genmax-tts.mjs"), "--text", text, "--out", base, "--voice", v.voice,
-        "--speed", String(v.speed ?? 1), "--no-srt", "--provider", provider, ...(v.model ? ["--model", v.model] : [])], { stdio: ["ignore", "ignore", "inherit"], cwd: ROOT });
+        "--speed", String(v.speed ?? 1), "--no-srt", "--provider", provider, ...(v.model ? ["--model", v.model] : []), ...(v.lang ? ["--lang", v.lang] : [])], { stdio: ["ignore", "ignore", "inherit"], cwd: ROOT });
       p.on("exit", (c) => (c === 0 ? res() : rej(new Error(`TTS failed (${v.voice}): ${text}`))));
     });
   }

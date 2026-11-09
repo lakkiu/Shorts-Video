@@ -1,0 +1,42 @@
+{ "roles": [
+  { "role": "narrator", "text": "Nửa đêm có người hỏi bạn bằng tiếng Hàn. Bạn có dám trả lời vâng không?",
+    "candidates": [
+      { "label": "kể chuyện ma (clone của bạn)", "name": "kể chuyện ma", "speed": 0.95 },
+      { "label": "trường kể (clone của bạn)", "name": "trường kể", "speed": 0.95 },
+      { "label": "Serene Man", "name": "Serene Man", "speed": 0.95 },
+      { "label": "Male Narrator", "name": "Male Narrator", "speed": 0.95 },
+      { "label": "Nam Trầm (CapCut)", "name": "Nam Trầm", "speed": 0.95 }
+    ] },
+  { "role": "ba-cu-han", "text": "학생... 들어가도 돼?", "lang": "Korean", "fx": "ghost",
+    "candidates": [
+      { "label": "Spirited Mentor — nữ lớn tuổi, khàn", "voice": "Korean_spirited_mentor_vv1", "speed": 0.8 },
+      { "label": "Charming Sister — trung niên, khàn", "voice": "Korean_CharmingSister", "speed": 0.8 },
+      { "label": "Mature Lady — trung niên, sắc", "voice": "Korean_MatureLady", "speed": 0.8 },
+      { "label": "Dramatic Announcer — trung niên, nặng", "voice": "Korean_dramatic_announcer_vv1", "speed": 0.8 },
+      { "label": "Cold Girl — trẻ, thở hắt, lạnh", "voice": "Korean_ColdGirl", "speed": 0.8 }
+    ] },
+  { "role": "ba-cu-viet", "text": "Cảm ơn cháu... đã cho bà vào.", "fx": "ghost",
+    "candidates": [
+      { "label": "Spirited Mentor nói tiếng Việt (lơ lớ giọng Hàn)", "voice": "Korean_spirited_mentor_vv1", "lang": "Vietnamese", "speed": 0.8 },
+      { "label": "Charming Sister nói tiếng Việt (lơ lớ)", "voice": "Korean_CharmingSister", "lang": "Vietnamese", "speed": 0.8 },
+      { "label": "Audiobook Woman (Việt, chậm)", "name": "Audiobook Woman", "speed": 0.8 },
+      { "label": "Chí Mai (CapCut)", "name": "Chí Mai", "speed": 0.8 },
+      { "label": "Spirited Mentor, thì thầm không vọng", "voice": "Korean_spirited_mentor_vv1", "lang": "Vietnamese", "speed": 0.75, "fx": "whisper" }
+    ] },
+  { "role": "co-kim", "text": "Phòng bên cạnh... trống ba năm rồi.",
+    "candidates": [
+      { "label": "Professional Assistant — nữ ấm", "name": "Dependable Woman", "speed": 0.95 },
+      { "label": "Crisp Woman — nữ rõ", "name": "Crisp Woman", "speed": 0.95 },
+      { "label": "Confident Woman", "name": "Confident Woman", "speed": 0.95 },
+      { "label": "Hà Nữ (CapCut, Bắc)", "name": "Hà Nữ", "speed": 0.95 },
+      { "label": "Sài Nữ (CapCut, Nam)", "name": "Sài Nữ", "speed": 0.95 }
+    ] },
+  { "role": "minh", "text": "네!", "lang": "Korean",
+    "candidates": [
+      { "label": "Friendly Man", "name": "Friendly Man", "speed": 1.0 },
+      { "label": "Articulate Assistant", "name": "Articulate Assistant", "speed": 1.0 },
+      { "label": "Duy Bắc (CapCut)", "name": "Duy Bắc", "speed": 1.0 },
+      { "label": "Ly Nam (CapCut)", "name": "Ly Nam", "speed": 1.0 },
+      { "label": "Cheerful Boyfriend (giọng Hàn thật)", "voice": "Korean_CheerfulBoyfriend", "speed": 1.0 }
+    ] }
+] }
