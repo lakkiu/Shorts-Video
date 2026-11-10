@@ -1,0 +1,43 @@
+{
+  "bpm": 130.0,
+  "beat": 0.46153846153846156,
+  "bar": 1.8461538461538463,
+  "duration": 32.038,
+  "sections": [
+    {
+      "name": "intro",
+      "bars": 2
+    },
+    {
+      "name": "drop",
+      "bars": 8
+    },
+    {
+      "name": "break",
+      "bars": 1
+    },
+    {
+      "name": "drop",
+      "bars": 4
+    },
+    {
+      "name": "outro",
+      "bars": 1
+    }
+  ],
+  "starts": {
+    "intro": [
+      0.0
+    ],
+    "drop": [
+      3.692,
+      20.308
+    ],
+    "break": [
+      18.462
+    ],
+    "outro": [
+      27.692
+    ]
+  }
+}

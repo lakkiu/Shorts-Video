@@ -19,6 +19,7 @@ Claude đọc file này trước mỗi kịch bản mới (cổng ①) và cập
 | 2026-11-09 | (bỏ) Phòng trọ 3 điều luật | Rules-horror | Từ chối: "chuyện khác đi" |
 | 2026-11-09 | Đừng nói 네 lúc 3 giờ sáng | 3 hook A/B/C | Chọn **A – câu hỏi trực diện người xem**; gợi ý ma nói tiếng Hàn |
 | 2026-11-10 | (định hướng) | Tập 2 series chuyện ma | **Bỏ chuyện ma**; muốn kịch bản đa thể loại |
+| 2026-11-10 | Kỷ luật (ngụ ngôn người que, mẫu từ video người dùng gửi) | Ngụ ngôn không lời, nhạc phonk | **Chê "nội dung chán, chưa tỏa aura"** → làm lại kiểu aura edit: nhân vật đen viền sáng, cắt theo nhịp, chữ đập, drop sớm |
 
 ## Hiệu quả video (điền khi có số liệu)
 

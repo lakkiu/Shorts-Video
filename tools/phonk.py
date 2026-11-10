@@ -19,6 +19,8 @@ p.add_argument("--sections", default="intro:4 groove:8 build:2 drop:6 outro:4")
 p.add_argument("--key", default="F")
 p.add_argument("--seed", type=int, default=1)
 p.add_argument("--json", help="write section times to this file")
+p.add_argument("--heavy", action="store_true", help="harder 808 / clap for aura edits")
+p.add_argument("--intro", default="ticks", choices=["ticks", "heartbeat"])
 a = p.parse_args()
 rng = np.random.default_rng(a.seed)
 
@@ -61,7 +63,7 @@ def bass808(f0, f1, length):
     f = f1 + (f0 - f1) * np.exp(-t / 0.06) if f0 != f1 else np.full(n, f0)
     ph = 2 * np.pi * np.cumsum(f) / SR
     s = np.sin(ph) * np.minimum(1, t / 0.004) * np.exp(-t / (length * 0.55))
-    return np.tanh(3.5 * s) * 0.8
+    return np.tanh((7.0 if a.heavy else 3.5) * s) * 0.8
 
 def clap():
     n = int(0.25 * SR); t = np.arange(n) / SR
@@ -107,9 +109,15 @@ for name, nbars in secs:
             for st, semi in RIFF:
                 if st // 16 == two:
                     add("bell", T + (st % 16) * step, bell(freq(semi, 5)))
-        if name == "intro":
+        if name == "intro" and a.intro == "heartbeat":
+            for k in (0, 2):
+                add("kick", T + k * beat, kick(0.55)); add("kick", T + k * beat + 0.18, kick(0.4))
+            if bi == nbars - 1:  # reverse swell into the drop
+                n = int(bar * SR); tt = np.arange(n) / SR
+                add("fx", T, rng.standard_normal(n) * (tt / tt[-1]) ** 3 * 0.3)
+        elif name == "intro":
             for k in range(8): add("fx", T + k * beat / 2, tick())
-            if bi >= 2:
+            if bi >= 2 and a.intro == "ticks":
                 for k in range(8): add("hat", T + k * beat / 2, hat() * 0.5)
         if full:
             for k in range(4): add("kick", T + k * beat, kick(1.0 if k % 2 == 0 else 0.85))
@@ -149,8 +157,8 @@ for k, v in stems.items(): write(os.path.join(tmp, f"{k}.wav"), v / max(1e-9, np
 intro_end = (secs[0][1] * bar) if secs[0][0] == "intro" else 0
 filters = {
     "kick": "volume=1.0",
-    "bass": "lowpass=f=180,volume=0.9",
-    "clap": "highpass=f=700,bandpass=f=1800:width_type=q:w=0.8,aecho=0.8:0.4:60:0.25,volume=0.6",
+    "bass": "lowpass=f=" + ("240" if a.heavy else "180") + ",volume=" + ("1.15" if a.heavy else "0.9"),
+    "clap": "highpass=f=700,bandpass=f=1800:width_type=q:w=0.8,aecho=0.8:0.4:60:0.25,volume=" + ("0.8" if a.heavy else "0.6"),
     "hat": "highpass=f=7000,volume=0.45",
     "bell": f"bandpass=f=1000:width_type=q:w=0.9,aecho=0.8:0.5:{int(beat*750)}:0.3,volume=0.55",
     "fx": "highpass=f=200,volume=0.55",

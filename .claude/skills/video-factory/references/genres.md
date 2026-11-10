@@ -128,6 +128,8 @@ Mọi kịch bản bắt đầu bằng **chọn thể loại** (ghi vào `genre`
 
 **Định dạng "ngụ ngôn không lời" (mono)** — rất hợp `motivation`: không lời kể, người que tối giản trong phòng tối, một vật nhấn màu (viên gạch vàng), đồng hồ / bộ đếm "NGÀY N" cho thời gian trôi, hai nhân vật đối lập (người làm đều đặn vs người trì hoãn), cú lật cuối trao hy vọng, **một câu chữ đánh máy duy nhất ở cuối**, nhạc phonk dồn theo nhịp. Mẫu: `projects/discipline/` (52 s). Quy tắc: mỗi hành động rơi đúng phách; đoạn "hụt hơi" của nhạc trùng khoảnh khắc nhân vật yếu lòng; drop trùng khoảnh khắc thành quả; câu cuối ≤ 2 dòng, viết như châm ngôn của chính kênh (không chép câu nổi tiếng).
 
+**Định dạng "aura edit"** — khi người dùng muốn video "ngầu", "tỏa aura", "sigma", "main character": nhân vật **đen tuyền + viền aura phát sáng + mắt sáng**, nhạc phonk nặng, **drop trong 4 giây đầu**, mỗi ô nhịp một cảnh hành động (tập, nâng, chạy, học, từ chối cám dỗ), **chữ 1-2 từ đập vào theo phách** ("DẬY." "TẬP." "KHÔNG."), zoom giật theo kick, rung, tách màu RGB, chớp trắng ở drop, một đoạn lặng (break) có câu nhỏ đánh máy, drop 2 nhân vật tiến về phía máy + câu chốt to ("KỶ LUẬT > ĐỘNG LỰC"). Dài 25-35 s để xem lại nhiều lần. Mẫu: `projects/aura/`. Người dùng đã chê bản ngụ ngôn hiền là "chán, chưa tỏa aura" → nội dung động lực ưu tiên định dạng này.
+
 ## `drama` — Truyện ngắn cảm động
 
 **Khung 60 s:** Một khoảnh khắc nhỏ khác thường (0-5) → hai nhân vật, một hiểu lầm / khoảng cách (5-30) → manh mối (30-45) → cú lật cảm xúc (45-55) → hình cuối im lặng + một câu (55-60).
