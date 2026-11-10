@@ -33,6 +33,11 @@ export const POSES = {
   slamDown: { lean: 12, tilt: 6, aF: [60, -10], aB: [10, 10], lF: [8, 0], lB: [-6, 0] },
   study: { lean: 24, tilt: 22, aF: [62, 40], aB: [55, 46], lF: [88, -88], lB: [80, -80], seat: true },
   flip: { lean: 18, tilt: 18, aF: [80, -20], aB: [55, 46], lF: [88, -88], lB: [80, -80], seat: true },
+  drink: { lean: 30, tilt: -14, aF: [128, 62], aB: [40, 40], lF: [88, -88], lB: [80, -80], seat: true },
+  headDown: { lean: 52, tilt: 30, aF: [70, 20], aB: [62, 26], lF: [88, -88], lB: [80, -80], seat: true },
+  lie: { lean: 0, tilt: 10, aF: [30, 40], aB: [-20, 10], lF: [8, 6], lB: [-4, 4] },
+  scream: { lean: -14, tilt: -42, aF: [140, 40], aB: [128, 46], lF: [16, 0], lB: [-14, 0] },
+  confident: { lean: -3, tilt: -6, aF: [8, 4], aB: [-8, 4], lF: [5, 0], lB: [-5, 0] },
   walkA: { lean: 4, tilt: 0, aF: [-22, 10], aB: [22, 10], lF: [26, -8], lB: [-20, -28] },
   walkB: { lean: 4, tilt: 0, aF: [22, 10], aB: [-22, 10], lF: [-20, -28], lB: [26, -8] },
 };
@@ -67,7 +72,7 @@ export function trackAt(track, t, walkRate = 2.6) {
 // ---- figure ----
 const L = { torso: 118, ua: 60, fa: 56, th: 74, sh: 72, head: 34 };
 const dv = (a, len, dir) => [Math.sin(rad(a)) * len * dir, Math.cos(rad(a)) * len];
-export function figure(ctx, { x, y, dir = 1, pose, color = C.white, scale = 1, glow = 0 }) {
+export function figure(ctx, { x, y, dir = 1, pose, color = C.white, scale = 1, glow = 0, bulk = 1, hair = null, dress = null, tie = null }) {
   ctx.save();
   ctx.translate(x, y); ctx.scale(scale, scale);
   const back = shadeHex(color, 0.72);
@@ -81,12 +86,25 @@ export function figure(ctx, { x, y, dir = 1, pose, color = C.white, scale = 1, g
     return h;
   };
   if (glow) { ctx.shadowColor = color; ctx.shadowBlur = glow; }
-  const hB = limb(sh, pose.aB[0], pose.aB[1], L.ua, L.fa, back, 19);
-  limb([0, 0], pose.lB[0], pose.lB[1], L.th, L.sh, back, 21);
-  stroke(ctx, [[0, 0], neck], 25, color);
-  limb([0, 0], pose.lF[0], pose.lF[1], L.th, L.sh, color, 21);
+  if (hair === "long") { // hair falls behind the head to the shoulders
+    ctx.fillStyle = color; ctx.beginPath();
+    ctx.ellipse(head[0] - dir * 8, head[1] + 26, L.head * 1.05, L.head * 1.6, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  const hB = limb(sh, pose.aB[0], pose.aB[1], L.ua, L.fa, back, 19 * bulk);
+  limb([0, 0], pose.lB[0], pose.lB[1], L.th, L.sh, back, 21 * bulk);
+  stroke(ctx, [[0, 0], neck], 25 * bulk * (bulk > 1 ? 1.15 : 1), color);
+  if (bulk > 1.05) { ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(sh[0], sh[1] + 34, 28 * bulk, 46, rad(pose.lean) * dir, 0, Math.PI * 2); ctx.fill(); } // chest
+  if (dress) { ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(-14, -40); ctx.lineTo(14, -40); ctx.lineTo(52, 70); ctx.lineTo(-52, 70); ctx.closePath(); ctx.fill(); }
+  limb([0, 0], pose.lF[0], pose.lF[1], L.th, L.sh, color, 21 * bulk);
   circle(ctx, head[0], head[1], L.head, color);
-  const hF = limb(sh, pose.aF[0], pose.aF[1], L.ua, L.fa, color, 19);
+  if (tie) { // white collar V + tie on the torso
+    const nx = neck[0], ny = neck[1] + 6, ld = rad(pose.lean) * dir;
+    ctx.save(); ctx.translate(nx, ny); ctx.rotate(ld);
+    ctx.fillStyle = "#f4f4f6"; ctx.beginPath(); ctx.moveTo(-14, 0); ctx.lineTo(0, 30); ctx.lineTo(14, 0); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = tie; ctx.beginPath(); ctx.moveTo(-5, 10); ctx.lineTo(5, 10); ctx.lineTo(8, 64); ctx.lineTo(0, 74); ctx.lineTo(-8, 64); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  const hF = limb(sh, pose.aF[0], pose.aF[1], L.ua, L.fa, color, 19 * bulk);
   ctx.shadowBlur = 0;
   if (pose.phone > 0.05) { // phone glow lighting the face
     const px = (hF[0] + hB[0]) / 2, py = (hF[1] + hB[1]) / 2 - 6;

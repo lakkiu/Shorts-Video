@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/lib/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Mont"; font-weight: 900; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2122, U+2190-2193, U+2212, U+FEFF; }
+      @font-face { font-family: "Mont"; font-weight: 900; src: url("assets/fonts/montserrat-vietnamese-900-normal.woff2") format("woff2");
+        unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; background: #000; }
+      #cv { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="37.6" data-width="1080" data-height="1920">
+      <canvas id="cv" class="clip" data-start="0" data-duration="37.6" data-track-index="0" width="1080" height="1920"></canvas>
+      <audio id="music" class="clip" src="assets/audio/music.wav" data-start="0" data-duration="37.6" data-track-index="1" data-volume="1"></audio>
+    </div>
+
+    <script>
+      (function () {
+        var D = 37.6, clock = { t: 0 }, sc = { render: null };
+        window.__mono = sc;
+        window.__hf = window.__hf || {};
+        window.__hf.buildReady = window.__hf.buildReady || {};
+        window.__hf.buildReady["main"] = new Promise(function (r) { sc.ready = r; });
+        var tl = gsap.timeline({ paused: true });
+        tl.to(clock, { t: D, duration: D, ease: "none", onUpdate: function () { if (sc.render) sc.render(clock.t); } }, 0);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+
+    <script type="module">
+      import { POSES, mixPose, figure, smooth, lerp, clamp01, hash, roundRect, mixHex } from "./assets/mono.js";
+      await document.fonts.load("900 120px 'Mont'", "KỶ LUẬT ĐỘNG LỰC NOOOO");
+
+      const W = 1080, H = 1920, BEAT = 60 / 130, BAR = BEAT * 4;
+      const STOP = 5 * BAR, DROP1 = 6 * BAR, BREAK = 14 * BAR, DROP2 = 15 * BAR, OUTRO = 19 * BAR, END = 37.6;
+      const PURPLE = "#8b5cf6", GOLD = "#f5b301", GOLD2 = "#ffe7a3", RED = "#ff2e4d";
+      const mk = () => { const c = document.createElement("canvas"); c.width = W; c.height = H; return [c, c.getContext("2d")]; };
+      const out = document.getElementById("cv").getContext("2d");
+      const [S, s] = mk(), [P, p] = mk(), [F, f] = mk(), [R, r] = mk(), [Y, y] = mk(), [G, gx] = mk();
+      const grain = (() => { const c = document.createElement("canvas"); c.width = 540; c.height = 960; const g = c.getContext("2d"), d = g.createImageData(540, 960);
+        for (let i = 0; i < 540 * 960; i++) { const v = 128 + (hash(i, 9) - 0.5) * 255; d.data[i * 4] = d.data[i * 4 + 1] = d.data[i * 4 + 2] = v; d.data[i * 4 + 3] = 255; } g.putImageData(d, 0, 0); return c; })();
+      const PP = { ...POSES,
+        pushUp: { lean: 64, tilt: -12, aF: [0, 0], aB: [-4, 0], lF: [-64, 0], lB: [-66, 0] },
+        pushDown: { lean: 77, tilt: -16, aF: [-70, 128], aB: [-74, 130], lF: [-77, 0], lB: [-79, 0] },
+      };
+      const pose = (a, b, k) => mixPose(PP[a], PP[b], smooth(k));
+      const beatIn = (lt) => lt / BEAT;
+      // aura grows and turns from purple to gold through the training montage
+      const growth = (t) => clamp01((t - DROP1) / (BREAK - DROP1));
+      const auraCol = (t) => (t >= BREAK ? GOLD : mixHex(PURPLE, GOLD, smooth((growth(t) - 0.35) / 0.6)));
+      const bulkAt = (t) => (t < DROP1 ? 1 : lerp(1, 1.4, smooth(growth(t))));
+
+      // ---------- aura figure ----------
+      function auraFig(c, o, t, I = 1, eyes = 1, col = auraCol(t), rot = 0) {
+        f.setTransform(1, 0, 0, 1, 0, 0); f.clearRect(0, 0, W, H);
+        if (rot) { f.translate(o.x, o.y); f.rotate(rot); f.translate(-o.x, -o.y); }
+        const res = figure(f, { ...o, color: "#000" });
+        f.setTransform(1, 0, 0, 1, 0, 0);
+        const sc = o.scale || 1, cx = o.x, cy = o.y - 110 * sc;
+        if (I > 0.01) {
+          const fl = 0.78 + 0.22 * hash(Math.floor(t * 24), 5), hi = col === GOLD ? GOLD2 : "#d8ccff";
+          c.save(); c.globalCompositeOperation = "lighter"; c.shadowOffsetX = 5000;
+          for (const [blur, cc, a] of [[140, col, 0.6], [64, col, 0.85], [22, hi, 0.9]]) { c.shadowColor = cc; c.shadowBlur = blur * sc; c.globalAlpha = Math.min(1, a * I * fl); c.drawImage(F, -5000, 0); }
+          for (let k = 0; k < 3; k++) {
+            const ph = (t * 1.6 + k / 3) % 1, g = 1 + 0.09 * ph * I;
+            gx.setTransform(1, 0, 0, 1, 0, 0); gx.clearRect(0, 0, W, H);
+            gx.setTransform(g, 0, 0, g, cx * (1 - g), cy * (1 - g) - 70 * sc * ph); gx.drawImage(F, 0, 0); gx.setTransform(1, 0, 0, 1, 0, 0);
+            c.shadowColor = col; c.shadowBlur = 34 * sc; c.globalAlpha = (1 - ph) * 0.55 * Math.min(1.4, I); c.drawImage(G, -5000, 0);
+          }
+          c.shadowColor = hi; c.shadowBlur = 4 * sc; c.globalAlpha = 0.85 * Math.min(1, I); c.drawImage(F, -5000, 0);
+          c.restore();
+        }
+        c.drawImage(F, 0, 0);
+        if (eyes > 0 && !rot) {
+          const [hx, hy] = res.head, d = o.dir || 1, er = 5.5 * sc;
+          c.save(); c.shadowColor = col === GOLD ? "#ffd166" : "#7dd3fc"; c.shadowBlur = 26 * sc * eyes; c.fillStyle = "#fffaf0"; c.globalAlpha = eyes;
+          for (const ex of [6, 21]) { c.beginPath(); c.ellipse(hx + d * ex * sc, hy - 5 * sc, er * 1.2, er * 0.75, 0, 0, Math.PI * 2); c.fill(); }
+          c.restore();
+        }
+        return res;
+      }
+      const sky = (c, a, b) => { const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, a); g.addColorStop(1, b); c.fillStyle = g; c.fillRect(0, 0, W, H); };
+      const ground = (c, yF, col = "#0e0b16", line = "rgba(139,92,246,0.25)") => { c.fillStyle = col; c.fillRect(0, yF, W, H - yF); c.fillStyle = line; c.fillRect(0, yF - 2, W, 3); };
+      const rain = (c, t, n = 150, a = 0.3) => { c.strokeStyle = `rgba(170,185,220,${a})`; c.lineWidth = 2; for (let i = 0; i < n; i++) { const x = hash(i, 1) * W, yy = (hash(i, 2) * H + t * 2000) % H; c.beginPath(); c.moveTo(x, yy); c.lineTo(x - 8, yy + 42); c.stroke(); } };
+      const bottle = (c, x, yb, fallen = 0) => { c.save(); c.translate(x, yb); c.rotate(fallen * Math.PI / 2); c.fillStyle = "#2f7d52"; roundRect(c, -16, -90, 32, 90, 8); c.fill(); c.fillRect(-7, -120, 14, 34); c.fillStyle = "rgba(255,255,255,0.25)"; c.fillRect(-10, -80, 5, 60); c.restore(); };
+      const heart = (c, x, y0, sz, col) => { const w = sz * 2, h = sz * 1.9; c.fillStyle = col; c.beginPath(); c.moveTo(x, y0 + h * 0.3);
+        c.bezierCurveTo(x, y0, x - w / 2, y0, x - w / 2, y0 + h * 0.3); c.bezierCurveTo(x - w / 2, y0 + h * 0.6, x, y0 + h * 0.78, x, y0 + h);
+        c.bezierCurveTo(x, y0 + h * 0.78, x + w / 2, y0 + h * 0.6, x + w / 2, y0 + h * 0.3); c.bezierCurveTo(x + w / 2, y0, x, y0, x, y0 + h * 0.3); c.fill(); };
+      const phone = (c, cx0, cy0, sc0, draw) => { c.save(); c.translate(cx0, cy0); c.scale(sc0, sc0); c.fillStyle = "#0b0a10"; roundRect(c, -230, -420, 460, 840, 60); c.fill(); c.strokeStyle = "#2b2438"; c.lineWidth = 10; c.stroke(); draw(c); c.restore(); };
+      const bubble = (c, text, yy, me = false, a = 1) => { c.globalAlpha = a; c.font = "900 36px 'Mont'"; const w = Math.min(380, c.measureText(text).width + 60); c.fillStyle = me ? "#3b82f6" : "rgba(235,240,255,0.95)"; roundRect(c, me ? 190 - w : -190, yy, w, 100, 30); c.fill(); c.fillStyle = me ? "#fff" : "#1b2233"; c.textAlign = "left"; c.textBaseline = "middle"; c.fillText(text, (me ? 190 - w : -190) + 30, yy + 50); c.globalAlpha = 1; };
+
+      // ---------- shots ----------
+      const SHOTS = [];
+      const shot = (start, end, draw) => SHOTS.push({ start, end, draw });
+
+      // flash-forward hook, then "6 tháng trước"
+      shot(0, 0.95, (c, lt, t) => successStage(c, t, 0.98));
+      shot(0.95, BAR, (c) => { c.fillStyle = "#000"; c.fillRect(0, 0, W, H); });
+      shot(BAR, 2 * BAR, (c, lt, t) => { // the message
+        sky(c, "#07080d", "#0d1018");
+        phone(c, 540, 960, 1.1, (c) => {
+          c.fillStyle = "#151a26"; roundRect(c, -205, -390, 410, 780, 44); c.fill();
+          c.fillStyle = "#cfd6e6"; c.font = "900 34px 'Mont'"; c.textAlign = "center"; c.fillText("Em ♡", 0, -330);
+          bubble(c, "Anh ơi…", -240, false);
+          if (beatIn(lt) > 1) bubble(c, "Mình dừng lại nhé.", -120, false);
+          if (beatIn(lt) > 2.4) bubble(c, "Em xin lỗi.", 0, false);
+          if (beatIn(lt) > 3.3) { c.fillStyle = "#8b93a7"; c.font = "900 26px 'Mont'"; c.textAlign = "right"; c.fillText("đang nhập…", 180, 150); }
+        });
+      });
+      shot(2 * BAR, 3 * BAR, (c, lt, t) => { // she leaves with someone else, heart breaks
+        sky(c, "#0a0d14", "#141a24"); ground(c, 1480, "#0c0f15", "rgba(140,160,190,0.2)"); rain(c, t);
+        const k = beatIn(lt), walk = (Math.sin(t * Math.PI * 2 * 1.1) + 1) / 2;
+        figure(c, { x: 270, y: 1480 - 146 * 1.6, pose: PP.slump, color: "#1d222c", scale: 1.6, dir: 1 });
+        const gx0 = lerp(640, 900, clamp01(k / 4));
+        figure(c, { x: gx0, y: 1480 - 146 * 1.5, pose: mixPose(PP.walkA, PP.walkB, walk), color: "#5d6574", scale: 1.5, dir: 1, hair: "long", dress: true });
+        figure(c, { x: gx0 + 120, y: 1480 - 146 * 1.6, pose: mixPose(PP.walkA, PP.walkB, 1 - walk), color: "#4a515e", scale: 1.6, dir: 1 });
+      });
+      const brokenHeart = (c, lt) => {
+        const k = beatIn(lt), split = smooth((k - 2) / 0.6) * 60, hy = 820;
+        c.save(); c.shadowColor = RED; c.shadowBlur = 50;
+        const zig = [[0, -140], [-18, -90], [16, -40], [-14, 10], [14, 60], [0, 120]];
+        for (const sd of [-1, 1]) { c.save(); c.translate(540 + sd * split, hy + split * 0.6); c.rotate(sd * split * 0.006);
+          c.beginPath(); c.moveTo(sd * 240, -160); for (const [zx, zy] of zig) c.lineTo(zx, zy); c.lineTo(sd * 240, 140); c.closePath(); c.clip();
+          heart(c, 0, -110, 120, RED); c.restore(); }
+        c.restore();
+      };
+      shot(3 * BAR, 4 * BAR, (c, lt, t) => { // drinking alone
+        sky(c, "#0b0a10", "#16121c"); ground(c, 1480, "#0e0c12", "rgba(140,120,160,0.2)");
+        c.fillStyle = "rgba(120,140,200,0.12)"; c.fillRect(640, 380, 340, 420); rain(c, t, 60, 0.18);
+        const lamp = c.createRadialGradient(470, 900, 10, 470, 900, 500); lamp.addColorStop(0, "rgba(255,200,140,0.18)"); lamp.addColorStop(1, "rgba(255,200,140,0)"); c.fillStyle = lamp; c.fillRect(0, 400, W, 1100);
+        c.fillStyle = "#1c1820"; c.fillRect(440, 1250, 520, 24); c.fillRect(920, 1274, 18, 206); c.fillRect(460, 1274, 18, 206);
+        c.fillStyle = "#1c1820"; c.fillRect(250, 1320, 130, 18); c.fillRect(260, 1338, 14, 142); c.fillRect(356, 1338, 14, 142);
+        const n = Math.min(6, 1 + Math.floor(beatIn(lt) * 1.5)); for (let i = 0; i < n; i++) bottle(c, 560 + i * 62, 1250, i === 4 ? 1 : 0);
+        const dk = (Math.sin(lt * 3) + 1) / 2;
+        figure(c, { x: 320, y: 1320 - 6, pose: mixPose(PP.headDown, PP.drink, dk), color: "#20242e", scale: 1.6, dir: 1 });
+      });
+      shot(4 * BAR, 4 * BAR + BEAT * 2.4, (c, lt, t) => { // lying among bottles, days pass
+        sky(c, "#08090d", "#101219"); ground(c, 1300, "#0b0c11", "rgba(120,130,160,0.2)");
+        for (let i = 0; i < 9; i++) bottle(c, 120 + i * 105 + hash(i, 3) * 30, 1340 + hash(i, 4) * 120, hash(i, 5) > 0.4 ? 1 : 0);
+        c.save(); c.translate(330, 1290); c.rotate(-Math.PI / 2 + 0.06); figure(c, { x: 0, y: 0, pose: PP.lie, color: "#20242e", scale: 1.5, dir: 1 }); c.restore();
+        c.save(); c.translate(760, 1220); c.shadowColor = "#60a5fa"; c.shadowBlur = 40; c.fillStyle = "#c7d7f5"; roundRect(c, -40, -70, 80, 140, 12); c.fill(); c.restore(); heart(c, 760, 1195, 18, RED);
+      });
+      shot(4 * BAR + BEAT * 2.4, STOP, (c, lt, t) => { // mirror: the reflection's eyes light up
+        sky(c, "#07070b", "#0f1016");
+        c.fillStyle = "#2a2a33"; c.fillRect(440, 360, 480, 1080); c.fillStyle = "#121520"; c.fillRect(460, 380, 440, 1040);
+        c.save(); c.beginPath(); c.rect(460, 380, 440, 1040); c.clip();
+        auraFig(c, { x: 700, y: 1420 - 146 * 2.0, pose: PP.slump, scale: 2.0, dir: -1 }, t, 0.45 * smooth(lt / 0.5), smooth(lt / 0.4), PURPLE);
+        c.restore();
+        figure(c, { x: 200, y: 1900 - 146 * 3.0 + 200, pose: PP.slump, color: "#000", scale: 3.0, dir: 1 });
+      });
+      shot(STOP, DROP1, (c, lt, t) => { // NOOOO: scream, bottle smash, aura starts to flicker
+        sky(c, "#14050a", "#05030a"); ground(c, 1460, "#09060c", "rgba(255,46,77,0.35)");
+        const k = beatIn(lt);
+        auraFig(c, { x: 540, y: 1460 - 146 * 1.9, pose: k < 2 ? PP.scream : pose("scream", "stand", (k - 2) / 1), scale: 1.9, dir: 1 }, t, k < 2 ? 0.3 + 0.3 * hash(Math.floor(t * 20), 2) : 0.2 + 0.6 * smooth((k - 2) / 2), 1, k < 2 ? RED : PURPLE);
+        const e = lt / 0.9; if (e < 1) for (let i = 0; i < 30; i++) { const a = -Math.PI * hash(i, 1), d = e * (200 + hash(i, 2) * 500); c.save(); c.translate(840 + Math.cos(a) * d, 1360 + Math.sin(a) * d + e * e * 300); c.rotate(e * 8 * hash(i, 3)); c.fillStyle = `rgba(120,220,170,${1 - e})`; c.beginPath(); c.moveTo(0, -14); c.lineTo(10, 10); c.lineTo(-8, 8); c.fill(); c.restore(); }
+      });
+
+      // training montage
+      const montage = [
+        (c, lt, t) => { sky(c, "#0a0514", "#1c0c33"); ground(c, 1460); const k = clamp01(beatIn(lt) / 1);
+          auraFig(c, { x: 540, y: 1460 - 146 * 1.9, pose: pose("slump", "confident", k), scale: 1.9, dir: 1, bulk: bulkAt(t) }, t, 0.6 + 0.8 * k); },
+        (c, lt, t) => { sky(c, "#07050d", "#150c26"); ground(c, 1460);
+          c.fillStyle = "#1c1826"; c.fillRect(760, 1260, 160, 200); c.fillStyle = "#2a2438"; c.fillRect(750, 1250, 180, 16);
+          for (let i = 0; i < 4; i++) { const k = clamp01((beatIn(lt) - i) / 0.7); if (k <= 0) continue; const x = lerp(420, 840, k), yy = lerp(1200, 1250, k) - Math.sin(Math.PI * k) * 300; if (k < 1) bottle(c, x, yy + 60, k * 3); }
+          auraFig(c, { x: 360, y: 1460 - 146 * 1.8, pose: Math.floor(beatIn(lt) * 2) % 2 ? PP.throw : PP.hold, scale: 1.8, dir: 1, bulk: bulkAt(t) }, t, 1); },
+        (c, lt, t) => { sky(c, "#07050d", "#150c26"); ground(c, 1460); c.fillStyle = "#17121f"; c.fillRect(120, 1300, 520, 160);
+          c.save(); c.translate(820, 640); c.fillStyle = "#1b1726"; c.beginPath(); c.arc(0, 0, 110, 0, 7); c.fill(); c.strokeStyle = auraCol(t); c.lineWidth = 6; c.stroke(); c.fillStyle = RED; c.font = "900 64px 'Mont'"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText("5:00", 0, 4); c.restore();
+          const k = clamp01(beatIn(lt) / 1.2); auraFig(c, { x: lerp(440, 520, k), y: lerp(1300 - 8, 1460 - 146 * 1.8, k), pose: pose("sit", "stand", k), scale: 1.8, dir: 1, bulk: bulkAt(t) }, t, 1.1); },
+        (c, lt, t) => { sky(c, "#06050c", "#130b22"); ground(c, 1420); const b = beatIn(lt), ph = (Math.sin((b - 0.5) * Math.PI) + 1) / 2, scl = 1.9;
+          auraFig(c, { x: 470, y: 1420 - lerp(64, 33, ph) * scl, pose: mixPose(PP.pushUp, PP.pushDown, ph), scale: scl, dir: 1, bulk: bulkAt(t) }, t, 1.1); },
+        (c, lt, t) => { sky(c, "#050710", "#0b0a1d"); ground(c, 1500, "#0a0912"); rain(c, t, 120, 0.3);
+          for (let i = 0; i < 14; i++) { const yy = 1050 + hash(i, 3) * 420, x = ((hash(i, 4) * 1400 - lt * 2600) % 1400 + 1400) % 1400 - 200; c.fillStyle = "rgba(255,231,163,0.25)"; c.fillRect(x, yy, 160, 4); }
+          const ph = (Math.sin(t * 2 * Math.PI * 2.2) + 1) / 2, scl = 1.7; auraFig(c, { x: 520, y: 1500 - 140 * scl - Math.abs(Math.cos(t * 2 * Math.PI * 2.2)) * 14, pose: mixPose(PP.sprintA, PP.sprintB, ph), scale: scl, dir: 1, bulk: bulkAt(t) }, t, 1.2); },
+        (c, lt, t) => { sky(c, "#06050b", "#110b1c"); ground(c, 1460);
+          const lamp = c.createRadialGradient(700, 1050, 10, 700, 1050, 520); lamp.addColorStop(0, "rgba(255,220,160,0.3)"); lamp.addColorStop(1, "rgba(255,220,160,0)"); c.fillStyle = lamp; c.fillRect(0, 500, W, 1000);
+          c.fillStyle = "#1b1624"; c.fillRect(520, 1240, 420, 22); c.fillRect(900, 1262, 18, 198); c.fillRect(540, 1262, 18, 198);
+          const books = 2 + Math.floor(beatIn(lt) * 2); for (let i = 0; i < books; i++) { c.fillStyle = ["#c0392b", "#2f6fdb", "#1f9d6b", "#e8c45a", "#7a4fd1"][i % 5]; c.fillRect(800 + (i % 2) * 6, 1222 - i * 22, 110, 20); }
+          c.save(); c.shadowColor = "#93c5fd"; c.shadowBlur = 40; c.fillStyle = "#cfe0ff"; c.fillRect(600, 1150, 150, 90); c.restore(); c.fillStyle = "#1b1624"; c.fillRect(590, 1238, 170, 8);
+          c.fillStyle = "#17121f"; c.fillRect(330, 1300, 120, 18); c.fillRect(340, 1318, 14, 142); c.fillRect(426, 1318, 14, 142);
+          auraFig(c, { x: 390, y: 1300 - 8 * 1.7, pose: PP.study, scale: 1.7, dir: 1, bulk: bulkAt(t) }, t, 0.9); },
+        (c, lt, t) => { sky(c, "#0a0612", "#1c1030"); ground(c, 1440); const k = clamp01((beatIn(lt) - 1) / 1), scl = 1.8;
+          const res = auraFig(c, { x: 540, y: 1440 - lerp(98, 146, smooth(k)) * scl, pose: pose("squat", "deadTop", k), scale: scl, dir: 1, bulk: bulkAt(t) }, t, 0.9 + 0.7 * smooth(k));
+          const [hx, hy] = res.hands[0]; c.fillStyle = "#d9d3e6"; c.fillRect(hx - 340, hy - 7, 680, 14);
+          for (const sx of [-1, 1]) for (const [dx, r0] of [[0, 120], [36, 100], [70, 84]]) { c.fillStyle = dx ? "#2a2238" : "#1a1524"; c.beginPath(); c.arc(hx + sx * (250 + dx), hy, r0, 0, Math.PI * 2); c.fill(); c.strokeStyle = auraCol(t); c.lineWidth = 4; c.stroke(); }
+          if (k >= 1) { const e = (beatIn(lt) - 2) / 1.2; for (let i = 0; i < 30; i++) { const a = hash(i, 4) * Math.PI * 2, d = e * (180 + hash(i, 5) * 260); c.fillStyle = `rgba(255,231,163,${clamp01(1 - e)})`; c.fillRect(hx + Math.cos(a) * d, hy + Math.sin(a) * d - e * e * 60, 5, 5); } } },
+        (c, lt, t) => { sky(c, "#0d0712", "#1f1206");
+          c.fillStyle = "#3a3020"; c.fillRect(440, 360, 480, 1080); c.fillStyle = "#16121c"; c.fillRect(460, 380, 440, 1040);
+          c.save(); c.beginPath(); c.rect(460, 380, 440, 1040); c.clip(); auraFig(c, { x: 700, y: 1420 - 146 * 2.0, pose: PP.confident, scale: 2.0, dir: -1, bulk: 1.4 }, t, 1.2, 1, GOLD); c.restore();
+          auraFig(c, { x: 200, y: 1900 - 146 * 3.0 + 200, pose: PP.confident, scale: 3.0, dir: 1, bulk: 1.4 }, t, 0.9, 0, GOLD); },
+      ];
+      montage.forEach((d, i) => shot(DROP1 + i * BAR, DROP1 + (i + 1) * BAR, d));
+
+      shot(BREAK, DROP2, (c, lt, t) => { // she texts back; "seen", phone face down
+        sky(c, "#0c0905", "#160f06"); c.fillStyle = "#17120a"; c.fillRect(0, 1300, W, 620);
+        const k = beatIn(lt), fk = smooth((k - 2.9) / 0.35);
+        phone(c, 540, 930, 1.05 * lerp(1, 1, fk), (c) => {
+          c.scale(1, lerp(1, -0.12, fk));
+          if (fk < 0.5) {
+            c.fillStyle = "#151a26"; roundRect(c, -205, -390, 410, 780, 44); c.fill();
+            c.fillStyle = "#cfd6e6"; c.font = "900 34px 'Mont'"; c.textAlign = "center"; c.fillText("Em", 0, -330);
+            if (k > 0.3) bubble(c, "Anh dạo này thế nào?", -230, false);
+            if (k > 0.9) bubble(c, "Em nhớ anh…", -110, false);
+            if (k > 1.8) { c.fillStyle = "#8b93a7"; c.font = "900 28px 'Mont'"; c.textAlign = "right"; c.fillText("Đã xem", 185, 30); }
+          }
+        });
+        if (k > 2.4) { const hk = smooth((k - 2.4) / 0.5); c.save(); c.shadowColor = GOLD; c.shadowBlur = 60; c.fillStyle = "#000"; roundRect(c, lerp(1100, 560, hk), 860, 540, 170, 80); c.fill(); c.restore(); }
+      });
+
+      function successStage(c, t, prog = 0) { // spotlight, flashes, suit + tie, gold aura
+        sky(c, "#0d0703", "#1a0f03");
+        const sp = c.createLinearGradient(0, 0, 0, 1500); sp.addColorStop(0, "rgba(255,231,163,0.35)"); sp.addColorStop(1, "rgba(255,231,163,0.06)");
+        c.fillStyle = sp; c.beginPath(); c.moveTo(470, 0); c.lineTo(610, 0); c.lineTo(900, 1520); c.lineTo(180, 1520); c.closePath(); c.fill();
+        c.fillStyle = "#130c05"; c.fillRect(0, 1520, W, 400); c.fillStyle = "rgba(245,179,1,0.35)"; c.fillRect(0, 1518, W, 3);
+        for (let i = 0; i < 16; i++) { const x = 40 + i * 66, yy = 1650 + (i % 2) * 40; c.fillStyle = "#0a0703"; c.beginPath(); c.arc(x, yy - 60, 26, 0, 7); c.fill(); c.fillRect(x - 30, yy - 36, 60, 120);
+          if (hash(Math.floor(t * 9), i) > 0.82) { const g = c.createRadialGradient(x + 14, yy - 70, 2, x + 14, yy - 70, 90); g.addColorStop(0, "rgba(255,255,255,0.95)"); g.addColorStop(1, "rgba(255,255,255,0)"); c.fillStyle = g; c.fillRect(x - 80, yy - 160, 190, 190); } }
+        const scl = lerp(1.8, 2.8, prog), ph = (Math.sin(t * Math.PI * 2 * 1.08) + 1) / 2;
+        auraFig(c, { x: 540, y: 1520 - 146 * scl + (1 - prog) * 0, pose: mixPose(PP.walkA, PP.walkB, ph * 0.6), scale: scl, dir: 1, bulk: 1.4, tie: GOLD }, t, 1.5, 1, GOLD);
+      }
+      for (let i = 0; i < 3; i++) shot(DROP2 + i * BAR, DROP2 + (i + 1) * BAR, (c, lt, t) => successStage(c, t, (t - DROP2) / (3 * BAR)));
+      shot(DROP2 + 3 * BAR, OUTRO, (c, lt, t) => { sky(c, "#140a02", "#2a1704"); auraFig(c, { x: 540, y: 960 + 640 + Math.sin(t * 40) * 3, pose: PP.confident, scale: 4, dir: 1, bulk: 1.4, tie: GOLD }, t, 1.7, 1, GOLD); });
+      shot(OUTRO, END + 1, (c, lt) => { c.fillStyle = "#000"; c.fillRect(0, 0, W, H); const g = c.createRadialGradient(540, 900, 10, 540, 900, 600); g.addColorStop(0, `rgba(245,179,1,${0.3 * (1 - lt / 3)})`); g.addColorStop(1, "rgba(245,179,1,0)"); c.fillStyle = g; c.fillRect(0, 0, W, H); });
+
+      // ---------- text ----------
+      const TEXT = [
+        { t: 0.05, d: 0.9, s: "6 THÁNG SAU", size: 110, y: 330, color: GOLD },
+        { t: 0.95, d: BAR - 0.95, s: "6 tháng trước…", size: 64, y: 960, type: true },
+        { t: 3 * BAR + 0.2, d: BAR - 0.2, s: "NGÀY 3", size: 64, y: 300, color: "#9aa3b5", plain: true },
+        { t: 4 * BAR + 0.1, d: BEAT * 2.3, s: "NGÀY 17", size: 64, y: 300, color: "#9aa3b5", plain: true },
+        { t: STOP, d: BAR, s: "NOOOO", size: 230, y: 520, color: RED, shake: 1 },
+        ...["ĐỦ RỒI.", "BỎ RƯỢU.", "5:00 AM", "GYM.", "CHẠY.", "HỌC.", "MẠNH HƠN.", "PHIÊN BẢN MỚI."].map((s0, i) => ({ t: DROP1 + i * BAR + 0.02, d: BAR - 0.05, s: s0, size: 150, y: 400 })),
+        { t: BREAK + 1.9 * BEAT, d: 2.1 * BEAT, s: "đã xem.", size: 56, y: 1560, type: true },
+        { t: DROP2, d: BAR, s: "KHÔNG CẦN AI", size: 150, y: 330 },
+        { t: DROP2 + BAR, d: BAR, s: "CHỈ CẦN", size: 160, y: 330 },
+        { t: DROP2 + 2 * BAR, d: BAR, s: "KỶ LUẬT.", size: 180, y: 330 },
+        { t: DROP2 + 3 * BAR, d: BAR + 2.6, s: "6 THÁNG.", size: 200, y: 330, color: GOLD },
+        { t: OUTRO + 0.2, d: END - OUTRO, s: "NỖI ĐAU LÀ NHIÊN LIỆU.", size: 72, y: 1500, type: true },
+      ];
+      function texts(c, t) {
+        for (const x of TEXT) {
+          if (t < x.t || t >= x.t + x.d) continue;
+          const lt = t - x.t;
+          c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+          let size = x.size; c.font = `900 ${size}px 'Mont'`; while (c.measureText(x.s).width > 990 && size > 30) { size -= 4; c.font = `900 ${size}px 'Mont'`; }
+          if (x.type) { const n = Math.floor(clamp01(lt / 0.9) * [...x.s].length); c.fillStyle = "rgba(240,236,250,0.92)"; c.fillText([...x.s].slice(0, n).join(""), W / 2, x.y); c.restore(); continue; }
+          if (x.plain) { c.globalAlpha = clamp01(lt / 0.2); c.fillStyle = x.color; c.fillText(x.s, W / 2, x.y); c.restore(); continue; }
+          const sl = 1 + 0.9 * Math.exp(-lt / 0.07), rot = (hash(Math.floor(x.t * 10), 2) - 0.5) * 0.08 * Math.exp(-lt / 0.15);
+          const shk = x.shake ? 18 * Math.exp(-lt / 0.5) : 0;
+          c.translate(W / 2 + Math.sin(t * 90) * shk, x.y + Math.cos(t * 70) * shk); c.rotate(rot); c.scale(sl, sl);
+          c.lineJoin = "round"; c.lineWidth = size * 0.14; c.strokeStyle = "#000"; c.strokeText(x.s, 0, 0);
+          c.shadowColor = x.color || auraCol(t); c.shadowBlur = 40; c.fillStyle = x.color || "#ffffff"; c.fillText(x.s, 0, 0);
+          c.restore();
+        }
+      }
+      function cracks(c, t) { // screen crack from the NOOOO hit
+        const k = t - STOP; if (k < 0 || k > BAR) return;
+        const a = 1 - clamp01((k - BAR * 0.6) / (BAR * 0.4));
+        c.save(); c.globalAlpha = a; c.strokeStyle = "rgba(255,255,255,0.85)"; c.lineWidth = 3;
+        const cx = 620, cy = 760;
+        for (let i = 0; i < 14; i++) { let x = cx, yy = cy, ang = (i / 14) * Math.PI * 2 + hash(i, 1) * 0.4; c.beginPath(); c.moveTo(x, yy);
+          for (let j = 0; j < 6; j++) { ang += (hash(i, j + 2) - 0.5) * 0.7; const L0 = 60 + hash(i, j + 9) * 110; x += Math.cos(ang) * L0; yy += Math.sin(ang) * L0; c.lineTo(x, yy); } c.stroke(); }
+        c.restore();
+      }
+
+      // ---------- post ----------
+      const inDrop = (t) => (t >= DROP1 && t < BREAK) || (t >= DROP2 && t < OUTRO);
+      function camera(t) {
+        if (t >= STOP && t < STOP + 0.6) { const e = Math.exp(-(t - STOP) / 0.15); return { z: 1.06 + 0.1 * e, dx: Math.sin(t * 120) * 30 * e, dy: Math.cos(t * 97) * 30 * e }; }
+        if (t < STOP) return { z: 1.02 + (t % BAR) * 0.012, dx: 0, dy: 0 };
+        if (!inDrop(t)) return { z: 1 + (t >= BREAK && t < DROP2 ? (t - BREAK) * 0.03 : 0), dx: 0, dy: 0 };
+        const b = t / BEAT, lb = Math.floor(b), lt = (b - lb) * BEAT, strong = lb % 2 === 0;
+        const z = 1.02 + (strong ? 0.07 : 0.035) * Math.exp(-lt / 0.12), sh = lb % 4 === 0 ? 16 * Math.exp(-lt / 0.14) : 0;
+        return { z, dx: Math.sin(t * 97) * sh, dy: Math.cos(t * 83) * sh };
+      }
+      function render(t) {
+        const sh = SHOTS.find((x) => t >= x.start && t < x.end) || SHOTS[SHOTS.length - 1];
+        s.setTransform(1, 0, 0, 1, 0, 0); s.globalAlpha = 1; s.globalCompositeOperation = "source-over";
+        s.clearRect(0, 0, W, H); sh.draw(s, t - sh.start, t);
+        const cam = camera(t);
+        p.setTransform(1, 0, 0, 1, 0, 0); p.fillStyle = "#000"; p.fillRect(0, 0, W, H);
+        p.setTransform(cam.z, 0, 0, cam.z, W / 2 * (1 - cam.z) + cam.dx, H / 2 * (1 - cam.z) + cam.dy); p.drawImage(S, 0, 0);
+        p.setTransform(1, 0, 0, 1, 0, 0);
+        if (t >= 0.95 && t < STOP) { // sad grade: drained colour, cold tint
+          p.save(); p.globalCompositeOperation = "saturation"; p.fillStyle = "rgba(128,128,128,0.8)"; p.fillRect(0, 0, W, H);
+          p.globalCompositeOperation = "multiply"; p.fillStyle = "rgba(150,170,215,0.45)"; p.fillRect(0, 0, W, H); p.restore();
+        }
+        if (t >= 2 * BAR && t < 3 * BAR) brokenHeart(p, t - 2 * BAR);
+        cracks(p, t);
+        texts(p, t);
+        const barStart = Math.floor(t / BAR) * BAR;
+        const split = inDrop(t) ? 16 * Math.exp(-(t - barStart) / 0.09) : t >= STOP && t < STOP + 0.5 ? 26 * Math.exp(-(t - STOP) / 0.2) : 0;
+        if (split > 0.6) {
+          for (const [cv, cx, col] of [[R, r, "#ff0000"], [Y, y, "#00ffff"]]) { cx.globalCompositeOperation = "source-over"; cx.drawImage(P, 0, 0); cx.globalCompositeOperation = "multiply"; cx.fillStyle = col; cx.fillRect(0, 0, W, H); cx.globalCompositeOperation = "source-over"; }
+          out.globalCompositeOperation = "source-over"; out.fillStyle = "#000"; out.fillRect(0, 0, W, H);
+          out.globalCompositeOperation = "lighter"; out.drawImage(R, -split, 0); out.drawImage(Y, split, 0); out.globalCompositeOperation = "source-over";
+        } else out.drawImage(P, 0, 0);
+        const fl = [[STOP, RED], [DROP1, "#f0eaff"], [DROP2, "#fff4d6"], [DROP2 + 3 * BAR, "#fff4d6"]].find(([x]) => t >= x && t < x + 0.22);
+        if (fl) { out.globalAlpha = 0.9 * (1 - (t - fl[0]) / 0.22); out.fillStyle = fl[1]; out.fillRect(0, 0, W, H); out.globalAlpha = 1; }
+        out.save(); out.globalAlpha = t < STOP ? 0.11 : 0.07; out.globalCompositeOperation = "overlay";
+        const gxo = Math.floor(hash(Math.floor(t * 30), 1) * 540), gyo = Math.floor(hash(Math.floor(t * 30), 2) * 960);
+        out.drawImage(grain, -gxo, -gyo, 1080 * 2, 1920 * 2); out.restore();
+        const vg = out.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.72); vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.7)");
+        out.fillStyle = vg; out.fillRect(0, 0, W, H);
+        if (t > END - 0.6) { out.fillStyle = `rgba(0,0,0,${(t - END + 0.6) / 0.6})`; out.fillRect(0, 0, W, H); }
+      }
+      window.__mono.render = render;
+      window.addEventListener("hf-seek", (e) => render(e.detail.time));
+      render(0);
+      window.__mono.ready();
+      document.title = "done";
+    </script>
+  </body>
+</html>

@@ -3,7 +3,8 @@
 
     python3 tools/phonk.py out.wav --bpm 128 --sections "intro:4 groove:7 break:1 groove:5 build:2 drop:4 outro:5" [--key F] [--seed 1]
 
-Sections (bars): intro (filtered cowbell + ticks), groove (full beat), break (bass + cowbell only),
+Sections (bars): sad (minor pad chords + slow piano + rain, no drums), stop (one hit then near-silence),
+intro (filtered cowbell + ticks / heartbeat), groove (full beat), break (bass + cowbell only),
 build (riser + snare roll), drop (impact + double hats + extra layer), outro (cowbell + pad, fade).
 Prints the start time of every section so visuals can be cut on the beat. Everything is synthesized here,
 so the track is free to use. Needs numpy and ffmpeg.
@@ -96,6 +97,14 @@ RIFF = [(0, 0), (3, 0), (6, 3), (8, 7), (10, 3), (12, 0), (14, -2),
         (16, 0), (19, 0), (22, 3), (24, 8), (26, 7), (28, 3), (30, 5)]
 BASS = [(0, 0, 0, 0.8), (7, 0, 3, 0.5), (10, 3, 3, 0.6), (16, 0, 0, 0.8), (23, -2, 0, 0.5), (26, -4, -2, 0.6)]  # step, from, to, len(beats)
 
+def piano(f, length=1.6):
+    n = int(length * SR); t = np.arange(n) / SR
+    s = sum(np.sin(2 * np.pi * f * k * t) * (0.6 ** k) for k in (1, 2, 3, 4)) * np.exp(-t / 0.7) * np.minimum(1, t / 0.005)
+    return s * 0.22
+
+SAD_CHORDS = [(0, 3, 7), (-4, 0, 3), (-9, -5, -2), (-2, 2, 5)]  # i - VI - III - VII (semitones from root)
+SAD_MELODY = [7, 5, 3, 2, 3, 0, -2, 0]
+
 starts = {}
 b0 = 0
 for name, nbars in secs:
@@ -104,6 +113,19 @@ for name, nbars in secs:
         T = (b0 + bi) * bar
         two = (b0 + bi) % 2
         full = name in ("groove", "drop", "build")
+        if name == "sad":
+            ch = SAD_CHORDS[bi % 4]
+            for semi in ch: add("pad", T, pad_note(freq(semi, 3), bar + 0.6) * 1.6)
+            add("bass", T, np.sin(2 * np.pi * freq(ch[0], 1) * np.arange(int(bar * SR)) / SR) * np.minimum(1, np.arange(int(bar * SR)) / SR / 0.3) * np.exp(-np.arange(int(bar * SR)) / SR / 1.5) * 0.5)
+            for k in range(2): add("bell", T + k * 2 * beat, piano(freq(SAD_MELODY[(bi * 2 + k) % 8], 5), 1.8) * 1.2)
+            n = int(bar * SR); add("fx", T, rng.standard_normal(n) * 0.05)  # rain bed
+            continue
+        if name == "stop":
+            add("kick", T, kick(1.4)); n = int(1.2 * SR)
+            add("fx", T, np.tanh(rng.standard_normal(n) * np.exp(-np.arange(n) / SR / 0.3)) * 0.35)
+            n = int(bar * 0.5 * SR); tt = np.arange(n) / SR
+            add("fx", T + bar * 0.5, rng.standard_normal(n) * (tt / tt[-1]) ** 3 * 0.3)
+            continue
         # cowbell riff
         if name != "break" or True:
             for st, semi in RIFF:

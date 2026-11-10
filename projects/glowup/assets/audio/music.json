@@ -1,0 +1,50 @@
+{
+  "bpm": 130.0,
+  "beat": 0.46153846153846156,
+  "bar": 1.8461538461538463,
+  "duration": 39.423,
+  "sections": [
+    {
+      "name": "sad",
+      "bars": 5
+    },
+    {
+      "name": "stop",
+      "bars": 1
+    },
+    {
+      "name": "drop",
+      "bars": 8
+    },
+    {
+      "name": "break",
+      "bars": 1
+    },
+    {
+      "name": "drop",
+      "bars": 4
+    },
+    {
+      "name": "outro",
+      "bars": 1
+    }
+  ],
+  "starts": {
+    "sad": [
+      0.0
+    ],
+    "stop": [
+      9.231
+    ],
+    "drop": [
+      11.077,
+      27.692
+    ],
+    "break": [
+      25.846
+    ],
+    "outro": [
+      35.077
+    ]
+  }
+}
