@@ -1,225 +1,130 @@
 ---
 name: video-factory
-description: Xưởng video ngắn và dài (TikTok, Reels, Shorts, YouTube) bằng nhân vật 2D trong bối cảnh 3D viền mực, giọng Việt / Hàn GenMax, phụ đề, chữ trên màn hình và âm thanh tự động. Dùng khi người dùng muốn viết kịch bản hoặc làm video thuộc mọi thể loại (kiến thức, mẹo, danh sách, học tiếng, hài, so sánh, kể chuyện, quảng cáo…), duyệt giọng / nhân vật / bối cảnh, hoặc làm video hàng loạt trong repo này.
+description: Tự làm video từ A đến Z cho TikTok, Reels, Shorts và YouTube — AI tự nghĩ nội dung và viết kịch bản, rồi cho người dùng chọn khổ (short / YouTube), nhân vật (3 ảnh), bối cảnh (3 ảnh), giọng đọc (nghe thử), và render (video dài chia nhiều cửa sổ chạy song song). Dùng skill này bất cứ khi nào người dùng muốn làm video, làm clip, làm short, làm video YouTube, "làm 1 video về…", viết kịch bản video, hoặc làm video hàng loạt trong repo này — kể cả khi họ chỉ đưa một chủ đề rất ngắn.
 ---
 
 # Video Factory
 
-Repo này biến một **kịch bản JSON** thành video hoàn chỉnh. Ảnh nền được dựng 3D **một lần** rồi dùng lại; mỗi video chỉ ghép 2D nên render nhanh (65 s video ≈ 6 phút trên 4 nhân CPU, không GPU).
-
-Mọi video đi qua **6 cổng duyệt**. Ở mỗi cổng: làm xong phần của cổng đó, gửi kết quả cho người dùng (SendUserFile cho ảnh/video), **dừng lại chờ duyệt**. Chỉ bỏ qua cổng khi người dùng nói rõ ("cứ làm", "không cần duyệt", "dùng lại nhân vật/bối cảnh cũ").
+Quy trình 4 bước. AI (Claude, Codex…) **tự lo nội dung**; người dùng chỉ chọn ở các điểm đánh dấu 👉. Đừng hỏi sâu về nội dung — đề xuất luôn, người dùng sửa nếu muốn.
 
 ```
-① Kịch bản  →  ② Giọng đọc  →  ③ Nhân vật  →  ④ Bối cảnh  →  ⑤ Storyboard  →  ⑥ Render + giao
+① Nội dung + khổ   → AI đề xuất; 👉 người dùng chọn Short hay YouTube
+② Kịch bản         → AI viết, tự soát; 👉 người dùng OK (hoặc sửa nhanh)
+③ Tạo video
+   3.1 Nhân vật    → 👉 3 ảnh theo mô tả, chọn 1
+   3.2 Bối cảnh    → 👉 3 ảnh, chọn 1
+   3.3 Giọng đọc   → 👉 nghe thử, chọn 1
+   3.4 Render      → video dài: chia đoạn, mỗi cửa sổ chạy 1 đoạn, rồi ghép
 ```
 
-## ① Duyệt kịch bản
+Mỗi điểm 👉: gửi kết quả (ảnh / âm thanh bằng SendUserFile nếu có), **dừng chờ chọn**. Người dùng nói "random", "tuỳ bạn", "cứ làm" → tự chọn phương án hợp nhất, nói ngắn gọn vì sao, đi tiếp. Nhân vật / bối cảnh / giọng đã có mà hợp thì đề xuất dùng lại thay vì tạo mới — nhanh hơn và giữ nhận diện kênh.
 
-**Trước khi viết, đọc:** `references/genres.md` (chọn thể loại → khung nhịp, hook, kết, mục chấm riêng của thể loại đó), `references/scriptwriting.md` (cẩm nang: hook, cấu trúc theo độ dài, twist, viết cho giọng AI, tự chấm điểm), `references/examples.md` (2 kịch bản mẫu có phân tích), `library/script-notes.md` (định hướng kênh, lựa chọn trước đây của người dùng, số liệu video đã đăng — ưu tiên điều đã hiệu quả), `library/ideas.md` (kho ý tưởng; khi người dùng chưa có đề tài, đề xuất 2-3 ý từ đây hoặc ý mới cùng tinh thần).
+## ① Nội dung + khổ
 
-Viết `stories/<slug>.script.md` theo mẫu `stories/_template.script.md` (chưa phải JSON), **tự chấm theo bảng ở mục 9 của cẩm nang** (tổng ≥ 32/40, không mục nào < 3; chưa đạt thì tự sửa tối đa 2 vòng) rồi mới gửi người dùng kèm bảng điểm. Gồm:
+- Có chủ đề → giữ đúng chủ đề. Chỉ có hướng chung ("làm video về kỷ luật") hoặc không có gì → tự chọn một ý cụ thể (gợi ý ở `library/ideas.md`; `library/script-notes.md` ghi định hướng kênh và những gì người dùng đã thích / chê).
+- Gửi **2-3 dòng**: tiêu đề, một câu tóm nội dung, thể loại. Rồi hỏi khổ:
 
-1. **Logline** một câu, **độ dài dự kiến** (≈ 3,3 từ tiếng Việt/giây với giọng kể 0,95x), nền tảng đích.
-2. **3 phương án hook** khác kiểu nhau, mỗi cái ≤ 15 từ, nói trong 3 giây đầu (thư viện hook theo thể loại: `references/scriptwriting.md` mục 2 và `references/genres.md`). Ví dụ các kiểu:
-   - *Luật lạ / cấm đoán*: "Ký túc xá này có một luật: sau 2 giờ sáng không mở cửa."
-   - *Nghịch lý nêu như sự thật*: "Cô ấy chết ba ngày trước, nhưng tối qua vẫn nhắn tin cho tôi."
-   - *Câu hỏi trực diện người xem*: "Nếu nửa đêm có người gõ cửa gọi đúng tên bạn, bạn có mở không?"
-   - *Vào thẳng khoảnh khắc căng nhất* (flash-forward) rồi quay lại: "3 giờ 02 phút. Tin nhắn đến. Và tôi hiểu mình vừa mắc sai lầm."
-   - *Con số / chi tiết cụ thể*: "Phòng 305 đã đổi người ở 7 lần trong một năm."
-3. **Dàn ý theo nhịp**, mỗi nhịp một dòng kèm thời điểm, đánh dấu kỹ thuật giữ chân đang dùng:
-   - **Vòng mở (open loop)**: đặt câu hỏi ở đầu, chỉ trả lời ở cuối.
-   - **Leo thang mỗi 6-10 giây**: mỗi nhịp phải lớn hơn nhịp trước (tiếng gõ → giọng quen → tin nhắn trái ngược → dấu chân).
-   - **Đổi nhịp (pattern interrupt)** mỗi ~8 giây: cắt cảnh, im lặng đột ngột, tiếng động, cận mặt, tin nhắn hiện lên.
-   - **Giả an toàn** trước cú cuối ("Minh thở phào") để cú lật mạnh hơn.
-   - **Twist chơi lại hook**: câu cuối phải làm người xem hiểu lại câu đầu.
-   - **Kết vòng**: câu chữ cuối / câu hỏi khiến người xem xem lại hoặc bình luận ("Bạn có dám nhìn ra sau không?"). Không chào, không "like và đăng ký" chen giữa.
-   - Không mô tả lại điều hình đã cho thấy; câu ≤ 15 từ; một ý một câu.
-4. **Danh sách cần có**: các vai có lời (cho cổng ②), nhân vật (mới / có sẵn trong `library/characters`), bối cảnh (mới / có sẵn trong `library/sets`), tiếng động.
+| Khổ | Khung | Độ dài | Ghi chú |
+|---|---|---|---|
+| **Short** (TikTok / Reels / Shorts) | 9:16 | 20-90 s | hook trong 1-3 giây đầu, nhịp nhanh |
+| **YouTube** | 16:9 | 3-20 phút | chia chương 60-120 s, có lời kể xuyên suốt |
 
-Video dài (5-20 phút): chia **chương** 60-120 s, mỗi chương có hook nhỏ riêng và kết bằng một câu hỏi treo; 30 s đầu vẫn phải có hook mạnh nhất.
+## ② Kịch bản
 
-Nội dung: cốt truyện, nhân vật, câu chữ luôn là của mình, không chép phim/truyện có bản quyền. Thông tin thật (visa, học phí, luật) phải đúng và ghi nguồn trong `script.md`. Video có giọng AI: nhắc người dùng bật nhãn "nội dung AI" khi đăng.
+Viết `stories/<slug>.script.md` theo `stories/_template.script.md`: 3 phương án hook, dàn ý theo giây (hoặc theo chương nếu YouTube dài), câu kết. Khung nhịp từng thể loại và mẹo viết: `references/genres.md`, `references/scriptwriting.md` — đọc phần của thể loại đang làm, không cần đọc hết. Video có thông tin thật (thủ tục, luật, con số, tin tức) → ghi nguồn; không chắc thì không đưa con số, vì người xem làm theo và kênh mất uy tín nếu sai.
 
-## ② Duyệt giọng đọc
+Tự chấm theo bảng ở `references/scriptwriting.md` mục 9 trước khi gửi. Gửi người dùng **bản tóm**: hook đề xuất + dàn ý ngắn (không dán cả file dài).
 
-Mỗi vai có lời (người kể + từng nhân vật nói + ma) nghe **5 giọng**, đọc **đúng câu thật của vai đó trong kịch bản** (chọn câu đặc trưng nhất: câu hook cho người kể, câu thoại quan trọng nhất cho nhân vật), có sẵn hiệu ứng của vai (`muffled`, `ghost`…) để nghe đúng như trong video.
-
-**Người dùng gọi giọng bằng tên** như trong GenMax ("kể chuyện ma", "Nam Trầm", "George"…): tra bằng
+Khi người dùng OK → viết `stories/<slug>.json` (định dạng: `references/story-format.md`), chạy soát và sửa hết lỗi:
 
 ```bash
-node scripts/voices.mjs find "kể chuyện ma"     # bỏ qua dấu/hoa thường; không có thì tìm trong thư viện chia sẻ ElevenLabs
-node scripts/voices.mjs list clone             # giọng người dùng tự clone (ưu tiên khi họ nhắc tên)
-node scripts/voices.mjs sync                   # cập nhật library/voice-catalog.json khi họ vừa clone giọng mới
+node tools/script-lint.mjs stories/<slug>.json
 ```
 
-và dùng thẳng tên trong JSON: `{ "name": "kể chuyện ma", "speed": 0.95 }` (thêm `"provider"` nếu tên trùng ở nhiều nguồn). Nếu tên không khớp chính xác, đưa người dùng các tên gần nhất để chọn, đừng tự đoán.
+## ③ Tạo video
 
-Danh sách giọng:
+### 3.1 Nhân vật — 3 ảnh
+
+Có sẵn: `ls library/characters` (mỗi file có `desc`). Cần nhân vật mới → viết `demos/<vai>.json` với **3 phương án** theo mô tả của người dùng (hoặc tự nghĩ, khác nhau rõ: kiểu tóc, trang phục, màu), rồi:
 
 ```bash
-node scripts/genmax-tts.mjs --voices                       # MiniMax tiếng Việt (uniq_id | tên | tag)
-node scripts/genmax-tts.mjs --voices --provider capcut     # CapCut tiếng Việt (voice_id số)
-node scripts/genmax-tts.mjs --voices --provider elevenlabs # ElevenLabs (đọc tiếng Việt bằng model eleven_v3)
-node scripts/genmax-tts.mjs --credits
+node tools/demo.cjs chars demos/<vai>.json          # -> demos/<vai>.png (3 phương án x 3 biểu cảm)
 ```
 
-Chọn 5 ứng viên khác nhau rõ (giới tính / tuổi / chất giọng / nhà cung cấp) hợp với vai, viết `demos/voices-<slug>.json`:
+Người dùng chọn → lưu `library/characters/<id>.json` = `{ "id", "desc", "spec" }`. Trường của `spec`: `references/assets.md`.
 
-```json
-{ "roles": [
-  { "role": "narrator", "text": "Câu hook thật của kịch bản…",
-    "candidates": [ { "label": "Nam trầm điện ảnh", "voice": "Vietnamese_Serene_Man", "speed": 0.95 },
-                    { "label": "Nam trầm (CapCut)", "voice": "7493478233703191041", "provider": "capcut", "speed": 0.95 },
-                    { "label": "George (ElevenLabs)", "voice": "JBFqnCBsd6RMkjVDRZzb", "provider": "elevenlabs" } ] },
-  { "role": "ghost", "text": "Câu thoại của ma…", "fx": "ghost", "candidates": [ … ] }
-] }
-```
+### 3.2 Bối cảnh — 3 ảnh
+
+Có sẵn: `ls library/sets` (`dorm`, `student-room`, `student-room-day`, `lop-hoc`…), ảnh nền ở `library/plates/<set>/`. Cần mới → `demos/<noi>.json` với **3 phương án** (khác bố cục / ánh sáng / đồ đạc), rồi:
 
 ```bash
-node tools/voice-demo.mjs demos/voices-<slug>.json   # -> demos/voices-<slug>/<role>-1..5.mp3 + <role>-tat-ca.mp3
+node tools/demo.cjs sets demos/<noi>.json           # -> demos/<noi>.png
 ```
 
-Gửi người dùng các file `<role>-tat-ca.mp3` (nghe lần lượt, có đọc "Giọng số một…") và bảng số → tên giọng (in ra cuối lệnh, lưu ở `README.txt`); gửi thêm file lẻ nếu họ muốn nghe lại một giọng. Người dùng có thể đổi tốc độ (`speed`: MiniMax/CapCut 0.5-2, ElevenLabs 0.7-1.2) hoặc hiệu ứng → chạy lại (giọng đã tạo được cache, chỉ phần mới tốn credit). Giọng được chọn ghi vào `voices` của kịch bản JSON (giữ nguyên `voice`, `provider`, `speed`, `model`, `fx`) — cache dùng chung nên khi render không tạo lại câu đã nghe thử. Giọng hay dùng lại cho kênh: lưu vào `library/voices.json` (tên preset → cấu hình giọng) rồi trong kịch bản chỉ cần `{ "preset": "horror-narrator" }` (có thể ghi đè thêm `speed`, `fx`…).
-
-Hiệu ứng giọng (`fx`): `muffled` (qua cửa), `ghost` (trầm, vọng), `whisper`, `phone`, `radio`, `cave`.
-
-## ③ Duyệt nhân vật
-
-Nhân vật có sẵn: `ls library/characters` (mỗi file có `desc`). Dùng lại nếu hợp.
-
-Nhân vật mới: viết `demos/<vai>.json` với **ít nhất 5 phương án khác hẳn nhau** (khác kiểu tóc, trang phục, màu, tính cách) — hoặc 5 biến thể sát mô tả nếu người dùng đã tả cụ thể — rồi:
+Người dùng chọn → lưu `library/sets/<id>.json` (`module: "kit.js"`, `spec`) và chụp ảnh nền theo khổ đã chọn:
 
 ```bash
-node tools/demo.cjs chars demos/<vai>.json        # -> demos/<vai>.png, gửi người dùng
+node tools/bake-plates.cjs <id>                     # Short (9:16)
+node tools/bake-plates.cjs <id> --landscape         # YouTube (16:9)
 ```
 
-```json
-{ "role": "Bạn cùng phòng", "candidates": [
-  { "name": "Tuấn", "desc": "Năng động, mũ lưỡi trai đỏ, áo sọc", "spec": { "skin": "#f3c9a5", "hair": "#1d1a1a", "hairStyle": "cap", "cap": "#e5484d", "top": "#f4f1ea", "stripes": "#2f6fdb", "pants": "#3b3f52", "shoes": "#ffffff", "headR": 146 } }
-] }
-```
+Đồ đạc, ánh sáng, góc máy, điểm đứng: `references/assets.md`.
 
-Trường của `spec` (engine/toon/characters.js):
-- `skin`, `hair`, `hairStyle`: `ponytail | spiky | bob | long | bun | twintails | short | curly | cap | bald`; `cap` (màu mũ), `accent` (màu buộc tóc).
-- Thân: `top` (áo), `pants` hoặc `skirt` hoặc `dress` (kèm `legs` = màu da), `shoes`.
-- Chi tiết: `hood`, `zip`, `cardigan`, `stripes` (màu sọc), `tie` (màu cà vạt), `scarf`, `glasses`, `mustache`, `bag` (balo), `book`.
-- `headR` 138-150 (to = trẻ con hơn). Con ma: `{ "ghost": true }`.
+### 3.3 Giọng đọc — nghe thử
 
-Người dùng chọn số nào → lưu `library/characters/<id>.json` = `{ "id", "desc", "spec" }`. Muốn chỉnh → sửa spec, chạy lại demo với 1-3 biến thể.
-
-## ④ Duyệt bối cảnh
-
-Bối cảnh có sẵn: `ls library/sets` (mỗi file có `description`), ảnh nền đã chụp: `library/plates/<set>/*.jpg` + `.json` (góc máy và điểm đứng).
-
-Bối cảnh mới: viết `demos/<noi>.json` với **5 phương án** (khác bố cục, màu, ánh sáng, đồ đạc), mỗi cái là một spec lắp ghép:
+Người dùng có thể gọi giọng bằng tên trong GenMax ("kể chuyện ma", "Nam Trầm", "George"…):
 
 ```bash
-node tools/demo.cjs sets demos/<noi>.json         # -> demos/<noi>.png
+node scripts/voices.mjs find "<tên>"                # tra theo tên (bỏ qua dấu, hoa thường)
+node scripts/voices.mjs list clone                  # giọng người dùng tự clone — ưu tiên khi họ nhắc tên
 ```
 
-```json
-{ "name": "Phòng thờ nhà cổ", "desc": "Ánh nến đỏ, bàn thờ, đèn lồng", "spec": {
-  "size": [4.4, 4.6, 3.0], "wall": "#c9a98a", "wainscot": "#6b3a2a", "floor": "tile", "floorColor": "#9a6a5a", "light": "red-candle",
-  "props": [ { "kind": "altar", "wall": "back", "along": 0, "offset": 0.3 }, { "kind": "lantern", "at": [-1.3, -0.8] } ] } }
-```
-
-- `size` [rộng x, sâu z, cao] mét; phòng nằm giữa gốc toạ độ, tường sau ở z = -sâu/2, máy quay mặc định ở phía trước (z dương).
-- `floor`: `wood | tile | linoleum | tatami | carpet`; `light`: `night-cold | warm-lamp | day | sunset | red-candle`.
-- Đồ đạc (`engine/toon/kit.js`, PROPS): `bed desk chair wardrobe shelf lamp floor-lamp ceiling-light window door mirror sink toilet bathtub sofa tv table rug plant fridge altar candle lantern frame poster clock stool`. Đặt bằng `"at": [x, z]` (+ `rot` độ) hoặc sát tường `"wall": "back|left|right|front", "along": m, "offset": m`. Tuỳ chọn hay dùng: `color`, `light`, `intensity`, `text`/`lines` (chữ trên tranh, poster, đồng hồ), `y`, `curtain`, `on`.
-
-Người dùng chọn → lưu `library/sets/<id>.json` = `{ "name", "description", "module": "kit.js", "spec": {...} }`. Thêm `angles` / `marks` riêng nếu góc mặc định (`wide front left-wall right-wall low`; điểm đứng `center left right back front`) chưa đủ cho kịch bản — mẫu chi tiết: `library/sets/dorm.json`. Rồi chụp và xem:
+Viết `demos/voices-<slug>.json` (mỗi vai có lời: 3 giọng phù hợp, đọc đúng một câu thật trong kịch bản để nghe đúng ngữ cảnh), rồi:
 
 ```bash
-node tools/bake-plates.cjs <id>                   # khung dọc 9:16  -> library/plates/<id>/*.jpg + *.json
-node tools/bake-plates.cjs <id> --landscape       # khung ngang 16:9 -> library/plates/<id>@16x9/
+node tools/voice-demo.mjs demos/voices-<slug>.json  # -> <vai>-1..3.mp3 + <vai>-tat-ca.mp3 (nghe liền, có đọc số)
 ```
 
-Kịch bản `"format": "16:9"` dùng ảnh nền `<set>@16x9` — chụp bản ngang trước khi làm video YouTube. Màu ám nhân vật (`charTint`) lấy theo ánh sáng của bối cảnh, tự áp khi kịch bản không ghi `tint`.
+Gửi `<vai>-tat-ca.mp3`. Giọng được chọn ghi vào `voices` của kịch bản JSON. Câu đã nghe thử được cache — lúc render không tạo lại, không tốn thêm credit.
 
-Gửi ảnh nền cho người dùng nếu bối cảnh mới. Bối cảnh không lắp ghép được (hành lang, phố…) thì viết module riêng như `engine/toon/dorm.js`.
+### 3.4 Render
 
-## ⑤ Duyệt storyboard
-
-Chuyển `script.md` đã duyệt thành `stories/<slug>.json`, rồi:
+Xem trước bố cục (nhanh, không tốn thêm credit) và gửi người dùng nếu là bối cảnh / nhân vật mới:
 
 ```bash
-node scripts/make.mjs stories/<slug>.json --no-render   # giọng (GenMax, có cache) + project từng chương
-node tools/storyboard.cjs out/<slug>                    # out/<slug>/storyboard.png: mỗi cảnh một ảnh
+node scripts/make.mjs stories/<slug>.json --no-render
+node tools/storyboard.cjs out/<slug>                # -> out/<slug>/storyboard.png
 ```
 
-Chạy soát kịch bản trước storyboard và sửa hết lỗi / cảnh báo (cảnh báo nào cố ý thì nói rõ với người dùng):
+**Short** — một lệnh:
 
 ```bash
-node tools/script-lint.mjs stories/<slug>.json          # hook, câu dài, chữ số, khoảng lặng, cảnh dài, câu Hàn thiếu nghĩa, góc / điểm đứng / nhân vật / tiếng động không tồn tại
+node scripts/make.mjs stories/<slug>.json --jobs 2  # -> out/<slug>/<slug>.mp4 + sheet.png
 ```
 
-Xem storyboard.png **trước khi gửi**: nhân vật đứng đúng chỗ, không che chữ, không bị cắt mặt, phụ đề không đè vào mặt. Sửa JSON và chạy lại (giọng đã cache nên nhanh). Gửi storyboard cho người dùng.
-
-### Định dạng kịch bản JSON
-
-```json
-{
-  "title": "Luật ký túc xá", "slug": "luat-ktx", "format": "9:16", "set": "dorm",
-  "tint": "rgba(30,40,90,0.22)",
-  "voices": {
-    "narrator": { "voice": "Vietnamese_Serene_Man", "speed": 0.95 },
-    "linh": { "voice": "Vietnamese_Cute_Girl_v1", "fx": "muffled", "color": "#ffb3c7", "quote": true }
-  },
-  "ambience": [{ "sfx": "drone", "volume": 0.55 }, { "sfx": "hum", "volume": 0.45 }],
-  "shots": [
-    { "angle": "room-door", "move": "push",
-      "chars": [{ "id": "minh", "char": "minhPJ", "mark": "room-center", "mood": "surprised", "look": -0.8,
-                  "keys": [{ "at": "b2", "mood": "excited" }], "walk": { "to": "door-inside", "at": "b2+0.6", "dur": 3.4 } }],
-      "beats": [
-        { "sfx": "knocks", "caption": "Cốc… cốc… cốc…", "shake": [0, 0.55, 1.1] },
-        { "say": "narrator", "text": "Một giọng nói quen thuộc vang lên ngoài cửa." },
-        { "say": "linh", "text": "Minh ơi, tớ Linh đây!" }
-      ] },
-    { "black": true, "text": "Bạn có dám nhìn ra sau không?", "hold": 2.6 }
-  ]
-}
-```
-
-- **Kịch bản**: `genre` (mã thể loại), `target` (giây mục tiêu), `sources` (bắt buộc với explainer / howto / news / myth / compare / language / ad), `cta` (bắt buộc với ad).
-- **Chữ trên màn hình**: `title` trong cảnh — chuỗi hoặc `{ text, orig (chữ Hàn phía trên), style: "banner" | "number" | "label", color, at, dur }`; `number` = số to trong vòng tròn (danh sách), `label` = chữ to không nền ("LỜI ĐỒN", "🇻🇳 Việt Nam"…).
-- **Cảnh (shot)**: `angle` (tên ảnh nền trong `library/plates/<set>/`), `set` (nếu khác bối cảnh mặc định), `move`: `hold drift push push-fast pull pan-left pan-right tilt-up tilt-down` hoặc `{ "zoom": [a, b], "pan": [[x, y], [x, y]] }` (zoom ≥ 1, pan -1..1), `lead` (giây trước nhịp đầu), `dim` 0-1, `tint`, `overlay: "peephole"`, `notify: { who, text, time, at, dur }`, `fx: [{ type: "flicker" | "blackout", at, dur, rate, threshold, depth }]`. Cảnh đen: `{ "black": true, "text", "hold" }`.
-- **Nhịp (beat)** chạy nối tiếp: lời `{ say, text, gap }` (người nói = khoá trong `voices`), tiếng động `{ sfx, caption, hold, shake: [giây] }`, kèm tiếng động trong lời: `also: [{ sfx, at, volume, shake }]`.
-- **Thời điểm** trong `keys`, `walk.at`, `fadeAt`, `fx.at`, `notify.at`: số giây từ đầu cảnh, `"bN"` (đầu nhịp N), `"eN"` (cuối nhịp N), cộng trừ: `"b2+0.6"`.
-- **Nhân vật**: `id` (trùng tên người nói thì tự nhép miệng), `char` (file trong `library/characters`), `mark` (điểm đứng có trong `.json` của góc máy đó — kiểm tra bằng `cat library/plates/<set>/<angle>.json`), `mood`, `pose`, `look` (-1 trái … 1 phải), `keys` (đổi trạng thái theo thời gian; thêm `lookDown`, `tilt`, `lean`), `walk { to, at, dur }`, `height` (m, mặc định 1.6; ma 2.0), ma: `fadeAt`, `fadeDur`.
-- `mood`: `neutral calm happy excited surprised wow scared worried relieved sleepy`. `pose`: `idle wave arms-up reach phone phone-off cower point`.
-- `voices.<vai>`: `{ name }` (tên giọng GenMax), `{ preset }` (trong `library/voices.json`) hoặc `{ voice, provider (minimax|capcut|elevenlabs) }`, cộng `speed, model, fx, color (màu phụ đề), quote (phụ đề trong ngoặc kép)` — lấy từ cổng ②.
-- Bối cảnh có sẵn: `dorm` (ký túc xá đêm), `student-room` (phòng trọ đêm), `student-room-day` (phòng trọ ban ngày), `lop-hoc` (lớp học tiếng Hàn ban ngày). Thể loại không phải truyện ma dùng bối cảnh ban ngày, không `tint` tối, `ambience` rỗng hoặc nhẹ.
-- Tiếng động có sẵn (`library/sfx`): `knocks creak sting buzz heart drips drone hum` (đa số hợp không khí căng; video vui cần thêm tiếng động / nhạc vui — chưa có, báo người dùng). Nền (`ambience`) được lặp liên tục và trộn ở bước cuối, tắt khi `blackout`.
-
-## ⑥ Render và giao
+**YouTube / video dài — chia cửa sổ.** Video được chia thành các chương (mặc định ≤ 90 s, đổi bằng `--chapter N`). `--no-render` ghi sẵn lệnh cho từng cửa sổ vào `out/<slug>/windows.txt`:
 
 ```bash
-node scripts/make.mjs stories/<slug>.json --jobs 2       # -> out/<slug>/<slug>.mp4 + sheet.png
+node scripts/make.mjs stories/<slug>.json --no-render      # chuẩn bị + windows.txt
+node scripts/make.mjs stories/<slug>.json --only 1         # cửa sổ 1
+node scripts/make.mjs stories/<slug>.json --only 2         # cửa sổ 2 … (chạy cùng lúc)
+node scripts/make.mjs stories/<slug>.json --join           # khi tất cả xong: ghép + trộn âm nền + chuẩn hoá âm lượng
 ```
 
-- Tự chia chương ≤ 90 s (`--chapter N`), render song song `--jobs` chương, ghép không nén lại, trộn nền, chuẩn hoá -14 LUFS (mức TikTok/Reels/Shorts).
-- Thời gian trên 4 nhân CPU không GPU: ~5,3 giây render cho mỗi giây video với 1 job; `--jobs 2` gần gấp đôi tốc độ (đã đo). Video 20 phút ≈ 1,5-2 giờ với 1 job; máy nhiều nhân + `--jobs` nhanh hơn tương ứng.
-- Cuối lệnh in số credit GenMax đã dùng / còn lại — báo cho người dùng.
-- Mỗi lần chạy `make` xoá chương cũ trong `out/<slug>/` rồi dựng lại.
-- Xem `out/<slug>/sheet.png` (một ảnh mỗi cảnh từ video thật) trước khi giao. Gửi video bằng SendUserFile. File > 100 MB: nói với người dùng có thể nén thêm.
+Mỗi cửa sổ là một terminal riêng mở ở thư mục repo (trên máy người dùng hoặc một phiên AI riêng); một cửa sổ nhận được nhiều chương (`--only 1,2`). Số cửa sổ nên khoảng bằng số nhân CPU / 2 — nhiều hơn thì các cửa sổ tranh CPU, không nhanh thêm. Nếu tự chạy được trong phiên hiện tại: chạy các `--only` dưới nền, chờ xong rồi `--join`. Lệnh `--only` / `--join` phải dùng cùng `--chapter` với lúc chuẩn bị (đã ghi sẵn trong `windows.txt`). Đo được: ~5,3 s render cho mỗi giây video mỗi cửa sổ (4 nhân, không GPU).
 
-## Định dạng "mono" (ngụ ngôn không lời, người que) và nhạc tự tổng hợp
-
-- Khi người dùng muốn video kiểu người que tối giản / không lời / động lực: dùng `engine/mono/mono.js` (người que có tư thế keyframe `trackAt`, phòng tối, bóng đèn, đồng hồ, sàn phản chiếu, viên gạch phát sáng) — dự án mẫu `projects/discipline/` (cảnh + `timing.json` + `sfx.py`). 2D thuần: ~2,5 phút render cho 52 s.
-- Không làm lại y hệt video / kênh người dùng gửi làm mẫu: giữ thể loại, đổi câu chuyện, màu nhấn, bố cục, câu kết.
-- Nhạc: `python3 tools/phonk.py <out.wav> --bpm 128 --sections "intro:4 groove:8 build:2 drop:4 outro:4"` tạo nhạc kiểu phonk (cowbell, 808, kick, clap, hats) tự tổng hợp — dùng thoải mái, in ra mốc từng đoạn để canh hình theo nhịp. Luôn xuất thêm bản **không nhạc** (chỉ tiếng động) để người dùng ghép nhạc trend trên TikTok/Reels (nhạc trend giúp phân phối).
+Giao: gửi `out/<slug>/<slug>.mp4` (âm lượng đã chuẩn -14 LUFS). Báo số credit GenMax đã dùng (in ở cuối lệnh). Gợi ý caption + hashtag + nhắc bật nhãn "nội dung AI" khi đăng.
 
 ## Sau khi giao
 
-- Ghi lựa chọn / chỉnh sửa của người dùng vào `library/script-notes.md` (mục "Lựa chọn của người dùng"), đánh dấu ✅ ý tưởng đã làm trong `library/ideas.md`.
-- Xin người dùng gửi số liệu sau 2-3 ngày đăng (view, thời gian xem trung bình, % xem hết, bình luận nổi bật) và ghi vào bảng "Hiệu quả video" + 1-2 bài học. Đó là cách skill viết kịch bản tốt dần lên.
+Ghi vào `library/script-notes.md` những gì người dùng chọn / sửa / chê — lần sau đề xuất trúng hơn; đánh dấu ✅ ý tưởng đã làm trong `library/ideas.md`. Người dùng gửi số liệu (view, % xem hết, bình luận) → ghi vào bảng "Hiệu quả video".
 
-## Lỗi hay gặp
+## Tham khảo (chỉ đọc khi cần)
 
-- `angle X has no mark "Y"`: góc máy đó không có điểm đứng này — xem `.json` của góc, hoặc thêm mark vào `library/sets/<set>.json` rồi chụp lại.
-- `character "X" is not in library/characters`: chưa qua cổng ③ — duyệt và lưu nhân vật trước.
-- Nhân vật quá to / bị cắt: chọn góc rộng hơn, đổi `mark` xa hơn, hoặc giảm `height`.
-- Khung đen khi render: kiểm tra `render.log` trong thư mục chương; chạy `npx hyperframes check --json` trong thư mục đó.
-- GenMax lỗi 401: `.env` thiếu `GENMAX_API_KEY`.
-- `no plate <set>@16x9/...`: chưa chụp ảnh nền khung ngang — `node tools/bake-plates.cjs <set> --landscape`.
-- Phụ đề đè lên nhân vật: đổi `mark` lên cao/xa hơn, hoặc dùng góc rộng hơn — phụ đề luôn ở 75% chiều cao khung.
+| File | Khi nào đọc |
+|---|---|
+| `references/genres.md` | Khung nhịp, hook, kết cho 14 thể loại + định dạng "mono" (người que) và "aura edit" |
+| `references/scriptwriting.md` | Nguyên tắc giữ chân, thư viện hook, twist, viết cho giọng AI, bảng tự chấm |
+| `references/examples.md` | Kịch bản mẫu đã chạy, có phân tích |
+| `references/story-format.md` | Định dạng kịch bản JSON cho `make.mjs` |
+| `references/assets.md` | Trường nhân vật, đồ đạc / ánh sáng bối cảnh, góc máy, giọng, tiếng động, nhạc tự tổng hợp, lỗi hay gặp |

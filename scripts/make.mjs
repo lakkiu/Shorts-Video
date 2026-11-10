@@ -3,6 +3,10 @@
 //   node scripts/make.mjs stories/luat-ktx.json            # voices + projects + render + mix
 //   node scripts/make.mjs stories/x.json --no-render       # build projects only (preview in HyperFrames)
 //   options: --jobs N (parallel chapter renders, default 1)  --chapter 90 (max chapter seconds)  --out out/<slug>
+//   long videos, one chapter per terminal window:
+//     node scripts/make.mjs stories/x.json --no-render     # voices + chapters, writes out/<slug>/windows.txt
+//     node scripts/make.mjs stories/x.json --only 3        # in window 3 (also "--only 1,2")
+//     node scripts/make.mjs stories/x.json --join          # concat + ambience + loudness + sheet
 import fs from "node:fs";
 import path from "node:path";
 import { execFileSync, spawn } from "node:child_process";
@@ -290,12 +294,30 @@ ${capsHtml}${audioHtml}    </div>
   fs.writeFileSync(path.join(dir, "hyperframes.json"), JSON.stringify({ paths: { assets: "assets" } }, null, 2));
   return dir;
 }
-for (const d of fs.readdirSync(OUT)) if (/^ch\d+$/.test(d)) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
-for (const d of ["storyboard", "sheet"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
-const dirs = chapters.map(writeChapter);
-fs.writeFileSync(path.join(OUT, "timeline.json"), JSON.stringify({ total: TOTAL, shots: shots.map((s) => ({ angle: s.src.angle, start: s.start, end: s.end })) }, null, 2));
-log(`projects: ${dirs.map((d) => path.relative(ROOT, d)).join(", ")}`);
-if (flag("no-render")) process.exit(0);
+// Window mode for long videos: prepare once, render one chapter per terminal window, then join.
+const ONLY = opt("only"), JOIN = flag("join");
+const chDir = (n) => path.join(OUT, `ch${String(n).padStart(2, "0")}`);
+let dirs;
+if (ONLY || JOIN) {
+  dirs = chapters.map((_, i) => chDir(i + 1));
+  const missing = dirs.filter((d) => !fs.existsSync(path.join(d, "index.html")));
+  if (missing.length) { console.error(`[make] chưa chuẩn bị chương: ${missing.map((d) => path.basename(d)).join(", ")} — chạy trước: node scripts/make.mjs ${storyPath} --no-render`); process.exit(2); }
+} else {
+  for (const d of fs.readdirSync(OUT)) if (/^ch\d+$/.test(d)) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
+  for (const d of ["storyboard", "sheet"]) fs.rmSync(path.join(OUT, d), { recursive: true, force: true });
+  dirs = chapters.map(writeChapter);
+  fs.writeFileSync(path.join(OUT, "timeline.json"), JSON.stringify({ total: TOTAL, shots: shots.map((s) => ({ angle: s.src.angle, start: s.start, end: s.end })), chapters: chapters.map((c, i) => ({ n: i + 1, start: c.start, end: c.end })) }, null, 2));
+  log(`projects: ${dirs.map((d) => path.relative(ROOT, d)).join(", ")}`);
+}
+if (flag("no-render")) {
+  if (dirs.length > 1) {
+    const extra = opt("chapter") ? ` --chapter ${CHAPTER_MAX}` : "";
+    const cmds = dirs.map((_, i) => `node scripts/make.mjs ${storyPath} --only ${i + 1}${extra}`);
+    fs.writeFileSync(path.join(OUT, "windows.txt"), [`# ${dirs.length} chương — mở ${dirs.length} cửa sổ terminal ở thư mục repo, mỗi cửa sổ chạy 1 dòng:`, ...cmds, "", "# khi tất cả xong, chạy ở một cửa sổ bất kỳ:", `node scripts/make.mjs ${storyPath} --join${extra}`, ""].join("\n"));
+    log(`video dài: ${dirs.length} chương — lệnh cho từng cửa sổ ở ${path.relative(ROOT, path.join(OUT, "windows.txt"))}`);
+  }
+  process.exit(0);
+}
 
 // ---------- 4. render chapters ----------
 const hfArgs = (dir) => (HF ? [HF] : ["hyperframes"]).concat(["render", "-o", "renders/chapter.mp4", "--crf", "20", "--skill", "hyperframes"]);
@@ -309,8 +331,21 @@ async function renderDir(dir) {
   log(`rendered ${path.basename(dir)} in ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 }
 const T0 = Date.now();
-const queue = [...dirs];
-await Promise.all(Array.from({ length: Math.min(JOBS, dirs.length) }, async () => { while (queue.length) await renderDir(queue.shift()); }));
+if (ONLY) {
+  const which = String(ONLY).split(",").map(Number);
+  for (const n of which) { if (!dirs[n - 1]) { console.error(`[make] không có chương ${n} (có ${dirs.length})`); process.exit(2); } }
+  for (const n of which) await renderDir(dirs[n - 1]);
+  const done = dirs.filter((d) => fs.existsSync(path.join(d, "renders/chapter.mp4"))).length;
+  log(`đã xong ${done}/${dirs.length} chương${done === dirs.length ? ` — chạy: node scripts/make.mjs ${storyPath} --join${opt("chapter") ? ` --chapter ${CHAPTER_MAX}` : ""}` : ""}`);
+  process.exit(0);
+}
+if (JOIN) {
+  const missing = dirs.filter((d) => !fs.existsSync(path.join(d, "renders/chapter.mp4")));
+  if (missing.length) { console.error(`[make] còn thiếu chương: ${missing.map((d) => path.basename(d)).join(", ")}`); process.exit(2); }
+} else {
+  const queue = [...dirs];
+  await Promise.all(Array.from({ length: Math.min(JOBS, dirs.length) }, async () => { while (queue.length) await renderDir(queue.shift()); }));
+}
 
 // ---------- 5. concat + ambience + loudness ----------
 const list = path.join(OUT, "chapters.txt");
