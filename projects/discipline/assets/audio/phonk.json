@@ -1,0 +1,57 @@
+{
+  "bpm": 128.0,
+  "beat": 0.46875,
+  "bar": 1.875,
+  "duration": 55.0,
+  "sections": [
+    {
+      "name": "intro",
+      "bars": 4
+    },
+    {
+      "name": "groove",
+      "bars": 7
+    },
+    {
+      "name": "break",
+      "bars": 1
+    },
+    {
+      "name": "groove",
+      "bars": 4
+    },
+    {
+      "name": "build",
+      "bars": 2
+    },
+    {
+      "name": "drop",
+      "bars": 4
+    },
+    {
+      "name": "outro",
+      "bars": 6
+    }
+  ],
+  "starts": {
+    "intro": [
+      0.0
+    ],
+    "groove": [
+      7.5,
+      22.5
+    ],
+    "break": [
+      20.625
+    ],
+    "build": [
+      30.0
+    ],
+    "drop": [
+      33.75
+    ],
+    "outro": [
+      41.25
+    ]
+  }
+}

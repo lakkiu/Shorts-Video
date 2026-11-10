@@ -203,6 +203,12 @@ node scripts/make.mjs stories/<slug>.json --jobs 2       # -> out/<slug>/<slug>.
 - Mỗi lần chạy `make` xoá chương cũ trong `out/<slug>/` rồi dựng lại.
 - Xem `out/<slug>/sheet.png` (một ảnh mỗi cảnh từ video thật) trước khi giao. Gửi video bằng SendUserFile. File > 100 MB: nói với người dùng có thể nén thêm.
 
+## Định dạng "mono" (ngụ ngôn không lời, người que) và nhạc tự tổng hợp
+
+- Khi người dùng muốn video kiểu người que tối giản / không lời / động lực: dùng `engine/mono/mono.js` (người que có tư thế keyframe `trackAt`, phòng tối, bóng đèn, đồng hồ, sàn phản chiếu, viên gạch phát sáng) — dự án mẫu `projects/discipline/` (cảnh + `timing.json` + `sfx.py`). 2D thuần: ~2,5 phút render cho 52 s.
+- Không làm lại y hệt video / kênh người dùng gửi làm mẫu: giữ thể loại, đổi câu chuyện, màu nhấn, bố cục, câu kết.
+- Nhạc: `python3 tools/phonk.py <out.wav> --bpm 128 --sections "intro:4 groove:8 build:2 drop:4 outro:4"` tạo nhạc kiểu phonk (cowbell, 808, kick, clap, hats) tự tổng hợp — dùng thoải mái, in ra mốc từng đoạn để canh hình theo nhịp. Luôn xuất thêm bản **không nhạc** (chỉ tiếng động) để người dùng ghép nhạc trend trên TikTok/Reels (nhạc trend giúp phân phối).
+
 ## Sau khi giao
 
 - Ghi lựa chọn / chỉnh sửa của người dùng vào `library/script-notes.md` (mục "Lựa chọn của người dùng"), đánh dấu ✅ ý tưởng đã làm trong `library/ideas.md`.

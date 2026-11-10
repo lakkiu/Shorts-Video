@@ -1,0 +1,26 @@
+{
+  "_": "Shared timings (seconds) for the scene and the sound effects. BPM 128: beat 0.46875, bar 1.875.",
+  "duration": 52.5,
+  "alarm": [1.5, 3.0],
+  "wBricks": [
+    { "i": 0, "drop": 4.25, "catch": 4.7, "thr": 5.95, "land": 6.56 },
+    { "i": 1, "bar": 4 }, { "i": 2, "bar": 5 }, { "i": 3, "bar": 6 }, { "i": 4, "bar": 7 },
+    { "i": 5, "bar": 8 }, { "i": 6, "bar": 9 }, { "i": 7, "bar": 10 },
+    { "i": 8, "drop": 21.55, "catch": 21.95, "thr": 22.2, "land": 22.5 },
+    { "i": 9, "drop": 22.55, "catch": 22.95, "thr": 23.45, "land": 23.906 }
+  ],
+  "gBricks": { "first": [5.2, 5.6], "bars": [4, 16] },
+  "struggle": [20.625, 22.5],
+  "climb": { "approach": 24.4, "firstStep": 25.2, "perStep": 0.42 },
+  "doorOpen": 33.75,
+  "phoneOff": 35.6,
+  "gStand": 37.5,
+  "gLookUp": 37.9,
+  "gWalk": 39.0,
+  "gLift": 39.55,
+  "gThrow": 40.3,
+  "gLand": 40.85,
+  "gDay1": 41.25,
+  "text": [[41.5, 1.8], [44.0, 1.6], [47.4, 1.5]],
+  "counter": { "bars": [2, 3, 5, 8, 12, 19, 30, 47, 63, 100, 180, 270, 365], "firstBar": 4 }
+}
