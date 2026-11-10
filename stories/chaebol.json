@@ -1,0 +1,79 @@
+{
+  "title": "Chaebol — tài phiệt Hàn Quốc ảnh hưởng thế nào?",
+  "slug": "chaebol",
+  "genre": "explainer",
+  "format": "9:16",
+  "target": 50,
+  "set": "lop-hoc",
+  "sources": [
+    "Chip bán dẫn chiếm 20,8% xuất khẩu Hàn Quốc năm 2024 (141,9 / 683,8 tỷ USD) — Korea Times 01/2025, theo Bộ Thương mại, Công nghiệp và Năng lượng Hàn Quốc",
+    "재벌 = 財閥 = tài phiệt",
+    "Chính phủ Park Chung-hee (1960-70) hỗ trợ vốn cho các tập đoàn được chọn — 'kỳ tích sông Hàn'",
+    "GSAT — kỳ thi tuyển của Samsung (Samsung Global Aptitude Test)",
+    "Daewoo, tập đoàn lớn thứ hai Hàn Quốc cuối thập niên 1990, sụp đổ năm 1999"
+  ],
+  "voices": {
+    "narrator": { "name": "trường kể", "speed": 1.0 },
+    "kim": { "name": "Dependable Woman", "speed": 0.95, "color": "#ffd9a0", "quote": true }
+  },
+  "ambience": [],
+  "shots": [
+    { "set": "student-room-day", "angle": "wide", "move": "push", "lead": 0.2,
+      "title": [{ "text": "1/5", "style": "label", "at": "b0", "dur": 3.2, "color": "#ffd27a" }, { "text": "SAMSUNG · SK", "style": "banner", "at": "b1", "color": "#2f6fdb" }],
+      "chars": [{ "id": "minh", "char": "minh", "mark": "center", "mood": "calm", "keys": [{ "at": "b1", "mood": "surprised" }] }],
+      "beats": [
+        { "say": "narrator", "text": "Cứ năm đồng Hàn Quốc kiếm từ xuất khẩu, gần một đồng đến từ chip." },
+        { "say": "narrator", "text": "Và chip đó chủ yếu của hai nhà: Samsung và SK." }
+      ] },
+
+    { "set": "student-room-day", "angle": "wide", "move": "drift",
+      "title": [{ "text": "SAMSUNG", "style": "banner", "at": "b1", "dur": 1.6, "color": "#2f6fdb" }, { "text": "LG", "style": "banner", "at": "b2", "dur": 1.4, "color": "#c0392b" },
+                { "text": "HYUNDAI", "style": "banner", "at": "b3", "dur": 1.4, "color": "#1f3b73" }, { "text": "LOTTE", "style": "banner", "at": "b4", "color": "#d6336c" }],
+      "chars": [{ "id": "minh", "char": "minh", "mark": "back", "mood": "happy", "pose": "phone", "keys": [{ "at": "b4", "mood": "wow", "pose": "idle" }] }],
+      "beats": [
+        { "say": "narrator", "text": "Mà đâu chỉ có chip.", "gap": 0.25 },
+        { "say": "narrator", "text": "Điện thoại Samsung.", "gap": 0.2 },
+        { "say": "narrator", "text": "Tủ lạnh LG.", "gap": 0.2 },
+        { "say": "narrator", "text": "Xe Hyundai.", "gap": 0.2 },
+        { "say": "narrator", "text": "Siêu thị Lotte." }
+      ] },
+
+    { "angle": "front", "move": "push",
+      "title": [{ "orig": "재벌", "text": "TÀI PHIỆT", "style": "label", "at": "b1", "color": "#ffd27a" }],
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm" }, { "id": "minh", "char": "minh", "mark": "student", "mood": "calm", "look": -0.6 }],
+      "beats": [
+        { "say": "narrator", "text": "Đó là chaebol." },
+        { "say": "narrator", "text": "Tiếng Việt gọi là tài phiệt." },
+        { "say": "narrator", "text": "Tập đoàn khổng lồ, do một gia đình nắm quyền, đời này truyền đời sau." }
+      ] },
+
+    { "angle": "wide", "move": "drift",
+      "title": [{ "text": "KỲ TÍCH SÔNG HÀN", "style": "banner", "at": "b2", "color": "#1f9d6b" }],
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm", "pose": "point" }, { "id": "minh", "char": "minh", "mark": "student", "mood": "calm", "look": -0.6, "keys": [{ "at": "b2", "mood": "wow" }] }],
+      "beats": [
+        { "say": "narrator", "text": "Sau chiến tranh, chính phủ dồn vốn cho vài tập đoàn.", "gap": 0.25 },
+        { "say": "narrator", "text": "Để kéo cả đất nước đi lên." },
+        { "say": "narrator", "text": "Từ nghèo khó, Hàn Quốc thành cường quốc." }
+      ] },
+
+    { "angle": "front", "move": "push",
+      "title": [{ "text": "GSAT", "style": "label", "at": "b1", "color": "#93c5fd" }],
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm" }, { "id": "minh", "char": "minh", "mark": "student", "mood": "happy", "look": -0.6, "keys": [{ "at": "b1", "mood": "surprised" }] }],
+      "beats": [
+        { "say": "narrator", "text": "Đến giờ, vào được Samsung vẫn là giấc mơ của nhiều sinh viên Hàn." },
+        { "say": "narrator", "text": "Họ còn có kỳ thi tuyển riêng, tên là GSAT." }
+      ] },
+
+    { "angle": "front", "move": "push",
+      "title": [{ "text": "1999 · DAEWOO SỤP ĐỔ", "style": "banner", "at": "b1", "color": "#7a1f2b" }],
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "neutral" }, { "id": "minh", "char": "minh", "mark": "student", "mood": "calm", "look": -0.6, "keys": [{ "at": "b1", "mood": "surprised" }, { "at": "b2", "mood": "worried" }] }],
+      "beats": [
+        { "say": "kim", "text": "Nhưng lớn quá, cũng là rủi ro." },
+        { "say": "narrator", "text": "Cuối những năm chín mươi, Daewoo, tập đoàn lớn thứ hai lúc đó, sụp đổ." },
+        { "say": "narrator", "text": "Để lại khoản nợ khổng lồ." }
+      ] },
+
+    { "black": true, "text": "ĐỘNG CƠ hay GÁNH NẶNG?",
+      "beats": [{ "say": "narrator", "text": "Theo bạn, chaebol là động cơ, hay gánh nặng của Hàn Quốc?", "gap": 1.2 }] }
+  ]
+}

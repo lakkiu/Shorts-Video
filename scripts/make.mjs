@@ -253,7 +253,7 @@ function writeChapter(ch, n) {
       .notify .msg { margin-top: 20px; font-size: 46px; line-height: 1.3; color: #222; font-weight: 600; }
       .title { position: absolute; left: 70px; right: 70px; top: ${Math.round(H * (W < H ? 0.1 : 0.08))}px; z-index: 26; text-align: center; font-family: "Montserrat"; font-weight: 900; color: #fff; }
       .title span { display: inline-block; }
-      .title .orig { display: block; font-family: "Jua", "Montserrat"; font-weight: 400; font-size: 0.9em; margin-bottom: 8px; }
+      .title .orig { display: block; font-family: "Jua", "Montserrat"; font-weight: 400; font-size: ${W < H ? 96 : 80}px; color: #ffffff; -webkit-text-stroke: 12px #07080f; paint-order: stroke fill; margin-bottom: 10px; }
       .title-banner span:not(.orig) { background: var(--tc, #e5484d); padding: 14px 34px; border-radius: 22px; font-size: ${W < H ? 64 : 56}px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
       .title-number span:not(.orig) { width: 230px; height: 230px; line-height: 230px; border-radius: 50%; background: var(--tc, #ffc940); color: #1d2340; font-size: 140px; box-shadow: 0 14px 40px rgba(0,0,0,0.4); border: 10px solid #1d2340; }
       .title-label span:not(.orig) { font-size: ${W < H ? 84 : 70}px; color: var(--tc, #ffd27a); -webkit-text-stroke: 14px #07080f; paint-order: stroke fill; letter-spacing: 0.04em; }
