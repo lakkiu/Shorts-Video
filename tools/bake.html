@@ -32,7 +32,8 @@
       if (isKit) {
         set = mod.buildSet(scene, def.spec);
         def.angles = def.angles || mod.defaultAngles(def.spec);
-        def.marks = def.marks || mod.defaultMarks(def.spec);
+        def.marks = { ...mod.defaultMarks(def.spec), ...(def.marks || {}) };
+        def.autoMarks = true; // kit sets: every mark visible from an angle is recorded
       } else {
         scene.add(new THREE.HemisphereLight("#41507a", "#1a1f2a", 0.9));
         set = mod.buildDorm(scene);
@@ -47,8 +48,11 @@
         for (const fp of set.insideSteps || []) fp.visible = !!st.footprints;
         if (set.cull) set.cull(camera.position);
         const marks = {};
-        for (const m of a.marks || []) {
+        const names = def.autoMarks ? Object.keys(def.marks) : a.marks || [];
+        for (const m of names) {
+          if (!def.marks[m]) continue;
           const [x, z] = def.marks[m];
+          if (def.autoMarks) { const pr = new THREE.Vector3(x, 0.8, z).project(camera); if (pr.z > 1 || Math.abs(pr.x) > 1.15 || pr.y < -1.6) continue; }
           const foot = new THREE.Vector3(x, 0, z).project(camera), top = new THREE.Vector3(x, 1, z).project(camera);
           const fx = (foot.x + 1) / 2 * W, fy = (1 - foot.y) / 2 * H, ty = (1 - top.y) / 2 * H;
           marks[m] = { x: +fx.toFixed(1), y: +fy.toFixed(1), pxPerM: +(fy - ty).toFixed(1), depth: +camera.position.distanceTo(new THREE.Vector3(x, 0.8, z)).toFixed(3) };

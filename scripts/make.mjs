@@ -52,7 +52,7 @@ const plateMeta = (set, angle) => {
 };
 const sfxFile = (n) => path.join(ROOT, "library/sfx", `${n}.mp3`);
 let cur = 0;
-const shots = [], audio = [], caps = [], fx = [], shakes = [], talk = [], notifies = [], overlays = [];
+const shots = [], audio = [], caps = [], fx = [], shakes = [], talk = [], notifies = [], overlays = [], titles = [];
 const resolveAt = (spec, sh, def = 0) => {
   if (spec == null) return sh.start + def;
   if (typeof spec === "number") return sh.start + spec;
@@ -120,6 +120,11 @@ for (const s of story.shots) {
   }
   if (s.notify) { const st = resolveAt(s.notify.at ?? 0, sh); notifies.push({ ...s.notify, start: st, end: st + (s.notify.dur || 3.5) }); }
   if (s.overlay) overlays.push({ type: s.overlay, start: sh.start, end: sh.end });
+  for (const ti of [].concat(s.title || [])) {
+    const o = typeof ti === "string" ? { text: ti } : ti;
+    const st = o.at != null ? resolveAt(o.at, sh) : sh.start;
+    titles.push({ ...o, style: o.style || "banner", start: st, end: o.dur ? st + o.dur : sh.end });
+  }
   shots.push(sh);
   cur = sh.end;
 }
@@ -187,6 +192,10 @@ function writeChapter(ch, n) {
     const r = rel(x);
     ovHtml += `      <div id="nt${i}" class="notify clip" data-start="${r.start.toFixed(3)}" data-duration="${(r.end - r.start).toFixed(3)}" data-track-index="2"><div class="row"><div class="av">${esc((x.who || "?")[0])}</div><div class="who">${esc(x.who || "")}</div><div class="time">${esc(x.time || "")}</div></div><div class="msg">${esc(x.text)}</div></div>\n`;
   });
+  titles.filter(inCh).forEach((x, i) => {
+    const r = rel(x);
+    ovHtml += `      <div id="ti${i}" class="title title-${x.style} clip" data-start="${r.start.toFixed(3)}" data-duration="${(r.end - r.start).toFixed(3)}" data-track-index="2"${x.color ? ` style="--tc:${x.color}"` : ""}>${x.orig ? `<span class="orig">${esc(x.orig)}</span>` : ""}<span>${esc(x.text)}</span></div>\n`;
+  });
   overlays.filter(inCh).forEach((x, i) => {
     const r = rel(x);
     ovHtml += `      <div id="ov${i}" class="ov-${x.type} clip" data-start="${r.start.toFixed(3)}" data-duration="${(r.end - r.start).toFixed(3)}" data-track-index="2"></div>\n`;
@@ -238,6 +247,12 @@ function writeChapter(ch, n) {
       .notify .who { font-weight: 800; font-size: 44px; color: #111; }
       .notify .time { margin-left: auto; font-size: 32px; color: #777; }
       .notify .msg { margin-top: 20px; font-size: 46px; line-height: 1.3; color: #222; font-weight: 600; }
+      .title { position: absolute; left: 70px; right: 70px; top: ${Math.round(H * (W < H ? 0.1 : 0.08))}px; z-index: 26; text-align: center; font-family: "Montserrat"; font-weight: 900; color: #fff; }
+      .title span { display: inline-block; }
+      .title .orig { display: block; font-family: "Jua", "Montserrat"; font-weight: 400; font-size: 0.9em; margin-bottom: 8px; }
+      .title-banner span:not(.orig) { background: var(--tc, #e5484d); padding: 14px 34px; border-radius: 22px; font-size: ${W < H ? 64 : 56}px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+      .title-number span:not(.orig) { width: 230px; height: 230px; line-height: 230px; border-radius: 50%; background: var(--tc, #ffc940); color: #1d2340; font-size: 140px; box-shadow: 0 14px 40px rgba(0,0,0,0.4); border: 10px solid #1d2340; }
+      .title-label span:not(.orig) { font-size: ${W < H ? 84 : 70}px; color: var(--tc, #ffd27a); -webkit-text-stroke: 14px #07080f; paint-order: stroke fill; letter-spacing: 0.04em; }
       .ov-peephole { position: absolute; inset: 0; z-index: 19; background: radial-gradient(circle at 50% 44%, rgba(0,0,0,0) 0, rgba(0,0,0,0) 330px, rgba(0,0,0,0.75) 380px, #000 430px); }
     </style>
   </head>
@@ -259,6 +274,9 @@ ${capsHtml}${audioHtml}    </div>
         tl.to(clock, { t: D, duration: D, ease: "none", onUpdate: function () { if (vf.render) vf.render(clock.t); } }, 0);
         document.querySelectorAll(".cap, .notify").forEach(function (el) {
           tl.fromTo("#" + el.id + (el.classList.contains("cap") ? " span" : ""), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" }, parseFloat(el.dataset.start));
+        });
+        document.querySelectorAll(".title").forEach(function (el) {
+          tl.fromTo("#" + el.id + " span", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)", stagger: 0.06 }, parseFloat(el.dataset.start));
         });
         window.__timelines = window.__timelines || {};
         window.__timelines["main"] = tl;

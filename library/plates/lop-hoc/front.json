@@ -1,0 +1,58 @@
+{
+  "set": "lop-hoc",
+  "angle": "front",
+  "desc": "Chính diện vào tường sau",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 675,
+      "y": 2201.5,
+      "pxPerM": 990.3,
+      "depth": 2.578
+    },
+    "left": {
+      "x": -82.7,
+      "y": 1944.7,
+      "pxPerM": 757.4,
+      "depth": 3.518
+    },
+    "right": {
+      "x": 1432.7,
+      "y": 1944.7,
+      "pxPerM": 757.4,
+      "depth": 3.518
+    },
+    "back": {
+      "x": 675,
+      "y": 1727,
+      "pxPerM": 559.9,
+      "depth": 4.57
+    },
+    "front": {
+      "x": 675,
+      "y": 2884,
+      "pxPerM": 1608.6,
+      "depth": 1.589
+    },
+    "board": {
+      "x": 675,
+      "y": 1701.3,
+      "pxPerM": 536.6,
+      "depth": 4.769
+    },
+    "student": {
+      "x": 1043.1,
+      "y": 2010.9,
+      "pxPerM": 817.5,
+      "depth": 3.157
+    },
+    "teacher": {
+      "x": 315.6,
+      "y": 1770,
+      "pxPerM": 599,
+      "depth": 4.312
+    }
+  }
+}

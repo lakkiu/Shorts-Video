@@ -1,0 +1,40 @@
+{
+  "set": "student-room-day",
+  "angle": "wide",
+  "desc": "Toàn cảnh từ phía trước phòng",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 577.4,
+      "y": 2059.8,
+      "pxPerM": 817.4,
+      "depth": 2.263
+    },
+    "left": {
+      "x": 13.3,
+      "y": 1872.9,
+      "pxPerM": 697.7,
+      "depth": 2.838
+    },
+    "right": {
+      "x": 1353.3,
+      "y": 2064.5,
+      "pxPerM": 820.4,
+      "depth": 2.392
+    },
+    "back": {
+      "x": 789.5,
+      "y": 1635.7,
+      "pxPerM": 543.3,
+      "depth": 3.51
+    },
+    "front": {
+      "x": 245.4,
+      "y": 2723.9,
+      "pxPerM": 1228.6,
+      "depth": 1.501
+    }
+  }
+}

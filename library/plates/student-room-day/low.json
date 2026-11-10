@@ -1,0 +1,28 @@
+{
+  "set": "student-room-day",
+  "angle": "low",
+  "desc": "Góc thấp sát sàn nhìn lên",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 327.1,
+      "y": 2142.1,
+      "pxPerM": 1260.1,
+      "depth": 1.874
+    },
+    "right": {
+      "x": 1492.4,
+      "y": 2115.8,
+      "pxPerM": 1206.7,
+      "depth": 2.043
+    },
+    "back": {
+      "x": 625.2,
+      "y": 1888.7,
+      "pxPerM": 735.9,
+      "depth": 3.147
+    }
+  }
+}

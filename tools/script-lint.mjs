@@ -21,6 +21,11 @@ const FX = "muffled ghost phone whisper radio cave".split(" ");
 const WPS = 3.3; // Vietnamese words per second at ~0.95x
 
 const errors = [], warns = [], notes = [];
+const GENRES = "explainer howto listicle storytime skit compare language myth quiz news motivation drama ad series-long horror".split(" ");
+const genre = story.genre;
+const NEEDS_SOURCES = "explainer howto news myth compare language ad".split(" ");
+const FAST = "listicle skit quiz language".split(" ");
+const SHOT_MAX = FAST.includes(genre) ? 7 : 8.5;
 const err = (where, msg) => errors.push(`✖ ${where}: ${msg}`);
 const warn = (where, msg) => warns.push(`⚠ ${where}: ${msg}`);
 const words = (t) => t.replace(/\.\.\./g, " ").split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)).length;
@@ -94,7 +99,7 @@ story.shots.forEach((s, i) => {
   const real = timeline?.shots?.[i] ? timeline.shots[i].end - timeline.shots[i].start : null;
   const D = real ?? dur;
   const changes = (s.chars || []).some((c) => c.walk || (c.keys || []).length) || (s.fx || []).length || s.notify || (s.beats || []).length > 1;
-  if (D > 8.5 && !changes) warn(where, `dài ${D.toFixed(1)}s mà không đổi gì (walk / keys / fx / thêm nhịp) — tách cảnh hoặc thêm chuyển động`);
+  if (D > SHOT_MAX && !changes) warn(where, `dài ${D.toFixed(1)}s mà không đổi gì (walk / keys / fx / thêm nhịp) — tách cảnh hoặc thêm chuyển động`);
   if (D > 12) warn(where, `dài ${D.toFixed(1)}s — nên tách thành 2 cảnh để đổi nhịp`);
   estT += D;
 });
@@ -113,7 +118,13 @@ else {
 }
 const last = story.shots[story.shots.length - 1];
 const lastSay = [...story.shots].reverse().flatMap((s) => [...(s.beats || [])].reverse()).find((b) => b.say);
-if (!(last.black && last.text) && !/\?\s*$/.test(lastSay?.text || "")) warn("kết", "không có câu hỏi hay chữ kết — thêm cảnh đen có câu hỏi / câu cần nhớ");
+if (!genre) warn("thể loại", `chưa ghi "genre" (${GENRES.join(" ")}) — cần để chấm và soát đúng thể loại`);
+else if (!GENRES.includes(genre)) warn("thể loại", `genre "${genre}" không có trong danh sách`);
+if (NEEDS_SOURCES.includes(genre) && !(story.sources || []).length) warn("nguồn", `thể loại ${genre} cần "sources" (nguồn cho con số / quy định / câu tiếng Hàn)`);
+if (genre === "ad" && !story.cta) err("quảng cáo", `thiếu "cta" (hành động + kênh liên hệ)`);
+if (genre === "ad" && /(100 ?%|chắc chắn|cam kết) (đậu|đỗ|có visa|thành công)/i.test(JSON.stringify(story.shots))) warn("quảng cáo", "hứa chắc chắn kết quả — nền tảng và luật quảng cáo không cho phép");
+if (genre === "listicle") { const n = story.shots.filter((s) => [].concat(s.title || []).some((t) => (t.style || "") === "number")).length; if (n < 3) warn("danh sách", `chỉ ${n} cảnh có số to (title style "number") — mỗi mục nên có số`); }
+if (genre !== "ad" && !(last.black && last.text) && !/\?\s*$/.test(lastSay?.text || "")) warn("kết", "không có câu hỏi hay chữ kết — thêm cảnh đen có câu hỏi / câu cần nhớ");
 if (charsUsed.size > 3) warn("nhân vật", `${charsUsed.size} nhân vật (${[...charsUsed].join(", ")}) — video ngắn nên ≤ 3`);
 const shots = story.shots.length;
 notes.push(`Thời lượng: ${total.toFixed(1)}s ${timeline ? "(thật, từ timeline.json)" : "(ước tính ~3,3 từ/giây)"} · ${shots} cảnh · trung bình ${(total / shots).toFixed(1)}s/cảnh`);

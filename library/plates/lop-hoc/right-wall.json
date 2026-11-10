@@ -1,0 +1,28 @@
+{
+  "set": "lop-hoc",
+  "angle": "right-wall",
+  "desc": "Nhìn về tường phải",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 809.6,
+      "y": 2171.3,
+      "pxPerM": 1011,
+      "depth": 2.413
+    },
+    "right": {
+      "x": 243.1,
+      "y": 1852.8,
+      "pxPerM": 708,
+      "depth": 3.502
+    },
+    "student": {
+      "x": 344.7,
+      "y": 1996.5,
+      "pxPerM": 844.7,
+      "depth": 2.913
+    }
+  }
+}

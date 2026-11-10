@@ -1,0 +1,162 @@
+{
+  "name": "lop-hoc",
+  "description": "Lớp học tiếng Hàn ban ngày: bảng xanh ghi 한국어 수업, bàn học sinh, cửa sổ nắng, poster tiếng Hàn",
+  "module": "kit.js",
+  "spec": {
+    "size": [
+      6.0,
+      6.0,
+      3.0
+    ],
+    "wall": "#efe8d6",
+    "wainscot": "#b8cbbf",
+    "floor": "linoleum",
+    "floorColor": "#a9b8a2",
+    "ceiling": "#e9e6de",
+    "light": "day",
+    "props": [
+      {
+        "kind": "board",
+        "wall": "back",
+        "along": 0,
+        "offset": 0.03,
+        "lines": [
+          "한국어 수업",
+          "존댓말 · 반말"
+        ]
+      },
+      {
+        "kind": "ceiling-light",
+        "at": [
+          -1.2,
+          0
+        ]
+      },
+      {
+        "kind": "ceiling-light",
+        "at": [
+          1.2,
+          0
+        ]
+      },
+      {
+        "kind": "window",
+        "wall": "left",
+        "along": -1.2,
+        "curtain": "#d9c48a"
+      },
+      {
+        "kind": "window",
+        "wall": "left",
+        "along": 1.2,
+        "curtain": "#d9c48a"
+      },
+      {
+        "kind": "poster",
+        "wall": "right",
+        "along": -1.0,
+        "lines": [
+          "감사합니다",
+          "안녕하세요"
+        ],
+        "ink": "#2f6fdb"
+      },
+      {
+        "kind": "desk",
+        "at": [
+          -1.3,
+          0.9
+        ],
+        "color": "#c9a46a"
+      },
+      {
+        "kind": "chair",
+        "at": [
+          -1.3,
+          1.45
+        ],
+        "rot": 180,
+        "color": "#3f6b9a"
+      },
+      {
+        "kind": "desk",
+        "at": [
+          1.3,
+          0.9
+        ],
+        "color": "#c9a46a"
+      },
+      {
+        "kind": "chair",
+        "at": [
+          1.3,
+          1.45
+        ],
+        "rot": 180,
+        "color": "#3f6b9a"
+      },
+      {
+        "kind": "desk",
+        "at": [
+          -1.3,
+          2.3
+        ],
+        "color": "#c9a46a"
+      },
+      {
+        "kind": "desk",
+        "at": [
+          1.3,
+          2.3
+        ],
+        "color": "#c9a46a"
+      },
+      {
+        "kind": "desk",
+        "wall": "back",
+        "along": 2.2,
+        "offset": 0.6,
+        "color": "#8a6a4f"
+      },
+      {
+        "kind": "plant",
+        "at": [
+          2.5,
+          -2.5
+        ]
+      },
+      {
+        "kind": "shelf",
+        "wall": "right",
+        "along": 1.6,
+        "offset": 0.17
+      }
+    ]
+  },
+  "marks": {
+    "center": [
+      0,
+      0.2
+    ],
+    "left": [
+      -1.0,
+      -0.6
+    ],
+    "right": [
+      1.0,
+      -0.6
+    ],
+    "board": [
+      0,
+      -2.0
+    ],
+    "student": [
+      0.45,
+      -0.35
+    ],
+    "teacher": [
+      -0.6,
+      -1.5
+    ]
+  }
+}

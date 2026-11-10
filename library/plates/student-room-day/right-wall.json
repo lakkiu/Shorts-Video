@@ -1,0 +1,22 @@
+{
+  "set": "student-room-day",
+  "angle": "right-wall",
+  "desc": "Nhìn về tường phải",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 567.1,
+      "y": 2758.3,
+      "pxPerM": 1624.7,
+      "depth": 1.475
+    },
+    "right": {
+      "x": 469.9,
+      "y": 2114.5,
+      "pxPerM": 1013.6,
+      "depth": 2.391
+    }
+  }
+}

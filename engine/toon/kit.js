@@ -114,6 +114,13 @@ const PROPS = {
     g.add(at(new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.6), toon("#ffffff", { map: tex })), 0, o.y ?? 1.5, 0)); return g; },
   clock: (o) => { const g = new THREE.Group(); const tex = canvasTex(256, 128, (c, w, h) => { c.fillStyle = "#111"; c.fillRect(0, 0, w, h); c.fillStyle = "#ff3b3b"; c.font = "bold 88px monospace"; c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(o.text || "03:00", w / 2, h / 2 + 4); });
     g.add(at(box(0.3, 0.15, 0.08, toon("#222")), 0, o.y ?? 0.865, 0), at(new THREE.Mesh(new THREE.PlaneGeometry(0.27, 0.12), basic("#fff", { map: tex })), 0, o.y ?? 0.865, 0.041)); return g; },
+  board: (o) => { const g = new THREE.Group(); const w = o.w || 2.6, h = o.h || 1.2;
+    const tex = canvasTex(1024, Math.round(1024 * h / w), (c, W, H) => { c.fillStyle = o.color || "#2f5a46"; c.fillRect(0, 0, W, H);
+      c.fillStyle = "rgba(255,255,255,0.08)"; for (let i = 0; i < 40; i++) c.fillRect(hash(i, 21) * W, hash(i, 22) * H, 60 + hash(i, 23) * 120, 4);
+      c.fillStyle = o.ink || "#f4f1e6"; c.textAlign = "center"; c.textBaseline = "middle"; const L = o.lines || []; c.font = `${Math.round(H / (L.length + 1.5))}px ${KR}`;
+      L.forEach((l, i) => c.fillText(l, W / 2, H * (i + 1) / (L.length + 1))); });
+    g.add(at(box(w + 0.12, h + 0.12, 0.05, toon("#8a6a4f")), 0, o.y ?? 1.55, 0), at(new THREE.Mesh(new THREE.PlaneGeometry(w, h), toon("#ffffff", { map: tex })), 0, o.y ?? 1.55, 0.03));
+    g.add(at(box(w * 0.8, 0.05, 0.08, toon("#8a6a4f")), 0, (o.y ?? 1.55) - h / 2 - 0.08, 0.05)); return g; },
   stool: (o) => { const g = new THREE.Group(); g.add(at(cyl(0.18, 0.18, 0.05, toon(o.color || "#c0392b")), 0, 0.45, 0), at(cyl(0.03, 0.03, 0.45, toon("#555"), 6), 0, 0.22, 0)); return g; },
 };
 

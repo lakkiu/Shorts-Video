@@ -1,6 +1,6 @@
 ---
 name: video-factory
-description: Xưởng video kể chuyện ngắn và dài (TikTok, Reels, Shorts, YouTube) bằng nhân vật 2D trong bối cảnh 3D viền mực, giọng Việt GenMax, phụ đề và âm thanh tự động. Dùng khi người dùng muốn làm video kể chuyện (chuyện ma, đời sống du học, truyện ngắn…), duyệt nhân vật hoặc bối cảnh, hoặc làm video hàng loạt trong repo này.
+description: Xưởng video ngắn và dài (TikTok, Reels, Shorts, YouTube) bằng nhân vật 2D trong bối cảnh 3D viền mực, giọng Việt / Hàn GenMax, phụ đề, chữ trên màn hình và âm thanh tự động. Dùng khi người dùng muốn viết kịch bản hoặc làm video thuộc mọi thể loại (kiến thức, mẹo, danh sách, học tiếng, hài, so sánh, kể chuyện, quảng cáo…), duyệt giọng / nhân vật / bối cảnh, hoặc làm video hàng loạt trong repo này.
 ---
 
 # Video Factory
@@ -15,12 +15,12 @@ Mọi video đi qua **6 cổng duyệt**. Ở mỗi cổng: làm xong phần c�
 
 ## ① Duyệt kịch bản
 
-**Trước khi viết, đọc:** `references/scriptwriting.md` (cẩm nang: hook, cấu trúc theo độ dài, twist, viết cho giọng AI, tự chấm điểm), `references/examples.md` (2 kịch bản mẫu có phân tích), `library/script-notes.md` (định hướng kênh, lựa chọn trước đây của người dùng, số liệu video đã đăng — ưu tiên điều đã hiệu quả), `library/ideas.md` (kho ý tưởng; khi người dùng chưa có đề tài, đề xuất 2-3 ý từ đây hoặc ý mới cùng tinh thần).
+**Trước khi viết, đọc:** `references/genres.md` (chọn thể loại → khung nhịp, hook, kết, mục chấm riêng của thể loại đó), `references/scriptwriting.md` (cẩm nang: hook, cấu trúc theo độ dài, twist, viết cho giọng AI, tự chấm điểm), `references/examples.md` (2 kịch bản mẫu có phân tích), `library/script-notes.md` (định hướng kênh, lựa chọn trước đây của người dùng, số liệu video đã đăng — ưu tiên điều đã hiệu quả), `library/ideas.md` (kho ý tưởng; khi người dùng chưa có đề tài, đề xuất 2-3 ý từ đây hoặc ý mới cùng tinh thần).
 
 Viết `stories/<slug>.script.md` theo mẫu `stories/_template.script.md` (chưa phải JSON), **tự chấm theo bảng ở mục 9 của cẩm nang** (tổng ≥ 32/40, không mục nào < 3; chưa đạt thì tự sửa tối đa 2 vòng) rồi mới gửi người dùng kèm bảng điểm. Gồm:
 
 1. **Logline** một câu, **độ dài dự kiến** (≈ 3,3 từ tiếng Việt/giây với giọng kể 0,95x), nền tảng đích.
-2. **3 phương án hook** khác kiểu nhau, mỗi cái ≤ 15 từ, nói trong 3 giây đầu. Ghi rõ kiểu của từng cái:
+2. **3 phương án hook** khác kiểu nhau, mỗi cái ≤ 15 từ, nói trong 3 giây đầu (thư viện hook theo thể loại: `references/scriptwriting.md` mục 2 và `references/genres.md`). Ví dụ các kiểu:
    - *Luật lạ / cấm đoán*: "Ký túc xá này có một luật: sau 2 giờ sáng không mở cửa."
    - *Nghịch lý nêu như sự thật*: "Cô ấy chết ba ngày trước, nhưng tối qua vẫn nhắn tin cho tôi."
    - *Câu hỏi trực diện người xem*: "Nếu nửa đêm có người gõ cửa gọi đúng tên bạn, bạn có mở không?"
@@ -180,13 +180,16 @@ Xem storyboard.png **trước khi gửi**: nhân vật đứng đúng chỗ, kh�
 }
 ```
 
+- **Kịch bản**: `genre` (mã thể loại), `target` (giây mục tiêu), `sources` (bắt buộc với explainer / howto / news / myth / compare / language / ad), `cta` (bắt buộc với ad).
+- **Chữ trên màn hình**: `title` trong cảnh — chuỗi hoặc `{ text, orig (chữ Hàn phía trên), style: "banner" | "number" | "label", color, at, dur }`; `number` = số to trong vòng tròn (danh sách), `label` = chữ to không nền ("LỜI ĐỒN", "🇻🇳 Việt Nam"…).
 - **Cảnh (shot)**: `angle` (tên ảnh nền trong `library/plates/<set>/`), `set` (nếu khác bối cảnh mặc định), `move`: `hold drift push push-fast pull pan-left pan-right tilt-up tilt-down` hoặc `{ "zoom": [a, b], "pan": [[x, y], [x, y]] }` (zoom ≥ 1, pan -1..1), `lead` (giây trước nhịp đầu), `dim` 0-1, `tint`, `overlay: "peephole"`, `notify: { who, text, time, at, dur }`, `fx: [{ type: "flicker" | "blackout", at, dur, rate, threshold, depth }]`. Cảnh đen: `{ "black": true, "text", "hold" }`.
 - **Nhịp (beat)** chạy nối tiếp: lời `{ say, text, gap }` (người nói = khoá trong `voices`), tiếng động `{ sfx, caption, hold, shake: [giây] }`, kèm tiếng động trong lời: `also: [{ sfx, at, volume, shake }]`.
 - **Thời điểm** trong `keys`, `walk.at`, `fadeAt`, `fx.at`, `notify.at`: số giây từ đầu cảnh, `"bN"` (đầu nhịp N), `"eN"` (cuối nhịp N), cộng trừ: `"b2+0.6"`.
 - **Nhân vật**: `id` (trùng tên người nói thì tự nhép miệng), `char` (file trong `library/characters`), `mark` (điểm đứng có trong `.json` của góc máy đó — kiểm tra bằng `cat library/plates/<set>/<angle>.json`), `mood`, `pose`, `look` (-1 trái … 1 phải), `keys` (đổi trạng thái theo thời gian; thêm `lookDown`, `tilt`, `lean`), `walk { to, at, dur }`, `height` (m, mặc định 1.6; ma 2.0), ma: `fadeAt`, `fadeDur`.
 - `mood`: `neutral calm happy excited surprised wow scared worried relieved sleepy`. `pose`: `idle wave arms-up reach phone phone-off cower point`.
 - `voices.<vai>`: `{ name }` (tên giọng GenMax), `{ preset }` (trong `library/voices.json`) hoặc `{ voice, provider (minimax|capcut|elevenlabs) }`, cộng `speed, model, fx, color (màu phụ đề), quote (phụ đề trong ngoặc kép)` — lấy từ cổng ②.
-- Tiếng động có sẵn (`library/sfx`): `knocks creak sting buzz heart drips drone hum`. Nền (`ambience`) được lặp liên tục và trộn ở bước cuối, tắt khi `blackout`.
+- Bối cảnh có sẵn: `dorm` (ký túc xá đêm), `student-room` (phòng trọ đêm), `student-room-day` (phòng trọ ban ngày), `lop-hoc` (lớp học tiếng Hàn ban ngày). Thể loại không phải truyện ma dùng bối cảnh ban ngày, không `tint` tối, `ambience` rỗng hoặc nhẹ.
+- Tiếng động có sẵn (`library/sfx`): `knocks creak sting buzz heart drips drone hum` (đa số hợp không khí căng; video vui cần thêm tiếng động / nhạc vui — chưa có, báo người dùng). Nền (`ambience`) được lặp liên tục và trộn ở bước cuối, tắt khi `blackout`.
 
 ## ⑥ Render và giao
 

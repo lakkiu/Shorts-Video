@@ -1,0 +1,53 @@
+{
+  "title": "3 câu tiếng Hàn khiến giáo viên nhíu mày",
+  "slug": "3-cau-nhiu-may",
+  "genre": "listicle",
+  "format": "9:16",
+  "set": "lop-hoc",
+  "target": 30,
+  "sources": [
+    "Kính ngữ cơ bản (존댓말 / 반말): 고마워 và 응 là thể thân mật dùng với bạn bè / người nhỏ tuổi; 감사합니다, 네 là thể lịch sự — giáo trình tiếng Hàn sơ cấp",
+    "Không gọi người lớn tuổi / giáo viên là 너; gọi bằng chức danh 선생님 — giáo trình tiếng Hàn sơ cấp"
+  ],
+  "voices": {
+    "narrator": { "name": "trường kể", "speed": 1.0 },
+    "minh": { "name": "Friendly Man", "lang": "Korean", "speed": 1.0, "color": "#9fd3ff", "quote": true },
+    "ko": { "voice": "Korean_femlae_announcer_vv1", "lang": "Korean", "speed": 0.9, "color": "#a6f0b0" }
+  },
+  "ambience": [],
+  "shots": [
+    { "angle": "front", "move": "push", "lead": 0.2,
+      "title": { "text": "3 câu khiến giáo viên Hàn nhíu mày", "style": "banner" },
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm" }, { "id": "minh", "char": "minh", "mark": "student", "mood": "happy", "look": -0.6 }],
+      "beats": [{ "say": "narrator", "text": "Ba câu tiếng Hàn này, nói với giáo viên là bị nhíu mày ngay." }] },
+
+    { "angle": "front", "move": "drift",
+      "title": { "text": "3", "style": "number" },
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm", "keys": [{ "at": "e0", "mood": "worried" }] }, { "id": "minh", "char": "minh", "mark": "student", "mood": "excited", "look": -0.6, "keys": [{ "at": "b2", "mood": "surprised" }] }],
+      "beats": [
+        { "say": "minh", "text": "고마워!", "sub": "Cảm ơn nha!" },
+        { "say": "narrator", "text": "Câu này chỉ dùng với bạn bè. Với giáo viên, hãy nói:" },
+        { "say": "ko", "text": "감사합니다.", "sub": "Em cảm ơn ạ." }
+      ] },
+
+    { "angle": "wide", "move": "drift",
+      "title": { "text": "2", "style": "number" },
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm", "keys": [{ "at": "e0", "mood": "surprised" }] }, { "id": "minh", "char": "minh", "mark": "student", "mood": "happy", "look": -0.6, "keys": [{ "at": "b2", "mood": "worried" }] }],
+      "beats": [
+        { "say": "minh", "text": "너 내일 와?", "sub": "Mai bạn có đến không?" },
+        { "say": "narrator", "text": "Gọi giáo viên là bạn là rất thất lễ. Hãy gọi bằng chức danh:" },
+        { "say": "ko", "text": "선생님, 내일 오세요?", "sub": "Cô ơi, mai cô có đến không ạ?" }
+      ] },
+
+    { "angle": "front", "move": "push",
+      "title": { "text": "1", "style": "number" },
+      "chars": [{ "id": "kim", "char": "kim", "mark": "teacher", "mood": "calm", "keys": [{ "at": "e0", "mood": "scared" }] }, { "id": "minh", "char": "minh", "mark": "student", "mood": "calm", "look": -0.6, "keys": [{ "at": "b2", "mood": "relieved" }] }],
+      "beats": [
+        { "say": "minh", "text": "응!", "sub": "Ừ!" },
+        { "say": "narrator", "text": "Trả lời người lớn bằng câu này giống như nói ừ trống không. Hãy nói:" },
+        { "say": "ko", "text": "네!", "sub": "Vâng ạ!" }
+      ] },
+
+    { "black": true, "textOrig": "감사합니다 · 선생님 · 네", "text": "Lưu lại trước khi lên lớp. Bạn từng lỡ nói câu nào?", "hold": 3.2 }
+  ]
+}

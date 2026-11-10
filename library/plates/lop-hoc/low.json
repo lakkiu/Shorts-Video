@@ -1,0 +1,46 @@
+{
+  "set": "lop-hoc",
+  "angle": "low",
+  "desc": "Góc thấp sát sàn nhìn lên",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 197.2,
+      "y": 1905.8,
+      "pxPerM": 977.5,
+      "depth": 2.403
+    },
+    "right": {
+      "x": 1188.6,
+      "y": 1811.3,
+      "pxPerM": 777.3,
+      "depth": 3.022
+    },
+    "back": {
+      "x": 615.8,
+      "y": 1696.5,
+      "pxPerM": 531,
+      "depth": 4.31
+    },
+    "board": {
+      "x": 637.3,
+      "y": 1685.8,
+      "pxPerM": 507.8,
+      "depth": 4.505
+    },
+    "student": {
+      "x": 728.6,
+      "y": 1830.2,
+      "pxPerM": 817.4,
+      "depth": 2.808
+    },
+    "teacher": {
+      "x": 252.2,
+      "y": 1707.6,
+      "pxPerM": 554.7,
+      "depth": 4.193
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "student-room-day",
+  "description": "Phòng trọ sinh viên ban ngày, nắng ấm qua cửa sổ (cùng bố cục với student-room)",
+  "module": "kit.js",
+  "spec": {
+    "size": [
+      3.6,
+      4.4,
+      2.6
+    ],
+    "wall": "#d9d2c0",
+    "wainscot": "#8fa69a",
+    "floor": "wood",
+    "floorColor": "#8a6a4f",
+    "light": "day",
+    "props": [
+      {
+        "kind": "bed",
+        "wall": "left",
+        "along": -1.0,
+        "offset": 0.55
+      },
+      {
+        "kind": "desk",
+        "wall": "back",
+        "along": 0.7,
+        "offset": 0.32
+      },
+      {
+        "kind": "lamp",
+        "wall": "back",
+        "along": 0.35,
+        "offset": 0.35
+      },
+      {
+        "kind": "chair",
+        "at": [
+          0.7,
+          -1.2
+        ]
+      },
+      {
+        "kind": "wardrobe",
+        "wall": "right",
+        "along": 1.2,
+        "offset": 0.3
+      },
+      {
+        "kind": "window",
+        "wall": "back",
+        "along": -0.6
+      },
+      {
+        "kind": "rug",
+        "at": [
+          0.1,
+          0.3
+        ],
+        "color": "#5a6a8a"
+      }
+    ]
+  }
+}

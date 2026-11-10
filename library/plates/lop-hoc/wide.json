@@ -1,0 +1,58 @@
+{
+  "set": "lop-hoc",
+  "angle": "wide",
+  "desc": "Toàn cảnh từ phía trước phòng",
+  "w": 1350,
+  "h": 2400,
+  "charTint": "rgba(0,0,0,0)",
+  "marks": {
+    "center": {
+      "x": 507.1,
+      "y": 1908.8,
+      "pxPerM": 659.7,
+      "depth": 2.907
+    },
+    "left": {
+      "x": 196.7,
+      "y": 1654.5,
+      "pxPerM": 490.8,
+      "depth": 4.055
+    },
+    "right": {
+      "x": 1219.5,
+      "y": 1778,
+      "pxPerM": 573.1,
+      "depth": 3.482
+    },
+    "back": {
+      "x": 815.6,
+      "y": 1530.1,
+      "pxPerM": 407.5,
+      "depth": 4.789
+    },
+    "front": {
+      "x": 138.7,
+      "y": 2360.9,
+      "pxPerM": 954.8,
+      "depth": 2.053
+    },
+    "board": {
+      "x": 833.8,
+      "y": 1507.8,
+      "pxPerM": 392.5,
+      "depth": 4.982
+    },
+    "student": {
+      "x": 877.1,
+      "y": 1796.6,
+      "pxPerM": 585.5,
+      "depth": 3.297
+    },
+    "teacher": {
+      "x": 541.9,
+      "y": 1543.5,
+      "pxPerM": 416.5,
+      "depth": 4.681
+    }
+  }
+}

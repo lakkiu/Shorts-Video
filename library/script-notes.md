@@ -4,7 +4,8 @@ Claude đọc file này trước mỗi kịch bản mới (cổng ①) và cập
 
 ## Định hướng kênh (từ người dùng)
 
-- Kênh tiếng Việt về **du học / đời sống ở Hàn Quốc**, thể loại chính hiện tại: **chuyện ma ngắn** có yếu tố Hàn.
+- Kênh tiếng Việt về **du học / đời sống ở Hàn Quốc**.
+- **2026-11-10: người dùng không làm chuyện ma nữa.** Đề xuất các thể loại khác (`references/genres.md`): kiến thức, mẹo, danh sách, học tiếng, hài tình huống, so sánh, kể chuyện trải nghiệm, truyền cảm hứng, quảng cáo dịch vụ…
 - Nền tảng: TikTok, Reels, Shorts (9:16, ~60 s); YouTube 16:9 khi cần.
 - Người dùng thích: yếu tố **ngôn ngữ Hàn** trong truyện (ma nói tiếng Hàn, phụ đề Hàn–Việt), giá trị **học được một câu tiếng Hàn**.
 - Người dùng muốn **truyện khác lạ**, không lặp mô-típ (đã từ chối "Phòng trọ giá rẻ và 3 điều luật" vì muốn chuyện khác).
@@ -17,6 +18,7 @@ Claude đọc file này trước mỗi kịch bản mới (cổng ①) và cập
 | 2026-11-08 | Luật ký túc xá | Bản 24 s → yêu cầu dài 60 s | Thích bản có cú lừa giọng quen + tin nhắn + dấu chân |
 | 2026-11-09 | (bỏ) Phòng trọ 3 điều luật | Rules-horror | Từ chối: "chuyện khác đi" |
 | 2026-11-09 | Đừng nói 네 lúc 3 giờ sáng | 3 hook A/B/C | Chọn **A – câu hỏi trực diện người xem**; gợi ý ma nói tiếng Hàn |
+| 2026-11-10 | (định hướng) | Tập 2 series chuyện ma | **Bỏ chuyện ma**; muốn kịch bản đa thể loại |
 
 ## Hiệu quả video (điền khi có số liệu)
 
@@ -24,6 +26,7 @@ Claude đọc file này trước mỗi kịch bản mới (cổng ①) và cập
 |---|---|---|---|---|---|---|---|---|---|
 | Luật ký túc xá | | | Luật lạ | 65 s | | | | | |
 | Đừng nói 네 lúc 3 giờ sáng | | | Câu hỏi trực diện | 65 s | | | | | |
+| 3 câu tiếng Hàn khiến giáo viên nhíu mày | | | Cảnh báo + con số (listicle) | 30 s | | | | | |
 
 ## Bài học sản xuất (từ storyboard / video đã làm)
 
