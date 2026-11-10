@@ -11,19 +11,19 @@
 
 | # | Kiểu | Câu mở |
 |---|---|---|
-| **A** ✅ đề xuất | Câu hỏi trực diện | "Ở Hàn, bạn có sống nổi một ngày mà không đụng tới Samsung?" |
+| A | Câu hỏi trực diện | "Ở Hàn, bạn có sống nổi một ngày mà không đụng tới Samsung?" |
 | B | Ngôn ngữ / bất ngờ | "Chaebol trong tiếng Việt có một tên rất quen: tài phiệt." |
-| C | Con số | "Cứ 5 đồng Hàn Quốc kiếm từ xuất khẩu, gần 1 đồng đến từ chip." |
+| **C** ✅ người dùng chọn | Con số | "Cứ 5 đồng Hàn Quốc kiếm từ xuất khẩu, gần 1 đồng đến từ chip." |
 
 ## Dàn ý
 
 | s | Lời | Hình | Kỹ thuật |
 |---|---|---|---|
-| 0-4 | Hook A | Minh thức dậy, phòng trọ sáng | Câu hỏi treo |
-| 4-13 | "Sáng ra: điện thoại Samsung, tủ lạnh LG. Đi làm bằng xe Hyundai, chiều ghé siêu thị Lotte." | Nhãn chữ đổi theo từng câu: SAMSUNG · LG · HYUNDAI · LOTTE | Liệt kê nhanh, đổi nhãn mỗi 2 s |
+| 0-5 | Hook C: "Cứ 5 đồng Hàn Quốc kiếm từ xuất khẩu, gần 1 đồng đến từ chip. Và chip đó chủ yếu của hai nhà: Samsung và SK." | Số to "1/5", Minh trong phòng trọ sáng | Con số + treo câu hỏi "hai nhà là ai?" |
+| 5-13 | "Mà đâu chỉ chip. Điện thoại Samsung, tủ lạnh LG, xe Hyundai, siêu thị Lotte." | Nhãn chữ đổi theo từng câu: SAMSUNG · LG · HYUNDAI · LOTTE | Liệt kê nhanh, đổi nhãn mỗi 2 s |
 | 13-21 | "Đó là chaebol, 재벌 — tiếng Việt gọi là tài phiệt: tập đoàn khổng lồ do một gia đình nắm quyền, đời này truyền đời sau." | Lớp học, chữ to 재벌 / TÀI PHIỆT | Đổi bối cảnh, giá trị học tiếng |
 | 21-30 | "Sau chiến tranh, chính phủ dồn vốn cho vài tập đoàn để kéo đất nước đi lên. Từ nghèo, Hàn Quốc thành cường quốc: 'kỳ tích sông Hàn'." | Cô Kim giảng, nhãn "KỲ TÍCH SÔNG HÀN" | Lý do lịch sử, 1 ý |
-| 30-37 | "Năm 2024, chỉ riêng chip bán dẫn — mảng mạnh của Samsung và SK — đã chiếm khoảng 1/5 xuất khẩu Hàn Quốc." | Số to "1/5" | Con số có nguồn |
+| 30-37 | "Đến giờ, vào được Samsung vẫn là giấc mơ của nhiều sinh viên Hàn. Họ còn có kỳ thi tuyển riêng, tên là GSAT." | Lớp học, nhãn "GSAT" | Ảnh hưởng tới đời sống, giấc mơ |
 | 37-46 | Cô Kim: "Nhưng lớn quá cũng là rủi ro." Người kể: "Năm 1999, Daewoo — tập đoàn lớn thứ hai lúc đó — sụp đổ, để lại khoản nợ khổng lồ." | Minh ngạc nhiên → lo | Đổi chiều (mặt trái) |
 | 46-52 | "Theo bạn, chaebol là động cơ hay gánh nặng của Hàn Quốc?" | Cảnh đen, chữ "ĐỘNG CƠ hay GÁNH NẶNG?" | Câu hỏi kéo bình luận |
 
@@ -35,6 +35,7 @@
 
 ## Nguồn
 
+- Kỳ thi tuyển GSAT (Samsung Global Aptitude Test) — Samsung.
 - Chip chiếm 20,8% xuất khẩu Hàn Quốc năm 2024 (141,9 tỷ USD / 683,8 tỷ USD) — Korea Times, 01/2025, theo Bộ Thương mại, Công nghiệp và Năng lượng Hàn Quốc.
 - 재벌 = 財閥 = tài phiệt (cùng gốc Hán).
 - Chính phủ Park Chung-hee (thập niên 1960-70) hỗ trợ vốn cho các tập đoàn được chọn; "kỳ tích sông Hàn" — kiến thức lịch sử phổ thông.

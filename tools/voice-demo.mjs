@@ -38,4 +38,4 @@ for (const r of spec.roles) {
 fs.unlinkSync(silence);
 fs.writeFileSync(path.join(out, "README.txt"), summary.join("\n") + "\n");
 console.log(summary.join("\n"));
-console.log(`\nfiles: ${path.relative(ROOT, out)}/  (<role>-tat-ca.mp3 = nghe lần lượt cả 5 giọng)`);
+console.log(`\nfiles: ${path.relative(ROOT, out)}/  (<role>-tat-ca.mp3 = nghe lần lượt các giọng)`);

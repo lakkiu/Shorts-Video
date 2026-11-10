@@ -1,0 +1,36 @@
+{
+  "role": "Nhân vật có sẵn cho video chaebol",
+  "candidates": [
+    {
+      "name": "Minh",
+      "desc": "Minh: du học sinh nam, tóc dựng, kính tròn, áo khoác xanh lá",
+      "spec": {
+        "skin": "#f7cfae",
+        "hair": "#1f1a1a",
+        "hairStyle": "spiky",
+        "top": "#3aa17e",
+        "zip": true,
+        "pants": "#d9c4a0",
+        "shoes": "#3b3b3b",
+        "glasses": true,
+        "headR": 146
+      }
+    },
+    {
+      "name": "Cô Kim",
+      "desc": "Cô Kim: giáo viên tiếng Hàn, tóc bob, cardigan tím, ôm sách",
+      "spec": {
+        "skin": "#ffe0c8",
+        "hair": "#4a2c2a",
+        "hairStyle": "bob",
+        "top": "#8e6bd1",
+        "cardigan": true,
+        "skirt": "#2f3a5a",
+        "legs": "#ffe0c8",
+        "shoes": "#7a4a3a",
+        "book": "#f1e5c8",
+        "headR": 140
+      }
+    }
+  ]
+}

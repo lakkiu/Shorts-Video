@@ -1,0 +1,14 @@
+{ "roles": [
+  { "role": "narrator", "text": "Cứ 5 đồng Hàn Quốc kiếm từ xuất khẩu, gần 1 đồng đến từ chip. Và chip đó chủ yếu của hai nhà: Samsung và SK.",
+    "candidates": [
+      { "label": "trường kể (clone của bạn)", "name": "trường kể", "speed": 1.0 },
+      { "label": "Professional Narrator — ấm, đều", "name": "Professional Narrator", "speed": 1.0 },
+      { "label": "Podcast Host — nhanh, cuốn", "name": "Podcast Host", "speed": 1.0 }
+    ] },
+  { "role": "co-kim", "text": "Nhưng lớn quá, cũng là rủi ro.",
+    "candidates": [
+      { "label": "Dependable Woman — ấm", "name": "Dependable Woman", "speed": 0.95 },
+      { "label": "Crisp Woman — rõ, sắc", "name": "Crisp Woman", "speed": 0.95 },
+      { "label": "Hà Nữ (CapCut, giọng Bắc)", "name": "Hà Nữ", "speed": 0.95 }
+    ] }
+] }
