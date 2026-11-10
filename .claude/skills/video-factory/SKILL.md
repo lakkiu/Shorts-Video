@@ -15,7 +15,9 @@ Mọi video đi qua **6 cổng duyệt**. Ở mỗi cổng: làm xong phần c�
 
 ## ① Duyệt kịch bản
 
-Viết `stories/<slug>.script.md` theo mẫu `stories/_template.script.md` (chưa phải JSON) rồi gửi người dùng. Gồm:
+**Trước khi viết, đọc:** `references/scriptwriting.md` (cẩm nang: hook, cấu trúc theo độ dài, twist, viết cho giọng AI, tự chấm điểm), `references/examples.md` (2 kịch bản mẫu có phân tích), `library/script-notes.md` (định hướng kênh, lựa chọn trước đây của người dùng, số liệu video đã đăng — ưu tiên điều đã hiệu quả), `library/ideas.md` (kho ý tưởng; khi người dùng chưa có đề tài, đề xuất 2-3 ý từ đây hoặc ý mới cùng tinh thần).
+
+Viết `stories/<slug>.script.md` theo mẫu `stories/_template.script.md` (chưa phải JSON), **tự chấm theo bảng ở mục 9 của cẩm nang** (tổng ≥ 32/40, không mục nào < 3; chưa đạt thì tự sửa tối đa 2 vòng) rồi mới gửi người dùng kèm bảng điểm. Gồm:
 
 1. **Logline** một câu, **độ dài dự kiến** (≈ 3,3 từ tiếng Việt/giây với giọng kể 0,95x), nền tảng đích.
 2. **3 phương án hook** khác kiểu nhau, mỗi cái ≤ 15 từ, nói trong 3 giây đầu. Ghi rõ kiểu của từng cái:
@@ -145,6 +147,12 @@ node scripts/make.mjs stories/<slug>.json --no-render   # giọng (GenMax, có c
 node tools/storyboard.cjs out/<slug>                    # out/<slug>/storyboard.png: mỗi cảnh một ảnh
 ```
 
+Chạy soát kịch bản trước storyboard và sửa hết lỗi / cảnh báo (cảnh báo nào cố ý thì nói rõ với người dùng):
+
+```bash
+node tools/script-lint.mjs stories/<slug>.json          # hook, câu dài, chữ số, khoảng lặng, cảnh dài, câu Hàn thiếu nghĩa, góc / điểm đứng / nhân vật / tiếng động không tồn tại
+```
+
 Xem storyboard.png **trước khi gửi**: nhân vật đứng đúng chỗ, không che chữ, không bị cắt mặt, phụ đề không đè vào mặt. Sửa JSON và chạy lại (giọng đã cache nên nhanh). Gửi storyboard cho người dùng.
 
 ### Định dạng kịch bản JSON
@@ -191,6 +199,11 @@ node scripts/make.mjs stories/<slug>.json --jobs 2       # -> out/<slug>/<slug>.
 - Cuối lệnh in số credit GenMax đã dùng / còn lại — báo cho người dùng.
 - Mỗi lần chạy `make` xoá chương cũ trong `out/<slug>/` rồi dựng lại.
 - Xem `out/<slug>/sheet.png` (một ảnh mỗi cảnh từ video thật) trước khi giao. Gửi video bằng SendUserFile. File > 100 MB: nói với người dùng có thể nén thêm.
+
+## Sau khi giao
+
+- Ghi lựa chọn / chỉnh sửa của người dùng vào `library/script-notes.md` (mục "Lựa chọn của người dùng"), đánh dấu ✅ ý tưởng đã làm trong `library/ideas.md`.
+- Xin người dùng gửi số liệu sau 2-3 ngày đăng (view, thời gian xem trung bình, % xem hết, bình luận nổi bật) và ghi vào bảng "Hiệu quả video" + 1-2 bài học. Đó là cách skill viết kịch bản tốt dần lên.
 
 ## Lỗi hay gặp
 

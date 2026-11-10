@@ -13,6 +13,7 @@ Chi tiết cho Claude: `.claude/skills/video-factory/SKILL.md`.
 
 | Bước | Lệnh |
 |---|---|
+| Soát kịch bản | `node tools/script-lint.mjs stories/<slug>.json` |
 | Nghe thử giọng | `node tools/voice-demo.mjs demos/voices-<slug>.json` |
 | Demo nhân vật | `node tools/demo.cjs chars demos/<vai>.json` |
 | Demo bối cảnh | `node tools/demo.cjs sets demos/<noi>.json` |
